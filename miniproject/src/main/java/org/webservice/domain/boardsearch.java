@@ -15,12 +15,21 @@ public class boardsearch {
 
 	private String type;
 	private String keyword;
+	private String boardname;
 	
 	public boardsearch() {
+		this.boardname="mainboard";
 		this.pageNum=1;
 		this.amount=10;
 	}
 	public boardsearch(int pagenum,int amount) {
+		this.boardname="mainboard";
+		this.pageNum=pagenum;
+		this.amount=amount;
+	}
+	
+	public boardsearch(String brdname, int pagenum,int amount) {
+		this.boardname=brdname;
 		this.pageNum=pagenum;
 		this.amount=amount;
 	}
