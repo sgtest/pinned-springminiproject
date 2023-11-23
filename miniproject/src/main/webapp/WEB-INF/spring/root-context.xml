@@ -41,4 +41,6 @@
 		<property name="dataSource" ref="dataSource"></property>
 	</bean>
 	
+	<context:component-scan base-package="org.webservice.service_1"></context:component-scan>
+	
 </beans>
