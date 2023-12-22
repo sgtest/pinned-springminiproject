@@ -1,5 +1,26 @@
 package org.webservice.service_1;
 
-public interface boardservice {
+import java.util.List;
 
+import org.webservice.domain.attachfile;
+import org.webservice.domain.board;
+import org.webservice.domain.boardsearch;
+
+public interface boardservice {
+	
+	//차단
+	public boolean userban();
+	
+	//게시판 생성
+	public void board_register(String boardname);
+	
+	//게시판의 게시글 관련 서비스
+	public board readboard(Long bno);
+	public void insertboard(board bd);
+	public boolean deleteboard(Long bno);
+	public void updateboard(board bd);
+	public int getlisttotal(boardsearch search);
+	public List<board> getList(boardsearch search);
+	public List<attachfile> getfilelist(Long bno);
+	public void deletefilelist(Long bno);
 }
