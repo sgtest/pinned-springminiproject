@@ -1,5 +1,7 @@
 package org.webservice.mapper;
 
-public interface membermapper {
+import org.webservice.domain.member;
 
+public interface membermapper {
+	public member readmember(String userid);
 }
