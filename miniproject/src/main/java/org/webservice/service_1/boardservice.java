@@ -8,11 +8,15 @@ import org.webservice.domain.boardsearch;
 
 public interface boardservice {
 	
+	
 	//차단
 	public boolean userban();
 	
 	//게시판 생성
 	public void board_register(String boardname);
+	
+	//관리자 양도
+	public void board_aouth(String boardname,String userid);
 	
 	//게시판의 게시글 관련 서비스
 	public board readboard(Long bno);
