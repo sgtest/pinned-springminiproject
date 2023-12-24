@@ -9,13 +9,13 @@ import org.webservice.domain.boardsearch;
 public class boardserviceImpl implements boardservice{
 
 	@Override
-	public boolean userban() {
+	public boolean userban(String userid, String reason) {
 		// TODO Auto-generated method stub
 		return false;
 	}
 
 	@Override
-	public void board_register(String boardname) {
+	public void board_register(String boardname,String boardsub) {
 		// TODO Auto-generated method stub
 		
 	}
