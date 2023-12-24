@@ -9,11 +9,13 @@ import org.webservice.domain.boardsearch;
 public interface boardservice {
 	
 	
-	//차단
-	public boolean userban(String userid, String reason);
+	//차단 및 차단 해제
+	public boolean userban(String userid, String reason,int periods);
+	public boolean userbanrelease(String userid);
 	
-	//게시판 생성
+	//게시판 생성 및 삭제
 	public void board_register(String boardname, String boardsub);
+	public void board_delete(String boardname);
 	
 	//관리자 양도
 	public void board_aouth(String boardname,String userid);

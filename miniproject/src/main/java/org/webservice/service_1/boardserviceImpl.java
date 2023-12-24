@@ -9,8 +9,13 @@ import org.webservice.domain.boardsearch;
 public class boardserviceImpl implements boardservice{
 
 	@Override
-	public boolean userban(String userid, String reason) {
+	public boolean userban(String userid, String reason, int periods) {
 		// TODO Auto-generated method stub
+		return false;
+	}
+	
+	public boolean userbanrelease(String userid) {
+		
 		return false;
 	}
 
@@ -70,6 +75,12 @@ public class boardserviceImpl implements boardservice{
 
 	@Override
 	public void deletefilelist(Long bno) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void board_delete(String boardname) {
 		// TODO Auto-generated method stub
 		
 	}

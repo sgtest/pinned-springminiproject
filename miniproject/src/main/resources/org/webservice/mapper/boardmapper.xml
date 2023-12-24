@@ -29,23 +29,33 @@
   	
   	
   	<insert id="banuser">
-  	
+	INSERT into pro_ban 
+	values(seq_pro_ban.nextval, #{userid},#{reason},sysdate,#{periods})
   	</insert>
-  	
+  	<delete id="userbanrelease">
+  	delete from pro_ban where userid=#{userid}
+  	</delete>
+  	<select id="banselect">
+  	select count(*) from pro_ban where userid=#{userid} 
+  	and sysdate between startdate and (startdate+periods) 
+  	</select>
   	
   	<insert id="createboard">
-  	
+  	insert into pro_board_list 
+  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{writer},#{boardsub})
   	</insert>
   	<delete id="deleteaouthboard">
-  	
+    delete from pro_member_auth where auth=#{boardname} and userid=#{userid}
   	</delete>
   	<insert id="aouthboard">
-  	
+   	insert into pro_member_auth values(#{userid},#{boardname})
   	</insert>
-  	
+  	<delete id="board_delete">
+  	delete from pro_board_list where boardname=#{boardname}
+  	</delete>
   	
   	<select id="readboard">
-  	
+  	select * from pro_board where bno=#{bno}
   	</select>
   	<select id="getlistboard">
   	
@@ -56,13 +66,14 @@
   	
   	
   	<delete id="deleteboard">
-  	
+  	delete from pro_board where bno=#{bno}
   	</delete>
   	<insert id="insertboard">
-  	
+  	insert into pro_board 
+  	values(seq_pro_board.nextval,#{boardname},#{title},#{content},#{writer},sysdate,sysdate)
   	</insert>
   	<update id="updateboard">
-  	
+  	update set title=#{title},content=#{content},writer=#{writer},udate=sysdate where bno=#{bno}
   	</update>
   	
   	

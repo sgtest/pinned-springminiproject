@@ -8,11 +8,14 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardsearch;
 
 public interface boardmapper {
-	public int banuser(String userid,String reason);
+	public int banuser(String userid,String reason,int periods);
+	public int banuserrealease(String userid);
+	public int banselect(String userid);
 	
 	public int createboard(String boardname, String boardsubject);
-	public int deleteaouthboard(String boardname, String userid);
+	public int deleteaouthboard(String boardname,String userid);
 	public int aouthboard(String boardname, String userid);
+	public int board_delete(String boardname);
 	
 	public board readboard(Long bno);
 	public int deleteboard(Long bno);
