@@ -10,10 +10,10 @@ public interface boardservice {
 	
 	
 	//차단
-	public boolean userban();
+	public boolean userban(String userid, String reason);
 	
 	//게시판 생성
-	public void board_register(String boardname);
+	public void board_register(String boardname, String boardsub);
 	
 	//관리자 양도
 	public void board_aouth(String boardname,String userid);

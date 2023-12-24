@@ -4,4 +4,24 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.webservice.mapper.commentmapper">
   	
+  	<select id="readcomment">
+  	
+  	</select>
+  	<insert id="insertcomment">
+  	
+  	</insert>
+  	<update id="updatecomment">
+  	
+  	</update>
+  	<delete id="deletecomment">
+  	
+  	</delete>
+  	
+  	
+  	<select id="getlistcomment">
+  	
+  	</select>
+  	<select id="getcountcomment">
+  	
+  	</select>
   </mapper>

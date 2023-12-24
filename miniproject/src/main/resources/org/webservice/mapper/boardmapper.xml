@@ -27,12 +27,52 @@
   		</trim>
   	</sql>
   	
-  	<insert id="">
+  	
+  	<insert id="banuser">
   	
   	</insert>
   	
-  	<insert id="">
+  	
+  	<insert id="createboard">
+  	
+  	</insert>
+  	<delete id="deleteaouthboard">
+  	
+  	</delete>
+  	<insert id="aouthboard">
   	
   	</insert>
   	
+  	
+  	<select id="readboard">
+  	
+  	</select>
+  	<select id="getlistboard">
+  	
+  	</select>
+  	<select id="getlistsearchboard">
+  	
+  	</select>
+  	
+  	
+  	<delete id="deleteboard">
+  	
+  	</delete>
+  	<insert id="insertboard">
+  	
+  	</insert>
+  	<update id="updateboard">
+  	
+  	</update>
+  	
+  	
+  	<update id="updatecmtcnt">
+  	
+  	</update>
+  	<select id="gettotalcntboard">
+  	
+  	</select>
+  	<select id="findfilebybno">
+  	
+  	</select>
   </mapper>
