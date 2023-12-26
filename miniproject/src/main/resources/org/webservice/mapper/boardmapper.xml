@@ -57,11 +57,28 @@
   	<select id="readboard">
   	select * from pro_board where bno=#{bno}
   	</select>
-  	<select id="getlistboard">
-  	
+  	<select id="getlistboard" resultType="org.webservice.domain.board">
+  	<![CDATA[
+  	select * from pro_board 
+  	where bno>0 and rownum<=100
+  	]]>
   	</select>
   	<select id="getlistsearchboard">
-  	
+  	<![CDATA[
+  	select * 
+  	from 
+  	(
+  	select /* INDEX_DESC(pro_board SYS_C0033769)/
+  	rownum rn, bno, boardname, title,content,writer,regdate,udate,commentnum
+  	from pro_board 
+  	where 
+  	]]>
+  	<include refid="search"> </include>
+  	<![CDATA[
+  	rownum<=#{pagenum}*#{amount}
+  	)
+  	where rn>(#{pagenum}-1)*#{amount}
+  	]]>
   	</select>
   	
   	
@@ -69,21 +86,26 @@
   	delete from pro_board where bno=#{bno}
   	</delete>
   	<insert id="insertboard">
+  	<selectKey keyProperty="bno" order="BEFORE" resultType="long">
+  	select seq_pro_board.nextval from dual
+  	</selectKey>
   	insert into pro_board 
-  	values(seq_pro_board.nextval,#{boardname},#{title},#{content},#{writer},sysdate,sysdate)
+  	values(#{bno},#{boardname},#{title},#{content},#{writer},sysdate,sysdate)
   	</insert>
   	<update id="updateboard">
-  	update set title=#{title},content=#{content},writer=#{writer},udate=sysdate where bno=#{bno}
+  	update pro_board set title=#{title},content=#{content},writer=#{writer},udate=sysdate where bno=#{bno}
   	</update>
   	
   	
   	<update id="updatecmtcnt">
-  	
+  	update pro_board set comment_num=comment_num+#{amount} where bno=#{bno}
   	</update>
-  	<select id="gettotalcntboard">
-  	
+  	<select id="gettotalcntboard" resultType="int">
+  	select count(*) from pro_board 
+  	<include refid="search"></include>
+  	bno>0
   	</select>
   	<select id="findfilebybno">
-  	
+  	select * from pro_file where bno=#{bno}
   	</select>
   </mapper>
