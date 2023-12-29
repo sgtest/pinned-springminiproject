@@ -42,7 +42,7 @@
   	
   	<insert id="createboard">
   	insert into pro_board_list 
-  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{writer},#{boardsub})
+  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{writer},#{boardsubject})
   	</insert>
   	<delete id="deleteaouthboard">
     delete from pro_member_auth where auth=#{boardname} and userid=#{userid}
@@ -63,12 +63,12 @@
   	where bno>0 and rownum<=100
   	]]>
   	</select>
-  	<select id="getlistsearchboard">
+  	<select id="getlistsearchboard" resultType="org.webservice.domain.board">
   	<![CDATA[
   	select * 
   	from 
   	(
-  	select /* INDEX_DESC(pro_board SYS_C0033769)/
+  	select /*+ INDEX_DESC(pro_board SYS_C0033769)/
   	rownum rn, bno, boardname, title,content,writer,regdate,udate,commentnum
   	from pro_board 
   	where 
@@ -105,7 +105,7 @@
   	<include refid="search"></include>
   	bno>0
   	</select>
-  	<select id="findfilebybno">
+  	<select id="findfilebybno" resultType="org.webservice.domain.attachfile">
   	select * from pro_file where bno=#{bno}
   	</select>
   </mapper>

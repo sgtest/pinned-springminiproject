@@ -4,20 +4,20 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="org.webservice.mapper.filemapper">
 
- <select id="getlistfile">
-  	
+ <select id="getlistfile" resultType="org.webservice.domain.attachfile">
+  	select * from tbl_attach where bno=#{bno}
  </select>
  <insert id="insertfile">
- 
+ 	insert into pro_file values(#{uuid},#{uploadpath},#{fileName},#{image},#{bno})
  </insert>
  <delete id="deletefile">
- 
+ 	delete from pro_file where uuid=#{uuid}
  </delete>
  <delete id="deleteallfile">
- 
+ 	delete from pro_file where bno=#{bno}
  </delete>
  
- <select id="getoldfile">
- 
+ <select id="getoldfile" resultType="org.webservice.domain.attachfile">
+ 	select * from pro_file where uploadpath=to_char(sysdate-1,'yyyy/mm/dd')
  </select>
 </mapper>

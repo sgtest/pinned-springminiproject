@@ -4,24 +4,35 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.webservice.mapper.commentmapper">
   	
-  	<select id="readcomment">
-  	
+  	<select id="readcomment" resultType="org.webservice.domain.comment">
+  	select * from pro_comment where bno=#{bno}
   	</select>
   	<insert id="insertcomment">
-  	
+  	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{reply},#{replyer},sysdate)
   	</insert>
   	<update id="updatecomment">
-  	
+  	update pro_comment set comments=#{reply} regdate=sysdate where rno=#{rno}
   	</update>
   	<delete id="deletecomment">
-  	
+  	delete from pro_comment where rno=#{rno}
   	</delete>
   	
   	
-  	<select id="getlistcomment">
-  	
+  	<select id="getlistcomment" resultType="org.webservice.domain.comment">
+  	<![CDATA[ 
+  	select bno,rno,comments,writer,regdate
+	from 
+	(
+	select /*+INDEX(pro_comment PK_COMMENT) */
+	rownum rn, bno, rno, comments, writer, regdate
+	from pro_comment
+	where bno=#{bno}
+	and rno>0
+	and rownum <= #{search.pageNum}*#{search.amount}
+	) where rn>(#{search.pageNum-1}*#{search.amount})
+  	]]>
   	</select>
-  	<select id="getcountcomment">
-  	
+  	<select id="getcountcomment" resultType="int">
+  	select count(rno) from pro_comment where bno=#{bno}
   	</select>
   </mapper>
