@@ -5,7 +5,6 @@ import java.util.List;
 
 public class board {
 	private Long bno;
-	private int recommendnum;
 	private String boardname;
 	private String title;
 	private String content;
