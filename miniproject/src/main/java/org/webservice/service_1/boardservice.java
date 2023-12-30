@@ -15,10 +15,10 @@ public interface boardservice {
 	
 	//게시판 생성 및 삭제
 	public void board_register(String boardname, String boardsub);
-	public void board_delete(String boardname);
+	public boolean board_delete(String boardname);
 	
 	//관리자 양도
-	public void board_aouth(String boardname,String userid);
+	public boolean board_aouth(String boardname,String userid);
 	
 	//게시판의 게시글 관련 서비스
 	public board readboard(Long bno);

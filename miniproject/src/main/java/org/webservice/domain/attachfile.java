@@ -1,5 +1,10 @@
 package org.webservice.domain;
 
+import java.util.Date;
+
+import lombok.Data;
+
+@Data
 public class attachfile {
 	private String fileName;
 	private String uploadPath;

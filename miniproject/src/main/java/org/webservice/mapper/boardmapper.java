@@ -15,6 +15,7 @@ public interface boardmapper {
 	public int createboard(String boardname, String boardsubject);
 	public int deleteaouthboard(String boardname,String userid);
 	public int aouthboard(String boardname, String userid);
+	public String select_boardaouth(String boardname);
 	public int board_delete(String boardname);
 	
 	public board readboard(Long bno);

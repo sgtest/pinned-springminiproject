@@ -2,6 +2,8 @@ package org.webservice.domain;
 
 import java.util.Date;
 
+import lombok.Data;
+@Data
 public class banuser {
 	private int bannum;
 	private String userid;
