@@ -1,9 +1,12 @@
 package org.webservice.domain;
 
+import java.util.Date;
+
+import lombok.Data;
 import lombok.Getter;
 import lombok.ToString;
 
-@Getter
+@Data
 @ToString
 public class boardpage {
 	  private String boardname;

@@ -40,6 +40,9 @@
   	and sysdate between startdate and (startdate+periods) 
   	</select>
   	
+  	<select id="select_boardaouth">
+  	select REGUSERID from pro_board where boardname=#{boardname}
+  	</select>
   	<insert id="createboard">
   	insert into pro_board_list 
   	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{writer},#{boardsubject})
@@ -80,7 +83,6 @@
   	where rn>(#{pagenum}-1)*#{amount}
   	]]>
   	</select>
-  	
   	
   	<delete id="deleteboard">
   	delete from pro_board where bno=#{bno}
