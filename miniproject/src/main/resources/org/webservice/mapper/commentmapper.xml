@@ -5,7 +5,7 @@
   <mapper namespace="org.webservice.mapper.commentmapper">
   	
   	<select id="readcomment" resultType="org.webservice.domain.comment">
-  	select * from pro_comment where bno=#{bno}
+  	select * from pro_comment where rno=#{rno}
   	</select>
   	<insert id="insertcomment">
   	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{reply},#{replyer},sysdate)
