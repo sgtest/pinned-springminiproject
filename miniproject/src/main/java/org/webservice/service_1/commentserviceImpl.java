@@ -2,46 +2,62 @@ package org.webservice.service_1;
 
 import java.util.List;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
 import org.webservice.domain.commentpage;
+import org.webservice.mapper.boardmapper;
+import org.webservice.mapper.commentmapper;
 
+import lombok.Setter;
+import lombok.extern.log4j.Log4j;
+
+@Log4j
+@Service
 public class commentserviceImpl implements commentservice{
 
+	@Setter(onMethod_ = @Autowired)
+	private commentmapper cmtmapper;
+	
+	@Setter(onMethod_ = @Autowired)
+	private boardmapper brdmapper;
+	
 	@Override
 	public int registercomment(comment cmt) {
-		// TODO Auto-generated method stub
-		return 0;
+		brdmapper.updatecmtcnt(cmt.getBno(), 1);
+		return cmtmapper.insertcomment(cmt);
 	}
 
 	@Override
 	public comment getcomment(Long rno) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return cmtmapper.readcomment(rno);
 	}
 
 	@Override
 	public int updatecomment(comment cmt) {
-		// TODO Auto-generated method stub
-		return 0;
+		
+		return cmtmapper.updatecomment(cmt);
 	}
 
 	@Override
 	public int deletecomment(Long rno) {
-		// TODO Auto-generated method stub
-		return 0;
+		comment tmpcmt=cmtmapper.readcomment(rno);
+		brdmapper.updatecmtcnt(tmpcmt.getBno(), -1);
+		return cmtmapper.deletecomment(rno);
 	}
 
 	@Override
 	public List<comment> getcmtlist(boardsearch search, Long bno) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return cmtmapper.getlistcomment(search, bno);
 	}
 
 	@Override
 	public commentpage getcmtlistpage(boardsearch search, Long bno) {
-		// TODO Auto-generated method stub
-		return null;
+		
+		return new commentpage(cmtmapper.getcountcomment(bno),cmtmapper.getlistcomment(search, bno));
 	}
 
 }

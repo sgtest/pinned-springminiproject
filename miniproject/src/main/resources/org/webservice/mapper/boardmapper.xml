@@ -32,7 +32,7 @@
 	INSERT into pro_ban 
 	values(seq_pro_ban.nextval, #{userid},#{reason},sysdate,#{periods})
   	</insert>
-  	<delete id="userbanrelease">
+  	<delete id="banuserrelease">
   	delete from pro_ban where userid=#{userid}
   	</delete>
   	<select id="banselect">

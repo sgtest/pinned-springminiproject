@@ -7,7 +7,7 @@ import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
 
 public interface commentmapper {
-	public comment readcomment(Long bno);
+	public comment readcomment(Long rno);
 	public int insertcomment(comment cmt);
 	public int deletecomment(Long rno);
 	public int updatecomment(comment cmt);
