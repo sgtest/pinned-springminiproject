@@ -1,6 +1,12 @@
 package org.webservice.controller;
 
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -59,20 +65,51 @@ public class boardcontroller {
 		
 		if(bservice.deleteboard(bno)) {
 			//파일 직접 삭제 함수
+			Filedelete(bservice.getfilelist(bno));
+			bservice.deletefilelist(bno);
 			rttr.addFlashAttribute("result", "success");
 		}
-		return "redirect:/board/list";
+		return "redirect:/board/list"+search.getListLink();
 	}
 	
 	private void Filedelete(List<attachfile> filelist) {
-		String filelink="";
-		File file;
+		String firstfilelink="D:\\server\\temp\\";
+		Path fpath,sumfpath;
+		if(filelist==null||filelist.size()==0) {
+			return;
+		}
+		
 		for(attachfile rmfile:filelist) {
-			
+			fpath=Paths.get(firstfilelink+rmfile.getUploadPath()+"\\"+rmfile.getUuid()+"_"+rmfile.getFileName());
+			try {
+				Files.deleteIfExists(fpath);
+			} catch (IOException e) {
+				log.info("삭제하려는 파일이 없거나 실패하였습니다.");
+			}
+			if(rmfile.isImage()) {
+				sumfpath=Paths.get(firstfilelink+rmfile.getUploadPath()+"\\"+"thum_"+rmfile.getUuid()+"_"+rmfile.getFileName());
+				try {
+					Files.delete(sumfpath);
+				} catch (IOException e) {
+					log.info("삭제하려는 썸네일이 없거나 실패하였습니다.");
+				}
+				
+			}
 		}
 	}
 
 	private void Fileupload(attachfile file) {
+		String firstfilelink="D:\\server\\temp";
+		Calendar celendar=Calendar.getInstance();
+		String year=Integer.toString(celendar.get(Calendar.YEAR));
+		String month=Integer.toString(celendar.get(Calendar.MONTH)+1);
+		String day=Integer.toString(celendar.get(Calendar.DATE));
+		String hour = Integer.toString(celendar.get(Calendar.HOUR)); 
+		String min = Integer.toString(celendar.get(Calendar.MINUTE));
+		String sec = Integer.toString(celendar.get(Calendar.SECOND));
+		
+		Path fpath;
+		
 		
 	}
 	
