@@ -24,7 +24,7 @@ public interface boardservice {
 	public board readboard(Long bno);
 	public void insertboard(board bd);
 	public boolean deleteboard(Long bno);
-	public void updateboard(board bd);
+	public boolean updateboard(board bd);
 	public int getlisttotal(boardsearch search);
 	public List<board> getList(boardsearch search);
 	public List<attachfile> getfilelist(Long bno);

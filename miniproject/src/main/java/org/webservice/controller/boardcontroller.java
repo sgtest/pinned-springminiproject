@@ -13,12 +13,15 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.attachfile;
+import org.webservice.domain.board;
+import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.service_1.boardservice;
 
@@ -33,30 +36,44 @@ public class boardcontroller {
 
 	public boardservice bservice;
 	
-	@GetMapping("/readBoard")
-	public void readboardLink() {
+	
+	@GetMapping("/readBoard"+"{bno}")
+	public void readboardLink(Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
+		model.addAttribute(search.getBoardname()+"board", bservice.readboard(bno));
+	}
+	
+	@GetMapping("/list")
+	public void readboardlist(@ModelAttribute("search") boardsearch search, Model model) {
+		
+		model.addAttribute(search.getBoardname()+"list", bservice.getList(search));
+		model.addAttribute("page", new boardpage(search, bservice.getlisttotal(search)));
 	}
 	
 	@PreAuthorize("authenticated()")
 	@PostMapping("/createBoardlist")
-	public String createboardlist() {
-		
+	public String createboardlist(String boardna, String boardsu) {
+		bservice.board_register(boardna, boardsu);
 		return "redirect:/board/list";
 	}
 	
 	@PreAuthorize("authenticated()")
 	@PostMapping("/createBoard")
-	public String createboardLink() {
+	public String createboardLink(board brd, boardsearch search, RedirectAttributes rttr) {
 		
-		return "redirect:/board/list";
+		bservice.insertboard(brd);
+		rttr.addFlashAttribute("result","success");
+		return "redirect:/board/list"+search.getListLink();
 	}
 	
 	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updateBoard")
-	public String updateboardLink(){
+	public String updateboardLink(board brd, boardsearch search,RedirectAttributes rttr){
 		
-		return "redirect:/board/list";
+		if(bservice.updateboard(brd))
+			rttr.addFlashAttribute("result", "success");
+		
+		return "redirect:/board/list"+search.getListLink();
 	}
 	
 	@PreAuthorize("principal.username == #board.writer")

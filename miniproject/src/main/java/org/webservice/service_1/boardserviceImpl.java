@@ -82,16 +82,17 @@ public class boardserviceImpl implements boardservice{
 
 	@Transactional
 	@Override
-	public void updateboard(board bd) {
+	public boolean updateboard(board bd) {
 		fmapper.deleteallfile(bd.getBno());
-		
-		if(bd.getAttachlist()!=null||mapper.updateboard(bd)==1) {
+		boolean result=mapper.updateboard(bd)==1;
+		if(bd.getAttachlist()!=null||result) {
 			for(attachfile file:bd.getAttachlist()) {
 				file.setBno(bd.getBno());
 				fmapper.insertfile(file);
 			}
+			return result;
 		}
-		
+		return result;
 	}
 
 	@Override
