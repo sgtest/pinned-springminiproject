@@ -14,7 +14,7 @@ public interface boardservice {
 	public boolean userbanrelease(String userid);
 	
 	//게시판 생성 및 삭제
-	public void board_register(String boardname, String boardsub);
+	public void board_register(String boardname, String reguserid, String boardsub);
 	public boolean board_delete(String boardname);
 	
 	//관리자 양도

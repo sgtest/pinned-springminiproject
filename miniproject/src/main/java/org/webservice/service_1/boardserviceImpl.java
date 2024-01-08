@@ -37,9 +37,10 @@ public class boardserviceImpl implements boardservice{
 	}
 
 	@Override
-	public void board_register(String boardname,String boardsub) {
+	public void board_register(String boardname,String reguserid, String boardsub) {
 		log.info("create boardname: "+boardname+", boardsubject: "+boardsub);
-		mapper.createboard(boardname, boardsub);
+		mapper.createboard(boardname, reguserid, boardsub);
+		mapper.aouthboard(boardname, reguserid);
 		
 	}
 
@@ -48,8 +49,8 @@ public class boardserviceImpl implements boardservice{
 		String olduserid=mapper.select_boardaouth(boardname);
 		if(1==mapper.deleteaouthboard(boardname, olduserid)) 
 		{
-		log.info("new "+boardname+" board manager"+userid);
-		return (1==mapper.aouthboard(boardname, userid));
+			log.info("new "+boardname+" board manager"+userid);
+			return (1==mapper.aouthboard(boardname, userid));
 		}
 		return false;
 	}
@@ -57,6 +58,7 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public board readboard(Long bno) {
 		
+		log.info(bno+"_board read");
 		return mapper.readboard(bno);
 	}
 
@@ -65,18 +67,22 @@ public class boardserviceImpl implements boardservice{
 	public void insertboard(board bd) {
 		mapper.insertboard(bd);
 		if(bd.getAttachlist()==null||bd.getAttachlist().size()<=0) {
+			log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+bd.getTitle()+"_"+bd.getContent()+"_"+bd.getWriter());
 			return;
 		}
 		for(attachfile file:bd.getAttachlist()) {
 			file.setBno(bd.getBno());
 			fmapper.insertfile(file);
 		}
+		log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+bd.getTitle()+"_"+bd.getContent()+"_"+bd.getWriter());
 	}
 
 	@Transactional
 	@Override
 	public boolean deleteboard(Long bno) {
 		fmapper.deleteallfile(bno);
+		if(mapper.deleteboard(bno)==1)
+			log.info(mapper.readboard(bno).getBoardname()+"_"+bno+"_board delete");
 		return mapper.deleteboard(bno)==1;
 	}
 
@@ -90,40 +96,51 @@ public class boardserviceImpl implements boardservice{
 				file.setBno(bd.getBno());
 				fmapper.insertfile(file);
 			}
+			log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+"board update");
 			return result;
 		}
+		log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+"board update");
 		return result;
 	}
 
 	@Override
 	public int getlisttotal(boardsearch search) {
 		
+		log.info(search.getKeyword()+" has "+mapper.gettotalcntboard(search)+" number ");
 		return mapper.gettotalcntboard(search);
 	}
 
 	@Override
 	public List<board> getList(boardsearch search) {
 		
+		log.info(search.getKeyword()+" has "+mapper.getlistsearchboard(search).size()+" number");
 		return mapper.getlistsearchboard(search);
 	}
 
 	@Override
 	public List<attachfile> getfilelist(Long bno) {
+		board bd=mapper.readboard(bno);
+		log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is existed");
 		return fmapper.getlistfile(bno);
 	}
 
 	@Override
 	public void deletefilelist(Long bno) {
-		
+		board bd=mapper.readboard(bno);
+		log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is deleted");
 		fmapper.deleteallfile(bno);
 	}
 
+	@Transactional
 	@Override
 	public boolean board_delete(String boardname) {
 		// TODO Auto-generated method stub
 		if(mapper.deleteaouthboard(boardname, mapper.select_boardaouth(boardname))==1)
-		return mapper.board_delete(boardname)==1;
-		
+			if(mapper.board_delete(boardname)==1)
+			{	
+				log.info(boardname+" is delete");
+				return mapper.board_delete(boardname)==1;
+			}
 		return false;
 	}
 

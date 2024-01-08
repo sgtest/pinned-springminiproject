@@ -12,9 +12,9 @@ public interface boardmapper {
 	public int banuserrealease(String userid);
 	public int banselect(String userid);
 	
-	public int createboard(String boardname, String boardsubject);
+	public void createboard(String boardname, String userid, String boardsubject);
 	public int deleteaouthboard(String boardname,String userid);
-	public int aouthboard(String boardname, String userid);
+	public int aouthboard(String aouth_userid,String aouth_boardname);
 	public String select_boardaouth(String boardname);
 	public int board_delete(String boardname);
 	
