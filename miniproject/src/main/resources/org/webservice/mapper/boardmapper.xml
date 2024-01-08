@@ -40,8 +40,8 @@
   	and sysdate between startdate and (startdate+periods) 
   	</select>
   	
-  	<select id="select_boardaouth">
-  	select REGUSERID from pro_board where boardname=#{boardname}
+  	<select id="select_boardaouth" resultType="String">
+  	select REGUSERID from pro_board_list where boardname=#{boardname}
   	</select>
   	<insert id="createboard">
   	insert into pro_board_list(boardnum, boardname, regdate, reguserid, boardsubject)
