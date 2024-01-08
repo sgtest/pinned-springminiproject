@@ -1,11 +1,14 @@
 package org.webservice.persis;
 
-import static org.junit.Assert.fail;
+
+
+import static org.junit.jupiter.api.Assertions.fail;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
 
-import org.junit.Test;
+import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Test;
 import org.webservice.*;
 
 import lombok.extern.log4j.Log4j;
@@ -21,6 +24,7 @@ public class JDBCTests {
 	}
 	
 	@Test
+	@DisplayName("sqld 연결 테스트")
 	public void testConnection() {
 		try(Connection con=
 				DriverManager.getConnection("jdbc:oracle:thin:@localhost:1521:XE","c##book_ex","book_ex")){

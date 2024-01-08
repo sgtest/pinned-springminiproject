@@ -44,14 +44,14 @@
   	select REGUSERID from pro_board where boardname=#{boardname}
   	</select>
   	<insert id="createboard">
-  	insert into pro_board_list 
-  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{writer},#{boardsubject})
+  	insert into pro_board_list(boardnum, boardname, regdate, reguserid, boardsubject)
+  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{userid},#{boardsubject})
   	</insert>
   	<delete id="deleteaouthboard">
     delete from pro_member_auth where auth=#{boardname} and userid=#{userid}
   	</delete>
   	<insert id="aouthboard">
-   	insert into pro_member_auth values(#{userid},#{boardname})
+   	insert into pro_member_auth values(#{aouth_userid},#{aouth_boardname})
   	</insert>
   	<delete id="board_delete">
   	delete from pro_board_list where boardname=#{boardname}

@@ -52,8 +52,8 @@ public class boardcontroller {
 	
 	@PreAuthorize("authenticated()")
 	@PostMapping("/createBoardlist")
-	public String createboardlist(String boardna, String boardsu) {
-		bservice.board_register(boardna, boardsu);
+	public String createboardlist(String boardna, String boardsu,String userid) {
+		bservice.board_register(boardna, boardsu, userid);
 		return "redirect:/board/list";
 	}
 	
