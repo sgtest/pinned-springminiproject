@@ -40,7 +40,7 @@ public class boardserviceImpl implements boardservice{
 	public void board_register(String boardname,String reguserid, String boardsub) {
 		log.info("create boardname: "+boardname+", boardsubject: "+boardsub);
 		mapper.createboard(boardname, reguserid, boardsub);
-		mapper.aouthboard(boardname, reguserid);
+		mapper.aouthboard(reguserid,boardname);
 		
 	}
 
