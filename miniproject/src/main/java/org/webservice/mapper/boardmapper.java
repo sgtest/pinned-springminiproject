@@ -4,7 +4,9 @@ import java.util.List;
 
 import org.apache.ibatis.annotations.Param;
 import org.webservice.domain.attachfile;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
+import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 
 public interface boardmapper {
@@ -12,9 +14,9 @@ public interface boardmapper {
 	public int banuserrealease(String userid);
 	public int banselect(String userid);
 	
-	public void createboard(String boardname, String userid, String boardsubject);
-	public int deleteaouthboard(String boardname,String userid);
-	public int aouthboard(String aouth_userid,String aouth_boardname);
+	public void createboard(boardlist brdlist);
+	public int deleteaouthboard(auth ath);
+	public int aouthboard(auth ath);
 	public String select_boardaouth(String boardname);
 	public int board_delete(String boardname);
 	

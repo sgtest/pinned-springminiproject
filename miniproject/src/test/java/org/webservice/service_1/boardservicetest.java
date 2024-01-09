@@ -1,12 +1,19 @@
 package org.webservice.service_1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.webservice.domain.attachfile;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
+import org.webservice.domain.boardlist;
+import org.webservice.domain.boardsearch;
 import org.webservice.mapper.boardmapper;
 import org.webservice.mapper.membermapper;
 import org.webservice.persis.DataSourceTests;
@@ -28,16 +35,76 @@ public class boardservicetest {
 		log.info(bmapper.select_boardaouth("main"));
 	}
 	
-	@Test
+	//@Test
 	@DisplayName("게시판 생성 테스트")
 	public void testregisterboard() {
-		bmapper.createboard("main", "master", "this is main board");
+		boardlist brdlist=new boardlist();
+		List<String> mgrlist=new ArrayList<String>(); 
+		mgrlist.add("master");
+		
+		brdlist.setBoardname("second");
+		brdlist.setBoardsubject("this is second board");
+		brdlist.setReguserid("master");
+		brdlist.setManageridlist(mgrlist);
+		bmapper.createboard(brdlist);
 	}
 	
 	//@Test
+	@DisplayName("게시판 삭제 테스트")
+	public void testdeleteaouthboard() {
+		bmapper.board_delete("main");
+	}
+	
+	
+	//@Test
+	@DisplayName("권한양도 테스트")
+	public void testaouth() {
+		auth ath=new auth();
+		ath.setUserid("master");
+		ath.setAuth("second");
+		bmapper.aouthboard(ath);
+	}
+	
+	//@Test
+	@DisplayName("권한삭제 테스트")
+	public void testdeleteaouth() {
+		auth ath=new auth();
+		ath.setUserid(bmapper.select_boardaouth("second"));
+		ath.setAuth("second");
+		bmapper.deleteaouthboard(ath);
+	}
+	
+	
+	@Test
+	@DisplayName("게시물 입력 테스트")
 	public void testinsertboard() {
+		
+		board brd=new board();
+		List<attachfile> filelist=new ArrayList<attachfile>();
+		brd.setBoardname("second");
+		brd.setTitle("test second board");
+		brd.setContent("이것은 테스트 용입니다");
+		brd.setWriter("user00");
+		brd.setAttachlist(filelist);
+		bmapper.insertboard(brd);
+	}
+	
+	//@Test
+	@DisplayName("게시물 수정 테스트")
+	public void testupdateboard() {
+		board brd=bmapper.readboard(7L);
+		brd.setTitle("수정하는 중인 타이틀입니다");
+		brd.setContent("수정되었습니다.");
+		brd.setWriter("user00");
+		bmapper.updateboard(brd);
 		
 	}
 	
+	//@Test
+	@DisplayName("게시물 삭제 테스트")
+	public void testdeleteboard() {
+		
+		bmapper.deleteboard(6L);
+	}
 	
 }

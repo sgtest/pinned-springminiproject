@@ -1,12 +1,18 @@
 package org.webservice.service_1;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.List;
+import java.util.ListIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webservice.domain.attachfile;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
+import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 import org.webservice.mapper.boardmapper;
 import org.webservice.mapper.filemapper;
@@ -39,18 +45,35 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public void board_register(String boardname,String reguserid, String boardsub) {
 		log.info("create boardname: "+boardname+", boardsubject: "+boardsub);
-		mapper.createboard(boardname, reguserid, boardsub);
-		mapper.aouthboard(reguserid,boardname);
+		boardlist brdlist=new boardlist();
+		List<String> mgrlist=new ArrayList<String>(); 
+		auth ath=new auth();
+		
+		mgrlist.add(reguserid);
+		
+		brdlist.setBoardname(boardname);
+		brdlist.setBoardsubject(boardsub);
+		brdlist.setReguserid(reguserid);
+		brdlist.setManageridlist(mgrlist);
+		mapper.createboard(brdlist);
+		
+		ath.setUserid(reguserid);
+		ath.setAuth(boardname);
+		mapper.aouthboard(ath);
 		
 	}
 
 	@Override
 	public boolean board_aouth(String boardname, String userid) {
 		String olduserid=mapper.select_boardaouth(boardname);
-		if(1==mapper.deleteaouthboard(boardname, olduserid)) 
+		auth ath=new auth();
+		ath.setUserid(olduserid);
+		ath.setAuth(boardname);
+		if(1==mapper.deleteaouthboard(ath)) 
 		{
 			log.info("new "+boardname+" board manager"+userid);
-			return (1==mapper.aouthboard(boardname, userid));
+			ath.setUserid(userid);
+			return (1==mapper.aouthboard(ath));
 		}
 		return false;
 	}
@@ -135,7 +158,10 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean board_delete(String boardname) {
 		// TODO Auto-generated method stub
-		if(mapper.deleteaouthboard(boardname, mapper.select_boardaouth(boardname))==1)
+		auth ath=new auth();
+		ath.setAuth(boardname);
+		ath.setUserid(mapper.select_boardaouth(boardname));
+		if(mapper.deleteaouthboard(ath)==1)
 			if(mapper.board_delete(boardname)==1)
 			{	
 				log.info(boardname+" is delete");

@@ -7,5 +7,5 @@ import lombok.Data;
 @Data
 public class auth {
 	private String userid;
-	private String boardauth;
+	private String auth;
 }
