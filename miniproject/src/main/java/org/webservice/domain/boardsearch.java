@@ -19,7 +19,7 @@ public class boardsearch {
 	
 	//처음 접속시 실행
 	public boardsearch() {
-		this.boardname="mainboard";
+		this.boardname="main";
 		this.pageNum=1;
 		this.amount=10;
 	}

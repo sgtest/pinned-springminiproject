@@ -44,20 +44,23 @@
   	select REGUSERID from pro_board_list where boardname=#{boardname}
   	</select>
   	<insert id="createboard">
+  	<selectKey keyProperty="boardnum" order="BEFORE" resultType="Long">
+  	select seq_pro_board_list.nextval from dual
+  	</selectKey>
   	insert into pro_board_list(boardnum, boardname, regdate, reguserid, boardsubject)
-  	values(seq_pro_board_list.nextval,#{boardname},sysdate,#{userid},#{boardsubject})
+  	values(#{boardnum}, #{boardname}, sysdate, #{reguserid}, #{boardsubject})
   	</insert>
   	<delete id="deleteaouthboard">
-    delete from pro_member_auth where auth=#{boardname} and userid=#{userid}
+    delete from pro_member_auth where auth=#{auth} and userid=#{userid}
   	</delete>
   	<insert id="aouthboard">
-   	insert into pro_member_auth values(#{aouth_userid},#{aouth_boardname})
+   	insert into pro_member_auth values(#{userid},#{auth})
   	</insert>
   	<delete id="board_delete">
   	delete from pro_board_list where boardname=#{boardname}
   	</delete>
   	
-  	<select id="readboard">
+  	<select id="readboard" resultType="org.webservice.domain.board">
   	select * from pro_board where bno=#{bno}
   	</select>
   	<select id="getlistboard" resultType="org.webservice.domain.board">
@@ -92,7 +95,7 @@
   	select seq_pro_board.nextval from dual
   	</selectKey>
   	insert into pro_board 
-  	values(#{bno},#{boardname},#{title},#{content},#{writer},sysdate,sysdate)
+  	values(#{bno},#{boardname},#{title},#{content},#{writer},sysdate,sysdate,0)
   	</insert>
   	<update id="updateboard">
   	update pro_board set title=#{title},content=#{content},writer=#{writer},udate=sysdate where bno=#{bno}
