@@ -5,12 +5,13 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 
 public interface boardmapper {
-	public int banuser(String userid,String reason,int periods);
+	public int banusers(banuser user);
 	public int banuserrealease(String userid);
 	public int banselect(String userid);
 	

@@ -1,5 +1,7 @@
 package org.webservice.service_1;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Iterator;
@@ -11,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
@@ -34,7 +37,21 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean userban(String userid, String reason, int periods) {
 		log.info("userid: "+userid+" ban, reason: "+reason+", period: "+periods);
-		return mapper.banuser(userid, reason, periods)==1;
+		
+		LocalDate currentDate = LocalDate.now();
+		LocalDate endDate=currentDate.plusDays(periods);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy/MM/dd");
+		String startformattedDate=currentDate.format(formatter);
+		String endformattedDate=endDate.format(formatter);
+		
+		banuser ban=new banuser();
+		ban.setUserid(userid);
+		ban.setBanreason(reason);
+		ban.setStartdate(startformattedDate);
+		ban.setEnddate(endformattedDate);
+		
+		return mapper.banusers(ban)==1;
 	}
 	
 	public boolean userbanrelease(String userid) {

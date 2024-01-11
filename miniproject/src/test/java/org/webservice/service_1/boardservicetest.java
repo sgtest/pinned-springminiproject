@@ -1,5 +1,7 @@
 package org.webservice.service_1;
 
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,6 +13,7 @@ import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
@@ -74,8 +77,15 @@ public class boardservicetest {
 		bmapper.deleteaouthboard(ath);
 	}
 	
+	//@Test
+	@DisplayName("권한조회 테스트")
+	public void testselectaouth() {
+		String boarna="main";
+		String id=bmapper.select_boardaouth(boarna);
+		log.info(id);
+	}
 	
-	@Test
+	//@Test
 	@DisplayName("게시물 입력 테스트")
 	public void testinsertboard() {
 		
@@ -107,4 +117,35 @@ public class boardservicetest {
 		bmapper.deleteboard(6L);
 	}
 	
+	//@Test
+	@DisplayName("유저 차단 테스트")
+	public void testuserban() {
+		banuser ban=new banuser();
+		LocalDate currentDate = LocalDate.now();
+		LocalDate endDate=currentDate.plusDays(7);
+		
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy/MM/dd");
+		String startformattedDate=currentDate.format(formatter);
+		String endformattedDate=endDate.format(formatter);
+		
+		ban.setUserid("user00");
+		ban.setBanreason("this is test");
+		ban.setStartdate(startformattedDate);
+		ban.setEnddate(endformattedDate);
+		bmapper.banusers(ban);
+	}
+	
+	//@Test
+	@DisplayName("유처 차단 조회 테스트")
+	public void testselectban() {
+		log.info(bmapper.banselect("user00"));
+	}
+	
+	//@Test
+	@DisplayName("유저 차단 해제 테스트")
+	public void testuserbanrelease() {
+		String id="user00";
+		
+		bmapper.banuserrealease(id);
+	}
 }

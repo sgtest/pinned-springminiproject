@@ -28,16 +28,15 @@
   	</sql>
   	
   	
-  	<insert id="banuser">
+  	<insert id="banusers">
 	INSERT into pro_ban 
-	values(seq_pro_ban.nextval, #{userid},#{reason},sysdate,#{periods})
+	values(seq_pro_ban.nextval, #{userid},#{banreason},sysdate,#{enddate})
   	</insert>
-  	<delete id="banuserrelease">
+  	<delete id="banuserrealease">
   	delete from pro_ban where userid=#{userid}
   	</delete>
-  	<select id="banselect">
-  	select count(*) from pro_ban where userid=#{userid} 
-  	and sysdate between startdate and (startdate+periods) 
+  	<select id="banselect" resultType="int">
+  	select count(*) from pro_ban where (userid=#{userid}) and (sysdate between startdate and enddate)
   	</select>
   	
   	<select id="select_boardaouth" resultType="String">
