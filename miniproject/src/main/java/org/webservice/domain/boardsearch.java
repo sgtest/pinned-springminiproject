@@ -10,38 +10,33 @@ import lombok.ToString;
 @Setter
 @Getter
 public class boardsearch {
-	private int pageNum;
+	private int pagenum;
 	private int amount;
 
+	private String boardname;
 	private String type;
 	private String keyword;
-	private String boardname;
 	
 	//처음 접속시 실행
 	public boardsearch() {
-		this.boardname="main";
-		this.pageNum=1;
+		this.pagenum=1;
 		this.amount=10;
 	}
 	
-	//처음 갤러리 접속시 실행
-	public boardsearch(String brdname) {
-		this.boardname=brdname;
-		this.pageNum=1;
-		this.amount=10;
-	}
 	
-	public boardsearch(int pagenum,int amount) {
-		this.boardname="mainboard";
-		this.pageNum=pagenum;
+	public boardsearch(String boardname,int pagenum,int amount) {
+		this.boardname=boardname;
+		this.pagenum=pagenum;
 		this.amount=amount;
 	}
 	
 	//이동시 실행
-	public boardsearch(String brdname, int pagenum,int amount) {
-		this.boardname=brdname;
-		this.pageNum=pagenum;
+	public boardsearch(String boardname, int pagenum, int amount, String type, String keyword) {
+		this.boardname=boardname;
+		this.pagenum=pagenum;
 		this.amount=amount;
+		this.type=type;
+		this.keyword=keyword;
 	}
 	public String[] getTypeArr() {
 
@@ -51,8 +46,8 @@ public class boardsearch {
 	public String getListLink() {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-				.queryParam("boardname", this.boardname)
-				.queryParam("pageNum", this.pageNum)
+				.queryParam("boardname", this.getBoardname())
+				.queryParam("pageNum", this.pagenum)
 				.queryParam("amount", this.getAmount())
 				.queryParam("type", this.getType())
 				.queryParam("keyword", this.getKeyword());
