@@ -73,16 +73,16 @@
   	select * 
   	from 
   	(
-  	select /*+ INDEX_DESC(pro_board SYS_C0033769)/
-  	rownum rn, bno, boardname, title,content,writer,regdate,udate,commentnum
+  	select /*+INDEX_DESC(pro_board SYS_C0033769) */
+  	rownum rn, bno, boardname, title,content,writer,regdate,udate,comment_num
   	from pro_board 
   	where 
   	]]>
   	<include refid="search"> </include>
   	<![CDATA[
-  	rownum<=#{pagenum}*#{amount}
+  	rownum<=#{pagenum} * #{amount}
   	)
-  	where rn>(#{pagenum}-1)*#{amount}
+  	where rn>(#{pagenum}-1) * #{amount}
   	]]>
   	</select>
   	

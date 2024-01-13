@@ -20,7 +20,8 @@ public class boardpage {
 	  public boardpage(boardsearch srh,int total) {
 		  this.srh=srh;
 		  this.total=total;
-		  this.endPage = (int) (Math.ceil(srh.getPageNum() / 10.0)) * 10;
+		  this.boardname=srh.getBoardname();
+		  this.endPage = (int) (Math.ceil(srh.getPagenum() / 10.0)) * 10;
 
 		    this.startPage = this.endPage - 9;
 
@@ -33,7 +34,6 @@ public class boardpage {
 		    this.prev = this.startPage > 1;
 
 		    this.next = this.endPage < realEnd;
-		    this.boardname=srh.getBoardname();
 		  
 	  }
 }

@@ -148,4 +148,33 @@ public class boardservicetest {
 		
 		bmapper.banuserrealease(id);
 	}
+	
+	//@Test
+	@DisplayName("게시판 리스트 조회 테스트")
+	public void testlistboard() {
+		List<board> listboard=new ArrayList<board>();
+		
+		listboard=bmapper.getlistboard();
+		for(board b:listboard) {
+			log.info("번호: "+b.getBno()+" 테스트 중입니다. 내용: "+b.getContent());
+		}
+	}
+	
+	//@Test
+	@DisplayName("게시판 검색 조회 테스트")
+	public void testsearchlistboard() {
+		List<board> listboard=new ArrayList<board>();
+		
+		boardsearch search=new boardsearch();
+		search.setBoardname("second");
+		search.setKeyword("테스트 5");
+		search.setType("C");
+		listboard=bmapper.getlistsearchboard(search);
+		
+		for(board b:listboard) {
+			log.info("번호: "+b.getBno()+" 테스트 중입니다. 내용: "+b.getContent());
+		}
+		log.info(listboard.size());
+		
+	}
 }
