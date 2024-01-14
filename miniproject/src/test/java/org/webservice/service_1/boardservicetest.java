@@ -167,8 +167,8 @@ public class boardservicetest {
 		
 		boardsearch search=new boardsearch();
 		search.setBoardname("second");
-		search.setKeyword("테스트 5");
-		search.setType("C");
+		search.setKeyword("user00");
+		search.setType("W");
 		listboard=bmapper.getlistsearchboard(search);
 		
 		for(board b:listboard) {
@@ -176,5 +176,18 @@ public class boardservicetest {
 		}
 		log.info(listboard.size());
 		
+	}
+	
+	//@Test
+	@DisplayName("게시판 검색 페이지 조회 테스트")
+	public void testsearchlistboardpage() {
+		List<board> listboard=new ArrayList<board>();
+
+		boardsearch search=new boardsearch();
+		search.setBoardname("second");
+		search.setKeyword("user00");
+		search.setType("W");
+		search.setPagenum(2);
+		listboard=bmapper.getlistsearchboard(search);
 	}
 }

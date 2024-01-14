@@ -2,13 +2,13 @@ package org.webservice.domain;
 
 import org.springframework.web.util.UriComponentsBuilder;
 
+import lombok.Data;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
 
 @ToString
-@Setter
-@Getter
+@Data
 public class boardsearch {
 	private int pagenum;
 	private int amount;

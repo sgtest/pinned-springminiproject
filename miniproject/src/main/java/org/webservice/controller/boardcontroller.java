@@ -130,7 +130,4 @@ public class boardcontroller {
 		
 	}
 	
-	private void oldFiledelete() {
-		
-	}
 }
