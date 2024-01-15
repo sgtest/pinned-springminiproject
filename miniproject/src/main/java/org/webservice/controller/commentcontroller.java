@@ -12,5 +12,9 @@ import lombok.extern.log4j.Log4j;
 @RequestMapping("/comment/*")
 @Log4j
 public class commentcontroller {
-
+	
+	
+	public void insertcomment() {
+		
+	}
 }
