@@ -8,10 +8,10 @@
   	select * from pro_comment where rno=#{rno}
   	</select>
   	<insert id="insertcomment">
-  	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{reply},#{replyer},sysdate)
+  	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{comments},#{writer},sysdate)
   	</insert>
   	<update id="updatecomment">
-  	update pro_comment set comments=#{reply} regdate=sysdate where rno=#{rno}
+  	update pro_comment set comments=#{comments}, regdate=sysdate where rno=#{rno}
   	</update>
   	<delete id="deletecomment">
   	delete from pro_comment where rno=#{rno}
@@ -28,8 +28,8 @@
 	from pro_comment
 	where bno=#{bno}
 	and rno>0
-	and rownum <= #{search.pageNum}*#{search.amount}
-	) where rn>(#{search.pageNum-1}*#{search.amount})
+	and rownum <= #{search.pagenum}*#{search.amount}
+	) where rn>((#{search.pagenum}-1)*#{search.amount})
   	]]>
   	</select>
   	<select id="getcountcomment" resultType="int">

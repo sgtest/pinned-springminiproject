@@ -9,7 +9,7 @@ public class comment {
 	  private Long rno;
 	  private Long bno;
 
-	  private String reply;
-	  private String replyer;
+	  private String comments;
+	  private String writer;
 	  private Date regdate;
 }
