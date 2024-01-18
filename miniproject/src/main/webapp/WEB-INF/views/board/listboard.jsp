@@ -12,7 +12,8 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
-          <style>
+          
+     <style>
         .boardlist {
             margin-top: 20px;
         }
@@ -23,6 +24,16 @@
 
         .board_table {
             width: 100%;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            margin-top: 20px;
+        }
+
+        .page-item {
+            margin: 0 5px;
         }
     </style>
           
@@ -60,6 +71,21 @@
 		</table>		
 	</div>
 	</div>
+	
+	<div class="pagination">
+		<c:if test="${page.prev}">
+			<a href="listboard?page=${page.startPage-1}&amount=${page.srh.getAmount()}">Prev </a>
+		</c:if>
+		
+		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+			<a href="listboard?page=${num}&amount=${page.srh.getAmount()}">${num} </a>
+		</c:forEach>
+		
+		<c:if test="${page.next}">
+			<a href="listboard?page=${page.startPage+1}&amount=${page.srh.getAmount()}"> Next</a>
+		</c:if>
+    </div>
+	
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -69,5 +95,9 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
+        
+        <script type="text/javascript">
+        
+        </script>
 </body>
 </html>
