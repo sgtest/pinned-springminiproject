@@ -74,15 +74,15 @@
 	
 	<div class="pagination">
 		<c:if test="${page.prev}">
-			<a href="listboard?page=${page.startPage-1}&amount=${page.srh.getAmount()}">Prev </a>
+			<li class="page-item"><a class="page-link" href="listboard?page=${page.startPage-1}&amount=${page.srh.getAmount()}">Prev </a></li>
 		</c:if>
 		
 		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
-			<a href="listboard?page=${num}&amount=${page.srh.getAmount()}">${num} </a>
+			<li class="page-item"><a class="page-link" href="listboard?page=${num}&amount=${page.srh.getAmount()}">${num}&nbsp; </a></li>
 		</c:forEach>
 		
 		<c:if test="${page.next}">
-			<a href="listboard?page=${page.startPage+1}&amount=${page.srh.getAmount()}"> Next</a>
+			<li class="page-item"><a class="page-link" href="listboard?page=${page.endPage+1}&amount=${page.srh.getAmount()}"> Next</a></li>
 		</c:if>
     </div>
 	
@@ -97,7 +97,13 @@
         crossorigin="anonymous"></script>
         
         <script type="text/javascript">
-        
+        $(document).ready(function(){
+            $('.page-link').on('click', function(event){
+                event.preventDefault();
+                var url = $(this).attr('href');
+                window.location.href = url;
+            });
+        });
         </script>
 </body>
 </html>
