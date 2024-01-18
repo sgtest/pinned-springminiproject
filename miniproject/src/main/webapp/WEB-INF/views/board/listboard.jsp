@@ -74,17 +74,28 @@
 	
 	<div class="pagination">
 		<c:if test="${page.prev}">
-			<li class="page-item"><a class="page-link" href="listboard?page=${page.startPage-1}&amount=${page.srh.getAmount()}">Prev </a></li>
+			<li class="page-item previous">
+			<a href="${page.startPage-1 }">Prev </a>
+			</li>
 		</c:if>
 		
 		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
-			<li class="page-item"><a class="page-link" href="listboard?page=${num}&amount=${page.srh.getAmount()}">${num}&nbsp; </a></li>
+			<li class="page-item ${page.srh.getPagenum() == num ? "active":""} ">
+			<a href="${num}">${num}</a>
+			</li>
 		</c:forEach>
 		
 		<c:if test="${page.next}">
-			<li class="page-item"><a class="page-link" href="listboard?page=${page.endPage+1}&amount=${page.srh.getAmount()}"> Next</a></li>
+			<li class="page-item next">
+			<a href=${page.endPage+1 }"> Next</a>
+			</li>
 		</c:if>
     </div>
+    
+	<form id='boardmove' action="/board/listboard" method='get'>
+	<input type='hidden' name='pageNum' value='${page.srh.getPagenum()}'>
+	<input type='hidden' name='amount' value='${page.srh.getAmount()}'>
+	</form>
 	
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -98,11 +109,12 @@
         
         <script type="text/javascript">
         $(document).ready(function(){
-            $('.page-link').on('click', function(event){
-                event.preventDefault();
-                var url = $(this).attr('href');
-                window.location.href = url;
-            });
+        var moveaction=$("#boardmove");
+        $(".page-item").on("click",function(e){
+        	e.preventDefault();
+        	moveaction.find("input[name='pageNum']").val($(this).attr("href"));
+        	moveaction.submit();
+        });
         });
         </script>
 </body>
