@@ -12,6 +12,20 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
+          <style>
+        .boardlist {
+            margin-top: 20px;
+        }
+
+        .default_board_top {
+            text-align: center;
+        }
+
+        .board_table {
+            width: 100%;
+        }
+    </style>
+          
 </head>
 <body>
 	<h2>이것은 게시판이다</h2>
@@ -37,8 +51,8 @@
 					<td>${board.boardname}</td>
 					<td><a href="readBoard/${board.bno}"> ${board.title}</a></td>
 					<td>${board.writer}</td>
-					<td>${board.regdate}</td>
-					<td>${board.udate}</td>
+					<td><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
+					<td><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td>${board.replyCnt}</td>					
 				</tr>
 			</c:forEach>
