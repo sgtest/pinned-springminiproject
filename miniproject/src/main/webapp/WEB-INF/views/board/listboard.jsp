@@ -4,7 +4,7 @@
 <html>
 <head>
 <meta charset="UTF-8">
-<title>this is worldboard</title>
+<title>this is world board</title>
 </head>
 <body>
 
