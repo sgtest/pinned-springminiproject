@@ -43,21 +43,26 @@ public class boardcontroller {
 		model.addAttribute(search.getBoardname()+"board", bservice.readboard(bno));
 	}
 	
-	@GetMapping("/list")
+	@GetMapping("/listboard")
 	public void readboardlist(@ModelAttribute("search") boardsearch search, Model model) {
 		
-		model.addAttribute(search.getBoardname()+"list", bservice.getList(search));
-		model.addAttribute("page", new boardpage(search, bservice.getlisttotal(search)));
+		List<board> boardList=bservice.getList(search);
+		
+		boardpage page=new boardpage(search, bservice.getlisttotal(search));
+		
+		model.addAttribute("boardList", boardList);
+		model.addAttribute("page", page);
+		
 	}
 	
-	@PreAuthorize("authenticated()")
+	//@PreAuthorize("authenticated()")
 	@PostMapping("/createBoardlist")
 	public String createboardlist(String boardna, String boardsu,String userid) {
 		bservice.board_register(boardna, boardsu, userid);
 		return "redirect:/board/list";
 	}
 	
-	@PreAuthorize("authenticated()")
+	//@PreAuthorize("authenticated()")
 	@PostMapping("/createBoard")
 	public String createboardLink(board brd, boardsearch search, RedirectAttributes rttr) {
 		
@@ -66,7 +71,7 @@ public class boardcontroller {
 		return "redirect:/board/list"+search.getListLink();
 	}
 	
-	@PreAuthorize("principal.username == #board.writer")
+	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updateBoard")
 	public String updateboardLink(board brd, boardsearch search,RedirectAttributes rttr){
 		
@@ -76,7 +81,7 @@ public class boardcontroller {
 		return "redirect:/board/list"+search.getListLink();
 	}
 	
-	@PreAuthorize("principal.username == #board.writer")
+	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/removeBoard")
 	public String deleteboard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr, String writer) {
 		

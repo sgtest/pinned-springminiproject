@@ -5,8 +5,14 @@
 	xsi:schemaLocation="http://www.springframework.org/schema/security http://www.springframework.org/schema/security/spring-security.xsd
 		http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 		
+	<bean id="bcryptPasswordEncoder"
+		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
+	<bean id="customUserDetailsService"
+		class="org.webservice.security.customUserDetailService"></bean>
 	<security:http>
 		
+	<security:intercept-url pattern="/board/listboard"
+			access="permitAll" />
 		<security:form-login/>
 		
 		<security:remember-me
@@ -14,6 +20,11 @@
 	</security:http>
 
 	<security:authentication-manager>
-	
+		<security:authentication-provider
+			user-service-ref="customUserDetailsService">
+			<security:password-encoder
+				ref="bcryptPasswordEncoder" />
+		</security:authentication-provider>
 	</security:authentication-manager>
+	
 </beans>

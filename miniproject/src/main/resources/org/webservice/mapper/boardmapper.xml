@@ -105,7 +105,7 @@
   	update pro_board set comment_num=comment_num+#{amount} where bno=#{bno}
   	</update>
   	<select id="gettotalcntboard" resultType="int">
-  	select count(*) from pro_board 
+  	select count(*) from pro_board where
   	<include refid="search"></include>
   	bno>0
   	</select>
