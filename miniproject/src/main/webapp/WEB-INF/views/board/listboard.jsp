@@ -17,7 +17,14 @@
         .boardlist {
             margin-top: 20px;
         }
-
+		.boardmake_create{
+			margin-top: 30px;
+			 float: left;
+		}
+		.boardmake_insert{
+			margin-top: 30px;
+			 float: right;
+		}
         .default_board_top {
             text-align: center;
         }
@@ -30,6 +37,7 @@
             display: flex;
             justify-content: center;
             margin-top: 20px;
+            margin-bottom: 20px;
         }
 
         .page-item {
@@ -39,7 +47,9 @@
           
 </head>
 <body>
-	<h2>이것은 게시판이다</h2>
+	<h2><a href="listboard">이것은 게시판이다</a></h2>
+	
+	<h1><a href="login">로그인</a></h1>
 	
 	<div class="boardlist">
 	<div class=default_board_top align="center">
@@ -64,7 +74,7 @@
 					<td>${board.writer}</td>
 					<td><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
-					<td>${board.replyCnt}</td>					
+					<td>${board.comment_num}</td>					
 				</tr>
 			</c:forEach>
 			</tbody>
@@ -90,9 +100,35 @@
             <a href="${page.endPage+1}"> Next</a>
         </li>
     </c:if>
-</div>
-
+	</div>
+	
+	<div class="boardsearch form">
+	<form action="/board/listboard" method="get" class="boardsearch srh">			
+		<select name="type">
+			<option value="" <c:out value="${page.srh.type == null ? 'selected' : ''}"/>>--</option>
+			<option value="G" <c:out value="${page.srh.type == 'G' ? 'selected' : ''}"/> >게시판이름</option>
+			<option value="T" <c:out value="${page.srh.type == 'T' ? 'selected' : ''}"/>>제목</option>
+			<option value="C" <c:out value="${page.srh.type == 'C' ? 'selected' : ''}"/>>내용</option>
+			<option value="W" <c:out value="${page.srh.type == 'W' ? 'selected' : ''}"/>>작성자</option>
+			<option value="TC" <c:out value="${page.srh.type == 'TC' ? 'selected' : ''}"/>>제목+내용</option>
+			<option value="GW" <c:out value="${page.srh.type == 'GW' ? 'selected' : ''}"/>>게사판이름+작성자</option>
+		</select>
+    	<input type="text" name="keyword" value='<c:out value="${page.srh.keyword}"/>' placeholder="검색어 입력"/>
+    	<input type="hidden" name="pageNum" value='<c:out value="${page.srh.pageNum}"/>'>
+    	<input type="hidden" name="amount" value='<c:out value="${page.srh.amount}"/>'>
+        <button type="submit" class="boardsearch search">검색</button>
+    </form>
+	</div>
+	
+	
+	
+		<div class="boardmake_insert"><a href="createBoard">게시판에 글쓰기</a></div>
+		<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div>
+	
 <form id='boardmove' method='get'>
+<!-- 타입하고 키워드 추가 -->
+	<input type='hidden' name='type' value='${page.srh.type}'>
+	<input type='hidden' name='keyword' value='${page.srh.keyword}'>
     <input type='hidden' name='pageNum' value='${page.srh.pageNum}'>
     <input type='hidden' name='amount' value='${page.srh.amount}'>
 </form>
@@ -117,6 +153,8 @@
         	boardmove.attr("action","listboard");
         	boardmove.submit();
         });
+        
+        
     });
 </script>
 </body>
