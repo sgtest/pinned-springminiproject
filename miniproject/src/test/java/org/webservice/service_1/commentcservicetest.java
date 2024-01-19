@@ -59,7 +59,7 @@ public class commentcservicetest {
 	public void testcommentlist() {
 		List<comment> cmtlist=new ArrayList<comment>();
 		boardsearch brdsrch=new boardsearch();
-		brdsrch.setPagenum(1);
+		brdsrch.setPageNum(1);
 		cmtlist=cmapper.getlistcomment(brdsrch, 50L);
 		int number=cmapper.getcountcomment(50L);
 		

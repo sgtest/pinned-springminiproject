@@ -73,30 +73,30 @@
 	</div>
 	
 	<div class="pagination">
-		<c:if test="${page.prev}">
-			<li class="page-item previous">
-			<a href="${page.startPage-1 }">Prev </a>
-			</li>
-		</c:if>
-		
-		<c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
-			<li class="page-item ${page.srh.getPagenum() == num ? "active":""} ">
-			<a href="${num}">${num}</a>
-			</li>
-		</c:forEach>
-		
-		<c:if test="${page.next}">
-			<li class="page-item next">
-			<a href=${page.endPage+1 }"> Next</a>
-			</li>
-		</c:if>
-    </div>
+    <c:if test="${page.prev}">
+        <li class="page-item previous">
+            <a href="${page.startPage-1}">Prev </a>
+        </li>
+    </c:if>
     
-	<form id='boardmove' action="/board/listboard" method='get'>
-	<input type='hidden' name='pageNum' value='${page.srh.getPagenum()}'>
-	<input type='hidden' name='amount' value='${page.srh.getAmount()}'>
-	</form>
-	
+    <c:forEach var="num" begin="${page.startPage}" end="${page.endPage}">
+        <li class="page-item btn">
+            <a href="${num}">${num}</a>
+        </li>
+    </c:forEach>
+    
+    <c:if test="${page.next}">
+        <li class="page-item next">
+            <a href="${page.endPage+1}"> Next</a>
+        </li>
+    </c:if>
+</div>
+
+<form id='boardmove' method='get'>
+    <input type='hidden' name='pageNum' value='${page.srh.pageNum}'>
+    <input type='hidden' name='amount' value='${page.srh.amount}'>
+</form>
+
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -107,15 +107,17 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
         
-        <script type="text/javascript">
-        $(document).ready(function(){
-        var moveaction=$("#boardmove");
-        $(".page-item").on("click",function(e){
+<script>
+    $(document).ready(function(){
+        let boardmove = $("#boardmove");
+        $(".page-item a").on("click", function(e){
         	e.preventDefault();
-        	moveaction.find("input[name='pageNum']").val($(this).attr("href"));
-        	moveaction.submit();
+        	console.log("page click");
+        	boardmove.find("input[name='pageNum']").val($(this).attr("href"));
+        	boardmove.attr("action","listboard");
+        	boardmove.submit();
         });
-        });
-        </script>
+    });
+</script>
 </body>
 </html>
