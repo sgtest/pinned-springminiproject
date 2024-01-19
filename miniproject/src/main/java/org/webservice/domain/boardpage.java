@@ -21,7 +21,7 @@ public class boardpage {
 		  this.srh=srh;
 		  this.total=total;
 		  this.boardname=srh.getBoardname();
-		  this.endPage = (int) (Math.ceil(srh.getPagenum() / 10.0)) * 10;
+		  this.endPage = (int) (Math.ceil(srh.getPageNum() / 10.0)) * 10;
 
 		    this.startPage = this.endPage - 9;
 

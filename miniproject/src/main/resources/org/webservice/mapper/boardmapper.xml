@@ -80,9 +80,9 @@
   	]]>
   	<include refid="search"> </include>
   	<![CDATA[
-  	rownum<=#{pagenum} * #{amount}
+  	rownum<=#{pageNum} * #{amount}
   	)
-  	where rn>(#{pagenum}-1) * #{amount}
+  	where rn>(#{pageNum}-1) * #{amount}
   	]]>
   	</select>
   	

@@ -38,13 +38,13 @@ public class boardcontroller {
 	
 	
 	@GetMapping("/readBoard"+"{bno}")
-	public void readboardLink(Long bno,@ModelAttribute("search") boardsearch search, Model model) {
+	public void readBoard(Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
 		model.addAttribute(search.getBoardname()+"board", bservice.readboard(bno));
 	}
 	
 	@GetMapping("/listboard")
-	public void readboardlist(@ModelAttribute("search") boardsearch search, Model model) {
+	public void listboard(boardsearch search, Model model) {
 		
 		List<board> boardList=bservice.getList(search);
 		
@@ -57,14 +57,14 @@ public class boardcontroller {
 	
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/createBoardlist")
-	public String createboardlist(String boardna, String boardsu,String userid) {
+	public String createBoardlist(String boardna, String boardsu,String userid) {
 		bservice.board_register(boardna, boardsu, userid);
 		return "redirect:/board/list";
 	}
 	
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/createBoard")
-	public String createboardLink(board brd, boardsearch search, RedirectAttributes rttr) {
+	public String createBoard(board brd, boardsearch search, RedirectAttributes rttr) {
 		
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
@@ -73,7 +73,7 @@ public class boardcontroller {
 	
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updateBoard")
-	public String updateboardLink(board brd, boardsearch search,RedirectAttributes rttr){
+	public String updateBoard(board brd, boardsearch search,RedirectAttributes rttr){
 		
 		if(bservice.updateboard(brd))
 			rttr.addFlashAttribute("result", "success");
@@ -83,7 +83,7 @@ public class boardcontroller {
 	
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/removeBoard")
-	public String deleteboard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr, String writer) {
+	public String removeBoard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr, String writer) {
 		
 		if(bservice.deleteboard(bno)) {
 			//파일 직접 삭제 함수

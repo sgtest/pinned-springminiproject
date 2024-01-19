@@ -187,7 +187,7 @@ public class boardservicetest {
 		search.setBoardname("second");
 		search.setKeyword("user00");
 		search.setType("W");
-		search.setPagenum(2);
+		search.setPageNum(2);
 		listboard=bmapper.getlistsearchboard(search);
 	}
 }

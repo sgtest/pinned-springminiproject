@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @Data
 public class boardsearch {
-	private int pagenum;
+	private int pageNum;
 	private int amount;
 
 	private String boardname;
@@ -19,21 +19,24 @@ public class boardsearch {
 	
 	//처음 접속시 실행
 	public boardsearch() {
-		this.pagenum=1;
+		this.pageNum=1;
 		this.amount=10;
 	}
 	
+	public boardsearch(int pagenum,int amount) {
+		this.pageNum=pagenum;
+		this.amount=amount;
+	}
 	
 	public boardsearch(String boardname,int pagenum,int amount) {
 		this.boardname=boardname;
-		this.pagenum=pagenum;
+		this.pageNum=pagenum;
 		this.amount=amount;
 	}
 	
 	//이동시 실행
-	public boardsearch(String boardname, int pagenum, int amount, String type, String keyword) {
-		this.boardname=boardname;
-		this.pagenum=pagenum;
+	public boardsearch(int pagenum, int amount, String type, String keyword) {
+		this.pageNum=pagenum;
 		this.amount=amount;
 		this.type=type;
 		this.keyword=keyword;
@@ -46,8 +49,7 @@ public class boardsearch {
 	public String getListLink() {
 
 		UriComponentsBuilder builder = UriComponentsBuilder.fromPath("")
-				.queryParam("boardname", this.getBoardname())
-				.queryParam("pageNum", this.pagenum)
+				.queryParam("pageNum", this.pageNum)
 				.queryParam("amount", this.getAmount())
 				.queryParam("type", this.getType())
 				.queryParam("keyword", this.getKeyword());
