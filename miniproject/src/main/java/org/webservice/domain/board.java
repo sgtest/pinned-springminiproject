@@ -14,6 +14,6 @@ public class board {
 	private Date regdate;
 	private Date udate;
 
-	private int replyCnt;
+	private int comment_num;
 	private List<attachfile> attachlist;
 }
