@@ -154,7 +154,6 @@
         	boardmove.submit();
         });
         
-        
     });
 </script>
 </body>
