@@ -17,12 +17,13 @@ public interface boardservice {
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);
 	public boolean board_delete(String boardname);
+	public List<String> select_boardlist();
 	
 	//관리자 양도
 	public boolean board_aouth(String boardname,String userid);
 	
 	//게시판의 게시글 관련 서비스
-	public board readboard(Long bno);
+	public board readBoard(Long bno);
 	public void insertboard(board bd);
 	public boolean deleteboard(Long bno);
 	public boolean updateboard(board bd);

@@ -96,7 +96,7 @@ public class boardserviceImpl implements boardservice{
 	}
 
 	@Override
-	public board readboard(Long bno) {
+	public board readBoard(Long bno) {
 		
 		log.info(bno+"_board read");
 		return mapper.readboard(bno);
@@ -185,6 +185,12 @@ public class boardserviceImpl implements boardservice{
 				return mapper.board_delete(boardname)==1;
 			}
 		return false;
+	}
+
+	@Override
+	public List<String> select_boardlist() {
+		List<String> boardlist=mapper.selectboardlist();
+		return boardlist;
 	}
 
 }

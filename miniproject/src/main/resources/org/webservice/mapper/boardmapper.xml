@@ -39,6 +39,9 @@
   	select count(*) from pro_ban where (userid=#{userid}) and (sysdate between startdate and enddate)
   	</select>
   	
+  	<select id="selectboardlist" resultType="String">
+  	select boardname from pro_board_list
+  	</select>
   	<select id="select_boardaouth" resultType="String">
   	select REGUSERID from pro_board_list where boardname=#{boardname}
   	</select>
@@ -60,7 +63,7 @@
   	</delete>
   	
   	<select id="readboard" resultType="org.webservice.domain.board">
-  	select * from pro_board where bno=#{bno}
+  	select * from pro_board where bno = #{bno}
   	</select>
   	<select id="getlistboard" resultType="org.webservice.domain.board">
   	<![CDATA[
