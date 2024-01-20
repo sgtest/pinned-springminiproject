@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -37,10 +38,11 @@ public class boardcontroller {
 	public boardservice bservice;
 	
 	
-	@GetMapping("/readBoard"+"{bno}")
+	@GetMapping("/readBoard/{bno}")
 	public void readBoard(Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
-		model.addAttribute(search.getBoardname()+"board", bservice.readboard(bno));
+		board board=bservice.readBoard(bno);
+		model.addAttribute("board", board);
 	}
 	
 	@GetMapping("/listboard")
@@ -55,20 +57,27 @@ public class boardcontroller {
 		
 	}
 	
+	
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/createBoardlist")
 	public String createBoardlist(String boardna, String boardsu,String userid) {
 		bservice.board_register(boardna, boardsu, userid);
-		return "redirect:/board/list";
+		return "redirect:/board/listboard";
 	}
 	
 	//@PreAuthorize("authenticated()")
-	@PostMapping("/createBoard")
-	public String createBoard(board brd, boardsearch search, RedirectAttributes rttr) {
-		
+	@PostMapping("/saveBoard")
+	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
+		List<String> boardname=bservice.select_boardlist();
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
-		return "redirect:/board/list"+search.getListLink();
+		return "redirect:/board/listboard"+search.getListLink();
+	}
+	@GetMapping("/createBoard")
+	public void createBoard(boardsearch search, Model model) {
+		List<String> boardname=bservice.select_boardlist();
+		model.addAttribute("boardlist", boardname);
+		model.addAttribute("searchcondition", "type: "+search.getType()+", keyword: "+search.getKeyword());
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
@@ -78,7 +87,7 @@ public class boardcontroller {
 		if(bservice.updateboard(brd))
 			rttr.addFlashAttribute("result", "success");
 		
-		return "redirect:/board/list"+search.getListLink();
+		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
@@ -91,7 +100,7 @@ public class boardcontroller {
 			bservice.deletefilelist(bno);
 			rttr.addFlashAttribute("result", "success");
 		}
-		return "redirect:/board/list"+search.getListLink();
+		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
 	private void Filedelete(List<attachfile> filelist) {
