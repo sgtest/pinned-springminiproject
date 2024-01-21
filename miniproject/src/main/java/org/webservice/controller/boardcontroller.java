@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.board;
+import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.service_1.boardservice;
@@ -38,11 +39,12 @@ public class boardcontroller {
 	public boardservice bservice;
 	
 	
-	@GetMapping("/readBoard/{bno}")
-	public void readBoard(Long bno,@ModelAttribute("search") boardsearch search, Model model) {
+	@GetMapping("/readBoard")
+	public void readBoard(@RequestParam("bno") Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
 		board board=bservice.readBoard(bno);
 		model.addAttribute("board", board);
+		model.addAttribute("search",search);
 	}
 	
 	@GetMapping("/listboard")
@@ -57,27 +59,41 @@ public class boardcontroller {
 		
 	}
 	
-	
-	//@PreAuthorize("authenticated()")
-	@PostMapping("/createBoardlist")
-	public String createBoardlist(String boardna, String boardsu,String userid) {
-		bservice.board_register(boardna, boardsu, userid);
-		return "redirect:/board/listboard";
-	}
-	
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/saveBoard")
 	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
-		List<String> boardname=bservice.select_boardlist();
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
 		return "redirect:/board/listboard"+search.getListLink();
-	}
+	}	
+	//@PreAuthorize("authenticated()")
 	@GetMapping("/createBoard")
 	public void createBoard(boardsearch search, Model model) {
 		List<String> boardname=bservice.select_boardlist();
 		model.addAttribute("boardlist", boardname);
 		model.addAttribute("searchcondition", "type: "+search.getType()+", keyword: "+search.getKeyword());
+	}
+	
+	//@PreAuthorize("authenticated()")
+	@PostMapping("createBoardlistaction")
+	public String createBoardlistaction(boardlist brdli, boardsearch search, RedirectAttributes rttr) {
+		
+		List<String> ex_brdlist=bservice.select_boardlist();
+		
+		for(String brdlist:ex_brdlist) {			
+			if(brdli.getBoardname().equals(brdlist)) {
+				rttr.addAttribute("result", "error");
+				return "redirect:/board/listboard"+search.getListLink();
+			}
+		}
+		bservice.board_register(brdli.getBoardname(), brdli.getReguserid(), brdli.getBoardsubject());
+		rttr.addAttribute("result", "success");
+		return "redirect:/board/listboard"+search.getListLink();
+	}
+	//@PreAuthorize("authenticated()")
+	@GetMapping("createBoardlist")
+	public void createBoardlist(Model model) {
+		
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
