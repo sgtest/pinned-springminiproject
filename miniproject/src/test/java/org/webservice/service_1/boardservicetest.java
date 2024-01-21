@@ -102,7 +102,9 @@ public class boardservicetest {
 	//@Test
 	@DisplayName("게시물 수정 테스트")
 	public void testupdateboard() {
-		board brd=bmapper.readboard(7L);
+		long a=51L;
+		board brd=bmapper.readboard(a);
+		log.info("수정할 게시물의 원래 내용: "+brd.getContent());
 		brd.setTitle("수정하는 중인 타이틀입니다");
 		brd.setContent("수정되었습니다.");
 		brd.setWriter("user00");

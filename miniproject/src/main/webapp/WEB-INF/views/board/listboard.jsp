@@ -17,8 +17,8 @@
         .boardlist {
             margin-top: 20px;
         }
-		.boardmake_create{
-			margin-top: 30px;
+		.boardmake_create,.boardmake_delete,.boardmake_list{
+			 margin-top: 30px;
 			 float: left;
 		}
 		.boardmake_insert{
@@ -70,7 +70,7 @@
 				<tr>
 					<td>${board.bno}</td>					
 					<td>${board.boardname}</td>
-					<td><a href="readBoard/${board.bno}"> ${board.title}</a></td>
+					<td><a href="readBoard?bno=${board.bno}"> ${board.title}</a></td>
 					<td>${board.writer}</td>
 					<td><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
@@ -122,9 +122,12 @@
 	
 	
 	
-		<div class="boardmake_insert"><a href="createBoard">게시판에 글쓰기</a></div>
-		<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div>
-	
+		<div class="boardmake_insert"><a href="createBoard">게시판에 글쓰기</a></div><br>
+		<div class="boardmake_list">
+			<div class="boardmake_select"><a href="selectBoardlist">게시판 리스트 살펴보기</a></div>
+			<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div>
+			<div class="boardmake_delete"><a href="removeBoardlist">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</a></div>
+		</div>
 <form id='boardmove' method='get'>
 <!-- 타입하고 키워드 추가 -->
 	<input type='hidden' name='type' value='${page.srh.type}'>

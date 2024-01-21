@@ -8,8 +8,21 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<title><c:out value="${board.title}"/></title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
+          crossorigin="anonymous">
+	<style>
+	textarea{
+		margin: 0;
+		text-align: justify;
+		font-size: 15px;
+		resize: none;
+	}
+	</style>
 </head>
 <body>
+<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a>
+
 <div class="readcontent_top">
 
 	<h4>제목</h4>
@@ -19,9 +32,11 @@
 	<p>${board.boardname}</p>
 
 	<h4>게시글 내용</h4>
-	<textarea name="content" rows="80" cols="140" readonly="readonly">
+	<div class="board_content">
+	<textarea name="content" rows="40" cols="140" readonly="readonly" >
 		<c:out value="${board.content}"/>
 	</textarea>
+	</div>
 	
 	<h4>작성자</h4>
 	<p>${board.writer}</p>
@@ -44,6 +59,11 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
-        
+        <script>
+        function goBack(){
+        	
+        	window.history.back();
+        }
+        </script>
 </body>
 </html>
