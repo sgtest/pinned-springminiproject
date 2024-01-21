@@ -125,7 +125,7 @@
 		<div class="boardmake_insert"><a href="createBoard">게시판에 글쓰기</a></div><br>
 		<div class="boardmake_list">
 			<div class="boardmake_select"><a href="selectBoardlist">게시판 리스트 살펴보기</a></div>
-			<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div>
+			<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div><br>
 			<div class="boardmake_delete"><a href="removeBoardlist">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</a></div>
 		</div>
 <form id='boardmove' method='get'>
