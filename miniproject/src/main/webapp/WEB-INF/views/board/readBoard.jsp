@@ -64,7 +64,7 @@
 	</div>
 	
 </div>
-
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
@@ -85,9 +85,9 @@
         		$.ajax({
         			type: 'get',
         			url: '/comment/readcommentlist',
-        			data: {page: 1, bno: bnoValue},
-        			success: function(commentpage) {
-						displaycomments(commentpage);
+        			data: {pagenum: 1, bno: bnoValue},
+        			success: function(cmtlist) {
+						displaycomments(cmtlist);
 					},
         			error: function(){
         				console.error('댓글 불러오기 실패');
@@ -95,19 +95,20 @@
         		});
         	}
         
-        	function displaycomments(commentpage){
+        	function displaycomments(cmtlist){
         		var commentcontainer=$("#comment_list");
         		commentcontainer.empty();
         		
-        		if(commentpage==null||commentpage.replyCnt==0){
+        		if(cmtlist==null||cmtlist.replyCnt==0){
         			return;
         		}
         		
-        		$.each(commentpage.list, function(index, comment) {
+        		
+        		$.each(cmtlist.list, function(index, comment) {
             	var commentHtml = '<p>' + comment.comments + '</p>';
+            	console.log(comment.comments);
             	commentContainer.append(commentHtml);
        		 	});
-        		loadComments();
         	}
         	
         	//댓글 등록과 업데이트 코드

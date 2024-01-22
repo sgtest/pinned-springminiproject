@@ -57,8 +57,8 @@ public class commentcontroller {
 	
 	@GetMapping("/readcommentlist")
 	@ResponseBody
-	public commentpage readcommentlist(@RequestParam int page,@RequestParam Long bno) {
-		boardsearch search=new boardsearch(page,10);
+	public commentpage readcommentlist(@RequestParam Long bno, @RequestParam int pagenum) {
+		boardsearch search=new boardsearch(pagenum,10);
 		List<comment> cmtlist=cservice.getcmtlist(search, bno);
 		commentpage cmtpage=new commentpage(cmtlist.size(), cmtlist);
 		
