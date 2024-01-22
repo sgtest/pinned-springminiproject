@@ -106,7 +106,10 @@
         		
         		
         		$.each(cmtpage.list, function(index, comment) {
+        		str = str + '<div>' + '<p>' + comment.writer + '</p>';
             	str = str + '<p>' + comment.comments + '</p>';
+            	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
+            	str = str + '</div><br>';
             	console.log(comment.comments);
             	console.log(str);
        		 	});
@@ -114,6 +117,21 @@
             	commentContainer.append(str);
         	}
         	
+        	function formatDateToCustomString(date) {
+        	    const options = {
+        	        year: 'numeric',
+        	        month: '2-digit',
+        	        day: '2-digit',
+        	        hour: '2-digit',
+        	        minute: '2-digit',
+        	        second: '2-digit',
+        	        hour12: false, // 24-hour format
+        	    };
+
+        	    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+        	    return formattedDate.replace(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)/, '$3/$1/$2 $4:$5:$6');
+        	}
+
         	//댓글 등록과 업데이트 코드
         });
 
