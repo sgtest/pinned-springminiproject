@@ -86,8 +86,9 @@
         			type: 'get',
         			url: '/comment/readcommentlist',
         			data: {pagenum: 1, bno: bnoValue},
-        			success: function(cmtlist) {
-						displaycomments(cmtlist);
+        			dataType:'JSON',
+        			success: function(cmtpage) {
+						displaycomments(cmtpage);
 					},
         			error: function(){
         				console.error('댓글 불러오기 실패');
@@ -95,24 +96,25 @@
         		});
         	}
         
-        	function displaycomments(cmtlist){
-        		var commentcontainer=$("#comment_list");
-        		commentcontainer.empty();
-        		
-        		if(cmtlist==null||cmtlist.replyCnt==0){
+        	function displaycomments(cmtpage){
+        		var commentContainer=$('.comment_list');
+        		commentContainer.empty();
+        		var str="";
+        		if(cmtpage==null||cmtpage.replyCnt==0){
         			return;
         		}
         		
         		
-        		$.each(cmtlist.list, function(index, comment) {
-            	var commentHtml = '<p>' + comment.comments + '</p>';
+        		$.each(cmtpage.list, function(index, comment) {
+            	str = str + '<p>' + comment.comments + '</p>';
             	console.log(comment.comments);
-            	commentContainer.append(commentHtml);
+            	console.log(str);
        		 	});
+
+            	commentContainer.append(str);
         	}
         	
         	//댓글 등록과 업데이트 코드
-
         });
 
         function goBack(){
