@@ -49,8 +49,23 @@
 
 </div>
 
+<br><br>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
+<div class="comment_class top">
+	<div class="comment_class class">
+	<h4>댓글 목록</h4>
+		<!-- 여기에는 댓글 페이지를 움직일시 다른 댓글을 보여주는 알고리즘 구현 board 페이지를 이용하면 될듯 -->
+		<div class="comment_list">
+			
+		</div>
+	</div>
+	<div class="comment_class page">
+	
+	</div>
+	
+</div>
+
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
         crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
@@ -60,6 +75,45 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
         <script>
+        $(document).ready(function(){
+        	var bnoValue = '<c:out value="${board.bno}"/>';
+
+        	loadComments();
+        	
+        	function loadComments(){
+        		
+        		$.ajax({
+        			type: 'get',
+        			url: '/comment/readcommentlist',
+        			data: {page: 1, bno: bnoValue},
+        			success: function(commentpage) {
+						displaycomments(commentpage);
+					},
+        			error: function(){
+        				console.error('댓글 불러오기 실패');
+        			}
+        		});
+        	}
+        
+        	function displaycomments(commentpage){
+        		var commentcontainer=$("#comment_list");
+        		commentcontainer.empty();
+        		
+        		if(commentpage==null||commentpage.replyCnt==0){
+        			return;
+        		}
+        		
+        		$.each(commentpage.list, function(index, comment) {
+            	var commentHtml = '<p>' + comment.comments + '</p>';
+            	commentContainer.append(commentHtml);
+       		 	});
+        		loadComments();
+        	}
+        	
+        	//댓글 등록과 업데이트 코드
+
+        });
+
         function goBack(){
         	
         	window.history.back();

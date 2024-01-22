@@ -49,9 +49,9 @@ public class commentcservicetest {
 	//@Test
 	@DisplayName("댓글 수정 테스트")
 	public void testcommentupdate() {
-		comment cmt=cmapper.readcomment(2L);
+		comment cmt=cmapper.readcomment(3L);
 		cmt.setComments("수정된 댓글 입니다");
-		cmapper.updatecomment(cmt);
+		log.info(cmapper.updatecomment(cmt));
 	}
 	
 	//@Test
