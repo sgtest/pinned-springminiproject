@@ -28,8 +28,8 @@
 	from pro_comment
 	where bno=#{bno}
 	and rno>0
-	and rownum <= #{search.pagenum}*#{search.amount}
-	) where rn>((#{search.pagenum}-1)*#{search.amount})
+	and rownum <= #{search.pageNum}*#{search.amount}
+	) where rn>((#{search.pageNum}-1)*#{search.amount})
   	]]>
   	</select>
   	<select id="getcountcomment" resultType="int">
