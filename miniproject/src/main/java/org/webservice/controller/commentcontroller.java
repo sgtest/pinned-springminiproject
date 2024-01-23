@@ -1,6 +1,8 @@
 package org.webservice.controller;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.http.HttpStatus;
@@ -42,10 +44,15 @@ public class commentcontroller {
 	
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/deletecomment")
-	public void deletecomment(Long rno, RedirectAttributes rttr) {
+	@ResponseBody
+	public Map<String,String> deletecomment(@RequestParam Long rno) {
+	    Map<String, String> response = new HashMap<>();
 		if(cservice.deletecomment(rno)==1) {
-			rttr.addFlashAttribute("result", "success");
+			response.put("result", "success");
+		}else {
+			response.put("result", "failure");
 		}
+		return response;
 		
 	}
 	
@@ -59,12 +66,16 @@ public class commentcontroller {
 	
 	@GetMapping("/readcommentlist")
 	@ResponseBody
-	public commentpage readcommentlist(@RequestParam Long bno, @RequestParam int pagenum) {
+	public Map<String,Object> readcommentlist(@RequestParam Long bno, @RequestParam int pagenum) {
 		boardsearch search=new boardsearch(pagenum,10);
 		List<comment> cmtlist=cservice.getcmtlist(search, bno);
 		commentpage cmtpage=new commentpage(cmtlist.size(), cmtlist);
+		int cmtcnt=cservice.gettotalcommentcnt(bno);
 		
-		return cmtpage;
+		Map<String,Object> resultMap=new HashMap<>();
+		resultMap.put("cmtpage", cmtpage);
+		resultMap.put("cmtcnt",cmtcnt);
+		return resultMap;
 	}
 	
 }

@@ -60,4 +60,9 @@ public class commentserviceImpl implements commentservice{
 		return new commentpage(cmtmapper.getcountcomment(bno),cmtmapper.getlistcomment(search, bno));
 	}
 
+	@Override
+	public int gettotalcommentcnt(Long bno) {
+		return cmtmapper.getcountcomment(bno);
+	}
+
 }

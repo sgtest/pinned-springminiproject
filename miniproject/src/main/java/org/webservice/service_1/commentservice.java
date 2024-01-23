@@ -12,6 +12,7 @@ public interface commentservice {
 	public comment getcomment(Long rno);
 	public int updatecomment(comment cmt);
 	public int deletecomment(Long rno);
+	public int gettotalcommentcnt(Long bno);
 	
 	public List<comment> getcmtlist(boardsearch search, Long bno);
 	public commentpage getcmtlistpage(boardsearch search, Long bno);
