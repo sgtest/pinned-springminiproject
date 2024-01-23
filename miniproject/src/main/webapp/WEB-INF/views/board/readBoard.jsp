@@ -79,6 +79,7 @@
         	var bnoValue = '<c:out value="${board.bno}"/>';
 
         	loadComments();
+        	loadCommentspage();
         	
         	function loadComments(){
         		
@@ -132,6 +133,12 @@
         	    return formattedDate.replace(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)/, '$3/$1/$2 $4:$5:$6');
         	}
 
+        	function loadCommentspage(){
+        		var commentspageform=$('.comment_class page');
+        		
+        		
+        	}
+        	
         	//댓글 등록과 업데이트 코드
         });
 
