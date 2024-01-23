@@ -18,6 +18,19 @@
 		font-size: 15px;
 		resize: none;
 	}
+	
+	.comment_obj{
+		margin-top: -5px;
+	}
+	.comment_class_page{
+        display: flex;
+        justify-content: center;
+        margin-top: 20px;
+        margin-bottom: 20px;
+	}
+	.commentpage{
+            margin: 0 5px;
+	}
 	</style>
 </head>
 <body>
@@ -49,17 +62,36 @@
 
 </div>
 
-<br><br>
+<br>
+<div class="comment_insert">
+	<div class="comment_form">
+		<form action="/comment/insertcomment" method="post">
+			<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+			
+			<div class="comment_insert_group">
+			
+			</div>
+			
+			<div class="comment_insert_group">
+			
+			</div>
+			
+		</form>
+	</div>
+</div>
+<br>
 
 <div class="comment_class top">
 	<div class="comment_class class">
 	<h4>댓글 목록</h4>
+	<input type="button" value="댓글 다시 불러오기" onclick="loadComments(1)"><br><br>
 		<!-- 여기에는 댓글 페이지를 움직일시 다른 댓글을 보여주는 알고리즘 구현 board 페이지를 이용하면 될듯 -->
 		<div class="comment_list">
 			
 		</div>
 	</div>
-	<div class="comment_class page">
+	
+	<div class="comment_class_page">
 	
 	</div>
 	
@@ -76,76 +108,127 @@
         crossorigin="anonymous"></script>
         <script>
         $(document).ready(function(){
-        	var bnoValue = '<c:out value="${board.bno}"/>';
+        	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
+			var pageNumValue = 1;
+        	loadComments(pageNumValue);
 
-        	loadComments();
-        	loadCommentspage();
-        	
-        	function loadComments(){
-        		
-        		$.ajax({
-        			type: 'get',
-        			url: '/comment/readcommentlist',
-        			data: {pagenum: 1, bno: bnoValue},
-        			dataType:'JSON',
-        			success: function(cmtpage) {
-						displaycomments(cmtpage);
-					},
-        			error: function(){
-        				console.error('댓글 불러오기 실패');
-        			}
-        		});
-        	}
-        
-        	function displaycomments(cmtpage){
-        		var commentContainer=$('.comment_list');
-        		commentContainer.empty();
-        		var str="";
-        		if(cmtpage==null||cmtpage.replyCnt==0){
-        			return;
-        		}
-        		
-        		
-        		$.each(cmtpage.list, function(index, comment) {
-        		str = str + '<div>' + '<p>' + comment.writer + '</p>';
-            	str = str + '<p>' + comment.comments + '</p>';
-            	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
-            	str = str + '</div><br>';
-            	console.log(comment.comments);
-            	console.log(str);
-       		 	});
-
-            	commentContainer.append(str);
-        	}
-        	
-        	function formatDateToCustomString(date) {
-        	    const options = {
-        	        year: 'numeric',
-        	        month: '2-digit',
-        	        day: '2-digit',
-        	        hour: '2-digit',
-        	        minute: '2-digit',
-        	        second: '2-digit',
-        	        hour12: false, // 24-hour format
-        	    };
-
-        	    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
-        	    return formattedDate.replace(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)/, '$3/$1/$2 $4:$5:$6');
-        	}
-
-        	function loadCommentspage(){
-        		var commentspageform=$('.comment_class page');
-        		
-        		
-        	}
-        	
-        	//댓글 등록과 업데이트 코드
         });
 
+
+    	function loadComments(pageNumValue){
+        	var bnoValue = '<c:out value="${board.bno}"/>';
+    		$.ajax({
+    			type: 'get',
+    			url: '/comment/readcommentlist',
+    			data: {pagenum: pageNumValue, bno: bnoValue},
+    			dataType:'JSON',
+    			success: function(resultMap) {
+    				var cmtpage=resultMap['cmtpage'];
+    				var cmtcnt=resultMap['cmtcnt'];
+    				var cmtamount=10;
+					displaycomments(cmtpage);
+					loadCommentspage(pageNumValue,cmtcnt,cmtamount);
+				},
+    			error: function(){
+    				console.error('댓글 불러오기 실패');
+    			}
+    		});
+    	}
+    
+    	function displaycomments(cmtpage){
+    		var commentContainer=$('.comment_list');
+    		commentContainer.empty();
+    		var str="";
+    		if(cmtpage==null||cmtpage.replyCnt==0){
+    			return;
+    		}
+    		
+    		
+    		$.each(cmtpage.list, function(index, comment) {
+    		str = str + '<div class="comment_obj">' + '<p>' + comment.writer + '</p>';
+        	str = str + '<p>' + comment.comments + '</p>';
+        	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
+        	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">'
+        	str = str + '</div><br>';
+   		 	});
+
+        	commentContainer.append(str);
+    	}
+    	
+    	function formatDateToCustomString(date) {
+    	    const options = {
+    	        year: 'numeric',
+    	        month: '2-digit',
+    	        day: '2-digit',
+    	        hour: '2-digit',
+    	        minute: '2-digit',
+    	        second: '2-digit',
+    	        hour12: false, // 24-hour format
+    	    };
+
+    	    const formattedDate = new Intl.DateTimeFormat('en-US', options).format(date);
+    	    return formattedDate.replace(/(\d+)\/(\d+)\/(\d+), (\d+):(\d+):(\d+)/, '$3/$1/$2 $4:$5:$6');
+    	}
+
+    	function loadCommentspage(pageNumValue, cmtcnt, cmtamount){
+    		var commentspageform=$('.comment_class_page');
+    		console.log(cmtcnt);
+    		
+    		var endpage=Math.ceil(pageNumValue/cmtamount)*10;
+    		var startpage=endpage-9;
+    		var realendpage=Math.ceil(cmtcnt/cmtamount);
+    		if(realendpage <= endpage){
+    			endpage=realendpage
+    		}
+
+    		var prev=startpage>1;
+    		var next=endpage<realendpage;
+    		
+    		//여기에서는 페이지 번호들을 생성을 한다 페이지 번호를 클릭시 게시물 번호와 해당 댓글 페이지 번호 정보를 이용해서 댓글 창을 출력한다	
+    		var str = "";
+    		commentspageform.empty();
+    		if (prev) {
+    		    str += '<li class="commentpage prev"><a href="#" onclick="loadComments(' + (startpage - 1) + ');"> prev </a></li>';
+    		}
+    		for (var num = startpage; num <= endpage; num++) {
+    		    str += '<li class="commentpage btn"><a href="#" onclick="loadComments(' + num + ');">' + num + '</a></li>';
+    		}
+    		if (next) {
+    		    str += '<li class="commentpage next"><a href="#" onclick="loadComments(' + (startpage + 1) + ');"> next </a></li>';
+    		}
+    		commentspageform.append(str);
+    		
+    	}
+    	
+    	function removeComment(rno){
+    		var csrfToken = $("#_csrf").val();
+    		$.ajax({
+    			type: 'post',
+    			url: '/comment/deletecomment',
+    			data: {rno: rno},
+    			dataType:'JSON',
+    	        beforeSend: function(xhr) {
+    	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+    	        },
+    			success: function(response){
+    				
+    				console.log('댓글 삭제 결과: '+response['result']);
+    				loadComments(1);
+    			},
+    			error: function(error){
+    				console.error('댓글 삭제 실패');
+    			}
+    		});
+    	}
+    	
+    	//댓글 등록과 업데이트 코드
+    	
+    	
         function goBack(){
         	
         	window.history.back();
         }
         </script>
+        
 </body>
 </html>

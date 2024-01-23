@@ -26,6 +26,7 @@ import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.service_1.boardservice;
+import org.webservice.service_1.commentservice;
 
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
@@ -38,11 +39,11 @@ public class boardcontroller {
 
 	public boardservice bservice;
 	
-	
 	@GetMapping("/readBoard")
 	public void readBoard(@RequestParam("bno") Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
 		board board=bservice.readBoard(bno);
+		
 		model.addAttribute("board", board);
 		model.addAttribute("search",search);
 	}
