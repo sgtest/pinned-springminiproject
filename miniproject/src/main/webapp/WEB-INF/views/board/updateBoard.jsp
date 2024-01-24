@@ -11,42 +11,64 @@
 <body>
 
 <h1>게시물 수정 페이지</h1>
-
+<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a><br><br>
 <div>
-<form action="board/updatesaveBoard" method="post">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
+<form action="updatesaveBoard" method="post">
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<input type="hidden" name="bno" value="${board.bno}">
+	
 <h4>게시판 종류 수정</h4>
 <div class="old_boardname">
-	
+	<p>${board.boardname}</p>
 </div>
 <div class="update_group">
-
+	<select name="boardname">
+		<c:forEach var="boardname" items="${boardlist}">
+			<option value="${boardname}">${boardname}</option>
+		</c:forEach>
+	</select>
 </div>
 
 <h4>게시글 제목 수정</h4>
 <div class="update_group">
-
+	<textarea id="title" name="title" rows="1" cols="100" required>${board.title}</textarea>
 </div>
 
 <h4>게시글 내용 수정</h4>
 <div class="update_group">
+	<textarea id="content" name="content" rows="80" cols="140" required>${board.content}</textarea><br>
 </div>
 
 <h4>게시글 작성자</h4>
 <div class="update_group">
+	<input type="text" id="writer" name="writer" value="${board.writer}" required><br>
 </div>
 
 <h4>게시글 첨부파일 수정</h4>
 <div class="update_group">
+	<div class="file_upload">
+		<div class="orginal_filelist">
+			
+		</div>
+		<div class="file_upload_attach">
+			<input type="file" name="uploadFile" multiple>
+		</div>
+		<div class="file_upload_result">
+		
+		</div>
+	</div>
 </div>
 
 <h4> 게시글 작성일자</h4>
 <div class="update_group">
+	<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
 </div>
 
 <div>
 </div>
+
+<button type="submit" class="btn_boardupdate">수정완료</button>
 
 </form>
 </div>

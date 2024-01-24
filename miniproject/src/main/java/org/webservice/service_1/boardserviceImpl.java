@@ -131,7 +131,7 @@ public class boardserviceImpl implements boardservice{
 	public boolean updateboard(board bd) {
 		fmapper.deleteallfile(bd.getBno());
 		boolean result=mapper.updateboard(bd)==1;
-		if(bd.getAttachlist()!=null||result) {
+		if(bd.getAttachlist()!=null&&result) {
 			for(attachfile file:bd.getAttachlist()) {
 				file.setBno(bd.getBno());
 				fmapper.insertfile(file);
