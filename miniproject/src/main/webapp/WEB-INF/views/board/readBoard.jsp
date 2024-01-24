@@ -39,8 +39,8 @@
 	</style>
 </head>
 <body>
-<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a>
-
+<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a><br>
+<a href="board/updateBoard">게시물 수정하기</a>
 <div class="readcontent_top">
 
 	<h4>제목</h4>
