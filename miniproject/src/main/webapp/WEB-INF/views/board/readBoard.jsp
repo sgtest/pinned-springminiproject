@@ -51,9 +51,7 @@
 
 	<h4>게시글 내용</h4>
 	<div class="board_content">
-	<textarea name="content" rows="40" cols="140" readonly="readonly" >
-		<c:out value="${board.content}"/>
-	</textarea>
+	<textarea name="content" rows="40" cols="140" readonly="readonly" ><c:out value="${board.content}"/></textarea>
 	</div>
 	
 	<h4>작성자</h4>
