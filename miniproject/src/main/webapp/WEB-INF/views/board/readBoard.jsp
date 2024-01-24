@@ -40,7 +40,7 @@
 </head>
 <body>
 <a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a><br>
-<a href="board/updateBoard">게시물 수정하기</a>
+<a href="updateBoard?bno=${board.bno}">게시물 수정하기</a>
 <div class="readcontent_top">
 
 	<h4>제목</h4>
@@ -127,7 +127,7 @@
 					</div>
 				
 					<button type="submit">댓글 수정완료</button>
-				<button type="button" class="commentedit_close_btn" data-dismiss="modal"  data-bs-target="#comment_edit" aria-label="Close">
+				<button type="button" id="modal_close_btn" class="commentedit_close_btn" data-dismiss="modal"  data-bs-target="#comment_edit" aria-label="Close">
 					<span aria-hidden="true">&times;</span>
 				</button>
 				</form>
@@ -151,6 +151,14 @@
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
         	
+        	$(".commentedit_close_btn").on("click",function(e){
+            	e.preventDefault();
+            	console.log("cmtmodal_close_click");
+        		const cmtmodal=document.getElementById("comment_edit");
+        		cmtmodal.style.display="none";
+        		
+        	});       	
+   
         	
         });
 

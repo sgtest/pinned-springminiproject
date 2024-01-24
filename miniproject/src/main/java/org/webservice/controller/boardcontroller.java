@@ -98,13 +98,21 @@ public class boardcontroller {
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
-	@PostMapping("/updateBoard")
-	public String updateBoard(board brd, boardsearch search,RedirectAttributes rttr){
-		
+	@PostMapping("/updatesaveBoard")
+	public String updatesaveBoard(board brd, boardsearch search,RedirectAttributes rttr) {
 		if(bservice.updateboard(brd))
 			rttr.addFlashAttribute("result", "success");
 		
 		return "redirect:/board/listboard"+search.getListLink();
+	}
+	
+	//@PreAuthorize("principal.username == #board.writer")
+	@GetMapping("/updateBoard")
+	public void updateBoard(Long bno, boardsearch search, Model model){
+		board brd=bservice.readBoard(bno);
+		List<String> boardname=bservice.select_boardlist();
+		model.addAttribute("boardlist", boardname);
+		model.addAttribute("board", brd);
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
