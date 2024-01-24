@@ -18,7 +18,12 @@
 		font-size: 15px;
 		resize: none;
 	}
-	
+	.comment_insert,.comment_obj {
+    	background-color: #f0f0f0;
+    	padding: 10px; 
+    	border: 1px solid #ccc; 
+   		margin-bottom: 10px; 
+	}
 	.comment_obj{
 		margin-top: -5px;
 	}
@@ -68,14 +73,17 @@
 		<form action="/comment/insertcomment" method="post">
 			<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 			
-			<div class="comment_insert_group">
+			<input type="hidden" id="bno" name="bno" value="${board.bno}"/>
+			<h5>댓글 작성자</h5>
+		        <div class="comment_insert_group">
+			    	<input type="text" id="writer" name="writer" required><br>
+			    </div>
 			
-			</div>
-			
-			<div class="comment_insert_group">
-			
-			</div>
-			
+			<h5>댓글 내용</h5>
+				<div class="comment_insert_group">
+					<textarea id="comments" name="comments" rows="1" cols="100"></textarea>
+				</div>
+			<button class="commment_insert_btn" type="submit">댓글 입력하기</button>
 		</form>
 	</div>
 </div>
@@ -96,13 +104,43 @@
 	</div>
 	
 </div>
+
+<div class="commentedit_modal" id="comment_edit" tabindex="-1" role="dialog" aria-labelledby="commenteditmodal" aria-hidden="true" style="display: none;">
+	<div class="commentedit_dialog" id="comment_edit_form" role="document">
+		<div class="commentedit_content">
+			<div class="commentedit_header">
+				<h5 class="commentedit_modal_title" id="commenteditmodal">댓글 수정</h5>
+			</div>
+			<div class="commentedit_body">
+				<form action="/comment/updatecomment" method="post">
+					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+					<input type="hidden" id="bno" name="bno" value=""/>
+					<input type="hidden" id="rno" name="rno" value=""/>
+				<h5>댓글 작성자</h5>
+		        	<div class="comment_update_group">
+			    		<input type="text" id="writer_obj" name="writer" value="" required>
+			    	</div>
+			
+				<h5>댓글 내용</h5>
+					<div class="comment_update_group">
+						<textarea id="comments_obj" name="comments" rows="1" cols="100" value=""></textarea>
+					</div>
+				
+					<button type="submit">댓글 수정완료</button>
+				<button type="button" class="commentedit_close_btn" data-dismiss="modal"  data-bs-target="#comment_edit" aria-label="Close">
+					<span aria-hidden="true">&times;</span>
+				</button>
+				</form>
+			</div>
+		</div>
+	</div>
+</div>
+
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>        
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
@@ -111,7 +149,7 @@
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
-
+        	
         });
 
 
@@ -149,6 +187,7 @@
         	str = str + '<p>' + comment.comments + '</p>';
         	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
         	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">'
+        	str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">'
         	str = str + '</div><br>';
    		 	});
 
@@ -222,7 +261,34 @@
     	}
     	
     	//댓글 등록과 업데이트 코드
-    	
+        function readCmt(rno, bno){
+        		$.ajax({
+        			type: 'get',
+        			url: '/comment/readComment',
+        			data: {rno: rno},
+        			dataType:'JSON',
+        			success: function(resultMap) {
+        				//댓글을 rno를 통해서 읽어오는 것을 성공할 시 해당 결과값을 이용해서 modal 창을 출력
+    					showupdatemodal(resultMap['comment'], bno);
+    				},
+        			error: function(){
+        				console.error('댓글 항목 불러오기 실패');
+        			}
+        		});
+        		
+        	}
+        function showupdatemodal(comment, bno){
+        		//댓글 수정을 위한 모달창을 띄우고 모달창에서 저장버튼 누를시 바로 수정적용
+        		var cmtmodal=$('#comment_edit_form');
+
+        	    cmtmodal.find('#writer_obj').val(comment.writer);
+        	    cmtmodal.find('#comments_obj').val(comment.comments);
+        	    cmtmodal.find('#rno').val(comment.rno);
+        	    cmtmodal.find('#bno').val(bno);
+        		
+        		cmtmodal.show();
+        		
+        	}
     	
         function goBack(){
         	
