@@ -147,8 +147,10 @@
         <script>
         $(document).ready(function(){
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
+        	
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
+        	
         	
         });
 
@@ -193,7 +195,7 @@
 
         	commentContainer.append(str);
     	}
-    	
+
     	function formatDateToCustomString(date) {
     	    const options = {
     	        year: 'numeric',
@@ -279,14 +281,14 @@
         	}
         function showupdatemodal(comment, bno){
         		//댓글 수정을 위한 모달창을 띄우고 모달창에서 저장버튼 누를시 바로 수정적용
-        		var cmtmodal=$('#comment_edit_form');
+        		const cmtmodal=document.getElementById("comment_edit");
 
-        	    cmtmodal.find('#writer_obj').val(comment.writer);
-        	    cmtmodal.find('#comments_obj').val(comment.comments);
-        	    cmtmodal.find('#rno').val(comment.rno);
-        	    cmtmodal.find('#bno').val(bno);
+        	    cmtmodal.querySelector('#writer_obj').value=comment.writer;
+        	    cmtmodal.querySelector('#comments_obj').value=comment.comments;
+        	    cmtmodal.querySelector('#rno').value=comment.rno;
+        	    cmtmodal.querySelector('#bno').value=bno;
         		
-        		cmtmodal.show();
+        		cmtmodal.style.display="block";
         		
         	}
     	
