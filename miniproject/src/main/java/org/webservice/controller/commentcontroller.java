@@ -36,11 +36,13 @@ public class commentcontroller {
 	commentservice cservice;
 	
 	//@PreAuthorize("authenticated()")
-	@PostMapping("/insertcomment")
-	public void insertcomment(comment cmt, RedirectAttributes rttr) {
+	@PostMapping("/insertcomment")	
+	public String insertcomment(comment cmt, RedirectAttributes rttr) {
 		cservice.registercomment(cmt);
 		rttr.addFlashAttribute("result", "success");
+		return "redirect:/board/readBoard?bno="+cmt.getBno();
 	}
+
 	
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/deletecomment")
@@ -56,12 +58,22 @@ public class commentcontroller {
 		
 	}
 	
+	@GetMapping("/readComment")
+	@ResponseBody
+	public Map<String,Object> readcomment(@RequestParam Long rno){
+		comment cmt=cservice.getcomment(rno);
+		Map<String,Object> resultMap=new HashMap<>();
+		resultMap.put("comment", cmt);
+		
+		return resultMap;
+	}
+	
 	@PostMapping("/updatecomment")
-	public void updatecomment(comment cmt, RedirectAttributes rttr) {
+	public String updatecomment(comment cmt, RedirectAttributes rttr) {
 		if(cservice.updatecomment(cmt)==1) {
 			rttr.addFlashAttribute("result", "success");
 		}
-		
+		return "redirect:/board/readBoard?bno="+cmt.getBno();
 	}
 	
 	@GetMapping("/readcommentlist")
