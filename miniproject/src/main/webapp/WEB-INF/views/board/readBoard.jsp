@@ -62,7 +62,9 @@
 
 	<h4>작성 날짜</h4>
 	<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
-
+	
+	<h4>첨부파일 목록</h4>
+	
 </div>
 
 <br>

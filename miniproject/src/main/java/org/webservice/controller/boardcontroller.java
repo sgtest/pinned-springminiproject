@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.board;
@@ -73,6 +74,15 @@ public class boardcontroller {
 		List<String> boardname=bservice.select_boardlist();
 		model.addAttribute("boardlist", boardname);
 		model.addAttribute("searchcondition", "type: "+search.getType()+", keyword: "+search.getKeyword());
+	}
+	
+	@PostMapping("/uploadTest")
+	public void uploadTest(MultipartFile[] uploadFile, Model model) {
+		for(MultipartFile multipartFile:uploadFile) {
+			log.info(multipartFile.getOriginalFilename());
+			log.info(multipartFile.getSize());
+			log.info(multipartFile.getName());
+		}
 	}
 	
 	//@PreAuthorize("authenticated()")
