@@ -48,17 +48,16 @@
 		
 		<button type="submit" class="btn_boardinsert">작성완료</button>
 	</form>
-	<form action="uploadFile" method="post" enctype="multipart/form-data">
+	
 	<h4>파일 업로드</h4>
 		<div class="file_upload">
 			<div class="file_upload_attach">
-				<input type="file" name="uploadFile" multiple>
+				<input type="file" id="inputfile" name="upload" multiple>
 			</div>
 			<div class="file_upload_result">
 			
 			</div>
 		</div>	
-	</form>	
 </div>
 
 
@@ -73,7 +72,30 @@
         crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
-	
+	var inputFile=$('#inputfile')
+	inputFile.change(funciton(){
+		var formData = new FormData();
+		var files = $('#inputfile')[0].files;
+		
+		$.ajax({
+			type: 'post',
+			url:'/upload',
+			data: formData,
+            contentType: false,
+            processData: false,
+			success: function(response){
+				var resultfilelist=response['attachfilelist'];
+				displayfilelist(resultfilelist);
+			},
+			error: function(error){
+				console.error('파일 업로드 에러!!');
+			}
+		});
+	});
+
+	function displayfilelist(resultfilelist){
+		
+	}
 });
 
 </script>
