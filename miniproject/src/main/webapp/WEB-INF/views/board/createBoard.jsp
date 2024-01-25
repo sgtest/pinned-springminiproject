@@ -44,19 +44,21 @@
 	<h4>작성자의 이름</h4>
 		<div class="insert_group">
 			<input type="text" id="writer" name="writer" required><br>
-		</div>
+		</div>		
+		
 		<button type="submit" class="btn_boardinsert">작성완료</button>
 	</form>
-	
+	<form action="uploadFile" method="post" enctype="multipart/form-data">
 	<h4>파일 업로드</h4>
-	<div class="file_upload">
-		<div class="file_upload_attach">
-		<input type="file" name="uploadFile" multiple>
-		</div>
-		<div class="file_upload_result">
-		
-		</div>
-	</div>
+		<div class="file_upload">
+			<div class="file_upload_attach">
+				<input type="file" name="uploadFile" multiple>
+			</div>
+			<div class="file_upload_result">
+			
+			</div>
+		</div>	
+	</form>	
 </div>
 
 
@@ -70,6 +72,10 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
 <script>
+$(document).ready(function(){
+	
+});
+
 </script>
 </body>
 </html>
