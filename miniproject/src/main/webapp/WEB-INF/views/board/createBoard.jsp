@@ -11,7 +11,9 @@
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
 	<style>
-	
+	.modal.show{
+		top: 0;
+	}
 	</style>
 </head>
 <body>
@@ -49,9 +51,10 @@
 		<button type="submit" class="btn_boardinsert">작성완료</button>
 	</form>
 	
-	<h4>파일 업로드</h4>
+	<h4>첨부파일</h4>
 		<div class="file_upload">
 			<div class="file_upload_attach">
+				<button type="button" id="fileupload_btn" data-bs-toggle="modal" data-bs-target="#fileUploadModal">파일 업로드</button>
 				<input type="file" id="inputfile" name="upload" multiple>
 			</div>
 			<div class="file_upload_result">
@@ -60,6 +63,28 @@
 		</div>	
 </div>
 
+
+<!-- 파일등록 모달창 -->
+<div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="file-modal-content">
+			<div class="file-modal-header">
+			<h5 class="file-modal-title" id="fileUploadModalLabel">파일 업로드</h5>
+			
+			</div>
+			<div class="file-modal-body">
+			<!-- 파일 업로드 영역 -->
+			
+			
+			<div class="fileupload_btn">
+				<button>File reset</button>
+				<button data-dismiss="modal">exit</button>
+				<button>File temp register</button>
+			</div>
+			</div>
+		</div>
+	</div>
+</div>		
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
@@ -73,10 +98,15 @@
 <script>
 $(document).ready(function(){
 	var inputFile=$('#inputfile')
-	inputFile.change(funciton(){
+	var filemodalbtn=$('#fileupload_btn');
+	
+	filemodalbtn.click(function(){
+		$('.modal').modal('show');
+	});
+	
+	inputFile.change(function(){
 		var formData = new FormData();
 		var files = $('#inputfile')[0].files;
-		
 		$.ajax({
 			type: 'post',
 			url:'/upload',
@@ -92,7 +122,8 @@ $(document).ready(function(){
 			}
 		});
 	});
-
+	
+	
 	function displayfilelist(resultfilelist){
 		
 	}
