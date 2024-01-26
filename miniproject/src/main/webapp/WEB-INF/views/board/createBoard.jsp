@@ -14,22 +14,41 @@
 	#fileUploadModal {
     top: 50%;
     transform: translateY(-50%);
-    width: 600px;
-    height: 600px;
+    width: 1000px;
+    height: 1300px;
     position: absolute;
     display: none;
-    left: 40%;
+    left: 30%;
     margin: 0;
   	justify-content: center;
   	align-items: center;
-  	background: rgba(0, 0, 0, 0.5);
+  	background-color: rgba(160, 160, 160, 1);
+	}
+	#fileUploadModal_box {
+	
 	}
 	#filemodalbody{
-    width: 600px;
-    height: 500px;
+	margin-left: 50px;
+	margin-right: 50px;
+    width: 900px;
+    height: 800px;
+    border: 2px solid #000;
+    overflow-y: auto;
 	}
 	#filemodalbtn{
-	
+		margin-top: 80px;
+		margin-bottom: 0px;
+		margin-left: 250px;
+		margin-right: 250px;
+	}
+	#fileupload_reset,#fileupload_tupload,#fileupload_close{
+		align-items:center; 
+		text-align: center;
+		margin-left:10px;
+		width: 150px;
+		height: 50px;
+		padding: 10px 5px;	
+  		cursor: pointer;
 	}
 	</style>
 </head>
@@ -83,18 +102,23 @@
 
 <!-- 파일등록 모달창 -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
-	<div class="modal-dialog modal-dialog-centered" role="document">
+	<div class="modal-dialog modal-dialog-centered" id="fileUploadModal_box" role="document">
 		<div class="file-modal-content">
 			<div class="file-modal-header">
-			<h5 class="file-modal-title" id="fileUploadModalLabel">파일 업로드</h5>
+			<h5 class="file-modal-title" id="fileUploadModalLabel">파일을 드래그해서 업로드 해주세요</h5>
 			</div>
 			<div id="filemodalbody" class="file-modal-body">
 			<!-- 파일 업로드 영역 -->
 			
+			</div>
+			<div id="filemodalresult">
+			<!-- 파일 업로드 리스트 영역 -->
 			
+			</div>
+			<div id="filemodalfooter">
 			<div id="filemodalbtn" class="fileupload_btn_set">
-				<button>File reset</button>
-				<button>File temp register</button>
+				<button id="fileupload_reset">File reset</button>
+				<button id="fileupload_tupload">File temp register</button>
 				<button id="fileupload_close" data-dismiss="modal">exit</button>
 			</div>
 			</div>
@@ -124,6 +148,21 @@ $(document).ready(function(){
 		
 		filemodal.modal('hide');
 		deletefile();
+	});
+	
+	const modal_file_drag=$('#filemodalbody');
+	modal_file_drag.on("dragover",function(e){
+	    console.log("파일 드래그 감지");
+	    e.preventDefault();
+	});
+	
+	modal_file_drag.on("drop",function(e){
+		console.log("파일 드롭 완료");
+	    e.preventDefault();
+	    var files = e.originalEvent.dataTransfer.files;
+	    console.log(files[0].name);
+	    //여기서 드롭을 할때, 실제로 서버에 업로드 아래 result 화면에 순서대로 나열된 리스트 형식으로 보여주면 될듯(이미지+파일이름)
+	    
 	});
 	
 	inputFile.change(function(){
