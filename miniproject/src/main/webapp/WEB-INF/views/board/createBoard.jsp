@@ -11,8 +11,25 @@
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
 	<style>
-	.modal.show{
-		top: 0;
+	#fileUploadModal {
+    top: 50%;
+    transform: translateY(-50%);
+    width: 600px;
+    height: 600px;
+    position: absolute;
+    display: none;
+    left: 40%;
+    margin: 0;
+  	justify-content: center;
+  	align-items: center;
+  	background: rgba(0, 0, 0, 0.5);
+	}
+	#filemodalbody{
+    width: 600px;
+    height: 500px;
+	}
+	#filemodalbtn{
+	
 	}
 	</style>
 </head>
@@ -70,28 +87,25 @@
 		<div class="file-modal-content">
 			<div class="file-modal-header">
 			<h5 class="file-modal-title" id="fileUploadModalLabel">파일 업로드</h5>
-			
 			</div>
-			<div class="file-modal-body">
+			<div id="filemodalbody" class="file-modal-body">
 			<!-- 파일 업로드 영역 -->
 			
 			
-			<div class="fileupload_btn">
+			<div id="filemodalbtn" class="fileupload_btn_set">
 				<button>File reset</button>
-				<button data-dismiss="modal">exit</button>
 				<button>File temp register</button>
+				<button id="fileupload_close" data-dismiss="modal">exit</button>
 			</div>
 			</div>
 		</div>
 	</div>
 </div>		
-
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-        crossorigin="anonymous"></script>
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
         crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>        
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
@@ -99,9 +113,17 @@
 $(document).ready(function(){
 	var inputFile=$('#inputfile')
 	var filemodalbtn=$('#fileupload_btn');
+	var filemodal=$('#fileUploadModal');
+	var filemodalclose=$('#fileupload_close');
 	
 	filemodalbtn.click(function(){
-		$('.modal').modal('show');
+		filemodal.modal('show');
+	});
+	
+	filemodalclose.click(function(){
+		
+		filemodal.modal('hide');
+		deletefile();
 	});
 	
 	inputFile.change(function(){
@@ -122,7 +144,10 @@ $(document).ready(function(){
 			}
 		});
 	});
-	
+	function deletefile(){
+		
+		
+	}
 	
 	function displayfilelist(resultfilelist){
 		
