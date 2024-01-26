@@ -28,6 +28,7 @@ public class filecontroller {
 	public Map<String,List<attachfile>> uploadfile(MultipartFile[] uploadFile, Model model) {
 		
 		Map<String, List<attachfile>> response=new HashMap<String, List<attachfile>>();
+		
 		List<attachfile> filelist=new ArrayList<attachfile>();
 		String topuploadfolder="D:\\server\\temp";
 		Date datevalue=new Date();
