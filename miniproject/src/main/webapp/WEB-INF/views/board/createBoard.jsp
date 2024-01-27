@@ -243,7 +243,7 @@ $(document).ready(function(){
 		{
 			//이미지 파일 리스트인 경우	
 			//썸네일 파일을 생성해서 모달창 아래쪽에 최대 5*4인 격자무늬로 보여줌
-			//이미지 경로를 받아서 보여주는 컨트롤러 메소드 필요
+			//이미지 경로를 받아서 섬네일을 보여주는 컨트롤러 메소드 필요
 			for(var i=0;i<resultfilelist.length;i++){
 				var imgfile=resultfilelist[i];
 				var thumbfileuri=encodeURIComponent(imgfile.uploadPath+"/th_"+imgfile.uuid+"_"+imgfile.fileName);
