@@ -27,6 +27,7 @@
 	#fileUploadModal_box {
 	
 	}
+	
 	#filemodalbody{
 	margin-left: 50px;
 	margin-right: 50px;
@@ -59,7 +60,7 @@
 	<h2>게시물 작성</h2>
 	
 	<form action="/board/saveBoard" method="post">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<h4>게시판 선택</h4>
 		<div class="insert_group">
 			<!-- 여기에는 현재 존재하는 게시판 중 하나를 선택할 수 있게 한다 -->
@@ -87,7 +88,7 @@
 		<button type="submit" class="btn_boardinsert">작성완료</button>
 	</form>
 	
-	<h4>첨부파일</h4>
+	<h4>첨부파일 (다시 업로드 버튼을 누르면 기존의 파일 목록이 초기화됩니다!!)</h4>
 		<div class="file_upload">
 			<div class="file_upload_attach">
 				<button type="button" id="fileupload_btn" data-bs-toggle="modal" data-bs-target="#fileUploadModal">파일 업로드</button>
@@ -99,7 +100,23 @@
 		</div>	
 </div>
 
-
+<!-- 파일 재등록 여부 확인 모달창 -->
+<!-- 
+<div class="modal fade" id="fileminimodal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div role="document">
+		<div>
+			<div>
+			<h5>파일 등록 창을 엽니다.(파일을 이미 등록한 경우, 기존에 등록된 파일이 초기화 됩니다!!!!)</h5>
+			</div>
+			<div>
+			<button></button>
+			<button></button>
+			</div>
+		</div>
+	</div>
+</div>
+-->
+ 
 <!-- 파일등록 모달창 -->
 <div class="modal fade" id="fileUploadModal" tabindex="-1" role="dialog" aria-labelledby="fileUploadModalLabel" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" id="fileUploadModal_box" role="document">
@@ -111,6 +128,8 @@
 			<!-- 파일 업로드 영역 -->
 			
 			</div>
+			<h5 class="file-modal-title">파일을 드래그해서 업로드 해주세요</h5>
+			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>이미지 파일은 따로 이미지 파일끼리 업로드 해주세요!!!</h5>
 			<div id="filemodalresult">
 			<!-- 파일 업로드 리스트 영역 -->
 			
@@ -139,15 +158,20 @@ $(document).ready(function(){
 	var filemodalbtn=$('#fileupload_btn');
 	var filemodal=$('#fileUploadModal');
 	var filemodalclose=$('#fileupload_close');
+	var filemodalreset=$('#fileupload_reset');
 	
 	filemodalbtn.click(function(){
+		deleteshowfile();
 		filemodal.modal('show');
 	});
 	
+	filemodalreset.click(function(){
+		deletefile();	
+	});
 	filemodalclose.click(function(){
-		
-		filemodal.modal('hide');
+
 		deletefile();
+		filemodal.modal('hide');
 	});
 	
 	const modal_file_drag=$('#filemodalbody');
@@ -159,8 +183,35 @@ $(document).ready(function(){
 	modal_file_drag.on("drop",function(e){
 		console.log("파일 드롭 완료");
 	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		
+		var formData = new FormData();
 	    var files = e.originalEvent.dataTransfer.files;
-	    console.log(files[0].name);
+	    for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+	    }
+	    $.ajax({
+	    	type: 'post',
+			url:'/uploadFile',
+			data: formData,
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+            success: function(response){
+            	var resultresponse=response['result'];
+				var resultfilelist=response['attachfilelist'];
+				var thumbnailefilelist=response['thumbnaillist'];
+				displayfilelist(resultresponse,resultfilelist,thumbnailefilelist);
+            },
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+	    });
 	    //여기서 드롭을 할때, 실제로 서버에 업로드 아래 result 화면에 순서대로 나열된 리스트 형식으로 보여주면 될듯(이미지+파일이름)
 	    
 	});
@@ -183,13 +234,41 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
 	function deletefile(){
 		
 		
 	}
-	
-	function displayfilelist(resultfilelist){
+	function deleteshowfile(){
 		
+	}
+	
+	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
+		var filemodalresult=$('#filemodalresult');
+		var str="";
+
+		filemodalresult.empty();
+		
+		if(resultresponse === 'upload_fail' || resultfilelist === null)
+		{
+			console.log('지원하지 않는 파일');
+			str=str+'<div><p>업로드에 실패하였습니다. 다시 시도해주세요</p></div>';	
+		}
+		else if(resultfilelist[0].image===true)
+		{
+			$.each(resultfilelist,function(index,file){
+				//이미지 파일 리스트인 경우	
+			});
+		}
+		else
+		{
+			$.each(resultfilelist,function(index,file){
+				//이미지 파일 리스트가 아닌 경우	
+			});
+		}
+		
+		
+		filemodalresult.append(str);
 	}
 });
 
