@@ -221,6 +221,7 @@ $(document).ready(function(){
 		
 		
 	}
+	
 	function deleteshowfile(){
 		
 	}
@@ -237,43 +238,49 @@ $(document).ready(function(){
 			console.log('지원하지 않는 파일');
 			str=str+'<div><p>업로드에 실패하였습니다. 다시 시도해주세요</p></div>';	
 		}
+		//모든 파일은 기본적으로 x버튼을 추가해서 추후에 해당 버튼을 클릭시 삭제를 수행하도록한다.
 		else if(resultfilelist[0].image===true)
 		{
-			$.each(resultfilelist,function(index,file){
-				//이미지 파일 리스트인 경우	
-				//썸네일 파일을 생성해서 모달창에 리스트 형태로 보여줌
-			});
+			//이미지 파일 리스트인 경우	
+			//썸네일 파일을 생성해서 모달창 아래쪽에 최대 5*4인 격자무늬로 보여줌
+			//이미지 경로를 받아서 보여주는 컨트롤러 메소드 필요
+			for(var i=0;i<resultfilelist.length;i++){
+				var imgfile=resultfilelist[i];
+				var thumbfileuri=encodeURIComponent(imgfile.uploadPath+"/th_"+imgfile.uuid+"_"+imgfile.fileName);
+				console.log(thumbfileuri);
+				
+				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
+				/*
+				str=str+'<div class="modal_img_file">'+'<span>'+imgfile.fileName+'</span>';
+				str=str+'<img src="'+thumbfileuri+'">';
+				str=str+'</div>'
+				
+				*/
+			}
 		}
 		else
 		{
-			$.each(resultfilelist,function(index,file){
-				//이미지 파일 리스트가 아닌 경우	
-				//파일명 그대로 목록으로 보여줌
-			});
+			//이미지 파일 리스트가 아닌 경우	
+			//파일명 그대로 순서대로 모달창 아래쪽에 목록으로 보여줌
+			for(var i=0;i<resultfilelist.length;i++){
+				var normalfile=resultfilelist[i];
+				var normalfileuri=encodeURIComponent(normalfile.uploadPath+"/"+normalfile.uuid+"_"+normalfile.fileName);
+				console.log(normalfileuri);
+				
+				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
+				/*
+				str=str+'<div class="modal_file">';
+				str=str+'<p></p>';
+				str=str+'</div>';
+				
+				*/
+			}
 		}
 		
 		
 		filemodalresult.append(str);
 	}
 	
-	inputFile.change(function(){
-		var formData = new FormData();
-		var files = $('#inputfile')[0].files;
-		$.ajax({
-			type: 'post',
-			url:'/upload',
-			data: formData,
-            contentType: false,
-            processData: false,
-			success: function(response){
-				var resultfilelist=response['attachfilelist'];
-				displayfilelist(resultfilelist);
-			},
-			error: function(error){
-				console.error('파일 업로드 에러!!');
-			}
-		});
-	});
 	
 });
 
