@@ -141,5 +141,13 @@ public class filecontroller {
 		}
 		return isImg;
 	}
-
+	
+	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
+	@PostMapping(value="/deletefile",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	@ResponseBody
+	public Map<String,Object> deletefile(){
+		Map<String, Object> response=new HashMap<String, Object>();
+		
+		return response;
+	}
 }
