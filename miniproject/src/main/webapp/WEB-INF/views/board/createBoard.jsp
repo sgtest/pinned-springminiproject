@@ -216,6 +216,46 @@ $(document).ready(function(){
 	    
 	});
 	
+	
+	function deletefile(){
+		
+		
+	}
+	function deleteshowfile(){
+		
+	}
+	
+	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
+		var filemodalresult=$('#filemodalresult');
+		//hidden input에 필요한 값들을 넣으면 될듯
+		var str="";
+
+		filemodalresult.empty();
+		
+		if(resultresponse === 'upload_fail' || resultfilelist === null)
+		{
+			console.log('지원하지 않는 파일');
+			str=str+'<div><p>업로드에 실패하였습니다. 다시 시도해주세요</p></div>';	
+		}
+		else if(resultfilelist[0].image===true)
+		{
+			$.each(resultfilelist,function(index,file){
+				//이미지 파일 리스트인 경우	
+				//썸네일 파일을 생성해서 모달창에 리스트 형태로 보여줌
+			});
+		}
+		else
+		{
+			$.each(resultfilelist,function(index,file){
+				//이미지 파일 리스트가 아닌 경우	
+				//파일명 그대로 목록으로 보여줌
+			});
+		}
+		
+		
+		filemodalresult.append(str);
+	}
+	
 	inputFile.change(function(){
 		var formData = new FormData();
 		var files = $('#inputfile')[0].files;
@@ -235,41 +275,6 @@ $(document).ready(function(){
 		});
 	});
 	
-	function deletefile(){
-		
-		
-	}
-	function deleteshowfile(){
-		
-	}
-	
-	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
-		var filemodalresult=$('#filemodalresult');
-		var str="";
-
-		filemodalresult.empty();
-		
-		if(resultresponse === 'upload_fail' || resultfilelist === null)
-		{
-			console.log('지원하지 않는 파일');
-			str=str+'<div><p>업로드에 실패하였습니다. 다시 시도해주세요</p></div>';	
-		}
-		else if(resultfilelist[0].image===true)
-		{
-			$.each(resultfilelist,function(index,file){
-				//이미지 파일 리스트인 경우	
-			});
-		}
-		else
-		{
-			$.each(resultfilelist,function(index,file){
-				//이미지 파일 리스트가 아닌 경우	
-			});
-		}
-		
-		
-		filemodalresult.append(str);
-	}
 });
 
 </script>
