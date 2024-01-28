@@ -297,9 +297,10 @@ $(document).ready(function(){
 				
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
 				/*
-				str=str+'<li class="modal_img_file">'+'<span>'+imgfile.fileName+'</span>';
-				str=str+'<img src="/disply?imgfile='+thumbfileuri+'">';
-				str=str+'</li>'
+				str=str+"<li class='modal_img_file'>"+"<span>"+imgfile.fileName+"</span>";
+				str=str+"<button class='modal_file_btn' type='button' data-path="+thumbfileuri+" data-name="+imgfile.fileName+" data-uuid="+imgfile.uuid+" data-image="+imgfile.image+">delete</burron>";
+				str=str+"<img src='/disply?imgfile="+thumbfileuri+"'>";
+				str=str+"</li>";
 				
 				*/
 			}
@@ -313,14 +314,16 @@ $(document).ready(function(){
 			for(var i=0;i<resultfilelist.length;i++){
 				var normalfile=resultfilelist[i];
 				var normalfileuri=encodeURIComponent(normalfile.uploadPath+"/"+normalfile.uuid+"_"+normalfile.fileName);
+				var normalfilelink=normalfileuri
+				
 				console.log(normalfileuri);
 				
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
 				
-				str=str+'<li class="modal_file">';
-				str=str+'<p>'+normalfile.fileName+'</p>';
-				str=str+'</li>';
-				
+				str=str+"<li class='modal_file'>";
+				str=str+"<p class='filename'>"+normalfile.fileName+"</p>";
+				str=str+"<button class='modal_file_btn' type='button' data-path=\'"+normalfileuri+"\' data-name="+normalfile.fileName+" data-uuid="+normalfile.uuid+" data-image="+normalfile.image+">delete</burron>";
+				str=str+"</li>";
 				
 			}
 			filemodalresult.append(str);
