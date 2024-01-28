@@ -11,30 +11,51 @@
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
 	<style>
+	.thumgrid {
+  		display: grid;
+  		grid-template-columns: repeat(8, 1fr);
+  		grid-template-rows: repeat(5, 1fr);
+    	overflow-y: scroll;
+    	height:0px;
+	}
+	.filelist{
+    	overflow-y: scroll;
+    	height:0px;
+	}
+	.modal_img_file{
+	    width: 100%;
+  		height: 100%;
+	}
+	#fileresult_thumb{
+  		display: grid;
+  		grid-template-columns: repeat(10, 1fr);
+  		grid-template-rows: repeat(5, 1fr);
+    	overflow-y: scroll;
+    	height:0px;
+	}
 	#fileUploadModal {
-    top: 50%;
-    transform: translateY(-50%);
-    width: 1000px;
-    height: 1300px;
-    position: absolute;
-    display: none;
-    left: 30%;
-    margin: 0;
-  	justify-content: center;
-  	align-items: center;
-  	background-color: rgba(160, 160, 160, 1);
+    	top: 50%;
+    	transform: translateY(-50%);
+    	width: 1000px;
+    	height: 1300px;
+    	position: absolute;
+    	display: none;
+    	left: 30%;
+    	margin: 0;
+  		justify-content: center;
+  		align-items: center;
+  		background-color: rgba(160, 160, 160, 1);
 	}
 	#fileUploadModal_box {
 	
 	}
-	
 	#filemodalbody{
-	margin-left: 50px;
-	margin-right: 50px;
-    width: 900px;
-    height: 800px;
-    border: 2px solid #000;
-    overflow-y: auto;
+		margin-left: 50px;
+		margin-right: 50px;
+   		width: 900px;
+    	height: 600px;
+    	border: 2px solid #000;
+    	overflow-y: auto;
 	}
 	#filemodalbtn{
 		margin-top: 80px;
@@ -95,7 +116,12 @@
 				<input type="file" id="inputfile" name="upload" multiple>
 			</div>
 			<div class="file_upload_result">
-			
+				<ul class="thumgrid" id="fileresult_thumb">
+				
+				</ul>
+				<ul class="filelist" id="fileresult_common">
+				
+				</ul>
 			</div>
 		</div>	
 </div>
@@ -132,13 +158,18 @@
 			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>이미지 파일은 따로 이미지 파일끼리 업로드 해주세요!!!</h5>
 			<div id="filemodalresult">
 			<!-- 파일 업로드 리스트 영역 -->
-			
+				<ul class="thumgrid" id="filemodalresult_thumb">
+				
+				</ul>
+				<ul class="filelist" id="filemodalresult_common">
+				
+				</ul>
 			</div>
 			<div id="filemodalfooter">
 			<div id="filemodalbtn" class="fileupload_btn_set">
-				<button id="fileupload_reset">File reset</button>
-				<button id="fileupload_tupload">File temp register</button>
-				<button id="fileupload_close" data-dismiss="modal">exit</button>
+				<button id="fileupload_reset">File Reset</button>
+				<button id="fileupload_tupload">File Temp Register</button>
+				<button id="fileupload_close" data-dismiss="modal">Exit</button>
 			</div>
 			</div>
 		</div>
@@ -159,6 +190,11 @@ $(document).ready(function(){
 	var filemodal=$('#fileUploadModal');
 	var filemodalclose=$('#fileupload_close');
 	var filemodalreset=$('#fileupload_reset');
+	var filemodalregister=$('#fileupload_tupload');
+	var filemodalresult=$('#filemodalresult_common');
+	var imgfilemodalresult=$('#filemodalresult_thumb');
+	var fileresult=$('#fileresult_commen');
+	var imgfileresult=$('#fileresult_thumb');
 	
 	filemodalbtn.click(function(){
 		deleteshowfile();
@@ -173,6 +209,10 @@ $(document).ready(function(){
 		deletefile();
 		filemodal.modal('hide');
 	});
+	filemodalregister.click(function(){
+		
+		
+	})
 	
 	const modal_file_drag=$('#filemodalbody');
 	modal_file_drag.on("dragover",function(e){
@@ -219,24 +259,29 @@ $(document).ready(function(){
 	
 	function deletefile(){
 		
-		
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
 	}
 	
 	function deleteshowfile(){
 		
+		fileresult.css("height","0px");
+		imgfileresult.css("height","0px");
+		fileresult.empty();
+		imgfileresult.empty();
 	}
 	
 	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
-		var filemodalresult=$('#filemodalresult');
 		//hidden input에 필요한 값들을 넣으면 될듯
 		var str="";
 
-		filemodalresult.empty();
-		
 		if(resultresponse === 'upload_fail' || resultfilelist === null)
 		{
 			console.log('지원하지 않는 파일');
 			str=str+'<div><p>업로드에 실패하였습니다. 다시 시도해주세요</p></div>';	
+			filemodalresult.append(str);
 		}
 		//모든 파일은 기본적으로 x버튼을 추가해서 추후에 해당 버튼을 클릭시 삭제를 수행하도록한다.
 		else if(resultfilelist[0].image===true)
@@ -244,6 +289,7 @@ $(document).ready(function(){
 			//이미지 파일 리스트인 경우	
 			//썸네일 파일을 생성해서 모달창 아래쪽에 최대 5*4인 격자무늬로 보여줌
 			//이미지 경로를 받아서 섬네일을 보여주는 컨트롤러 메소드 필요
+			imgfilemodalresult.css("height","300px");
 			for(var i=0;i<resultfilelist.length;i++){
 				var imgfile=resultfilelist[i];
 				var thumbfileuri=encodeURIComponent(imgfile.uploadPath+"/th_"+imgfile.uuid+"_"+imgfile.fileName);
@@ -251,34 +297,35 @@ $(document).ready(function(){
 				
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
 				/*
-				str=str+'<div class="modal_img_file">'+'<span>'+imgfile.fileName+'</span>';
-				str=str+'<img src="'+thumbfileuri+'">';
-				str=str+'</div>'
+				str=str+'<li class="modal_img_file">'+'<span>'+imgfile.fileName+'</span>';
+				str=str+'<img src="/disply?imgfile='+thumbfileuri+'">';
+				str=str+'</li>'
 				
 				*/
 			}
+			imgfilemodalresult.append(str);
 		}
 		else
 		{
 			//이미지 파일 리스트가 아닌 경우	
 			//파일명 그대로 순서대로 모달창 아래쪽에 목록으로 보여줌
+			filemodalresult.css("height","300px");
 			for(var i=0;i<resultfilelist.length;i++){
 				var normalfile=resultfilelist[i];
 				var normalfileuri=encodeURIComponent(normalfile.uploadPath+"/"+normalfile.uuid+"_"+normalfile.fileName);
 				console.log(normalfileuri);
 				
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
-				/*
-				str=str+'<div class="modal_file">';
-				str=str+'<p></p>';
-				str=str+'</div>';
 				
-				*/
+				str=str+'<li class="modal_file">';
+				str=str+'<p>'+normalfile.fileName+'</p>';
+				str=str+'</li>';
+				
+				
 			}
+			filemodalresult.append(str);
 		}
 		
-		
-		filemodalresult.append(str);
 	}
 	
 	
