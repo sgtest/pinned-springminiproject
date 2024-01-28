@@ -148,7 +148,9 @@ public class filecontroller {
 	public void display(String fileuri) {
 		//결국 반환값은 이미지가 되어야 한다.
 		String topuri="D:\\server\\temp";
+		File file=new File(topuri,fileuri);
 		
+		//해당 이미지 파일을 화면에 출력하는 코드
 	}
 	
 	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
@@ -156,6 +158,7 @@ public class filecontroller {
 	@ResponseBody
 	public Map<String,Object> deletefile(){
 		Map<String, Object> response=new HashMap<String, Object>();
+		
 		
 		return response;
 	}
