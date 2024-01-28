@@ -14,6 +14,7 @@ import java.util.UUID;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -142,6 +143,14 @@ public class filecontroller {
 		return isImg;
 	}
 	
+	@GetMapping("/display")
+	@ResponseBody
+	public void display(String fileuri) {
+		//결국 반환값은 이미지가 되어야 한다.
+		String topuri="D:\\server\\temp";
+		
+	}
+	
 	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
 	@PostMapping(value="/deletefile",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -150,4 +159,5 @@ public class filecontroller {
 		
 		return response;
 	}
+	
 }
