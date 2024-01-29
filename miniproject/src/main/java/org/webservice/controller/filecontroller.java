@@ -3,6 +3,11 @@ package org.webservice.controller;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.net.URLDecoder;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,7 +16,13 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.core.io.FileSystemResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -145,21 +156,52 @@ public class filecontroller {
 	
 	@GetMapping("/display")
 	@ResponseBody
-	public void display(String fileuri) {
+	public ResponseEntity<Resource> display(String fileuri) {
 		//결국 반환값은 이미지가 되어야 한다.
 		String topuri="D:\\server\\temp";
 		File file=new File(topuri,fileuri);
 		
-		//해당 이미지 파일을 화면에 출력하는 코드
+		Resource resource=new FileSystemResource(file);
+				
+		HttpHeaders header=new HttpHeaders();
+		Path filePath=null;
+		filePath=Paths.get(file.getAbsolutePath());
+		
+		try {
+			header.add("Content-Type", Files.probeContentType(filePath));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
 	}
 	
 	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
-	@PostMapping(value="/deletefile",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
+	//@PreAuthorize("isAuthenticated()")
+	@PostMapping("/deletefile")
 	@ResponseBody
-	public Map<String,Object> deletefile(){
+	public Map<String,Object> serverdeletefile(String fileuri, boolean filetype){
 		Map<String, Object> response=new HashMap<String, Object>();
 		
+		String topuri="D:\\server\\temp";
+		try {
+			File file=new File(topuri, URLDecoder.decode(fileuri, "UTF-8"));
+			file.delete();
+			
+			if(filetype) {
+				String orgfileuri=file.getAbsolutePath();
+				String orgfilename=orgfileuri.substring(orgfileuri.lastIndexOf("\\") + 1);
+				String thfilename="th_"+orgfilename;
+				String thfileuri=orgfileuri.replace(orgfilename,thfilename);		
+				File thfile=new File(thfileuri);
+				thfile.delete();
+				
+			}
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
 		
+		response.put("result", "success");
 		return response;
 	}
 	
