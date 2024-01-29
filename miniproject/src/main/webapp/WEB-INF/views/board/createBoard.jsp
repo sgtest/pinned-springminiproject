@@ -283,12 +283,28 @@ $(document).ready(function(){
 	
 	
 	filemodalclose.click(function(){
+		const dataPath=[];
+		const dataType=[];
+		const filelist=document.querySelectorAll(".modal_img_file");
 		
-		deletefile();
+		for (let i = 0; i < filelist.length; i++) {
+			const button=filelist[i].querySelector(".modal_file_btn");
+			dataPath.push(button.dataset.path);
+		    dataType.push(button.dataset.image);
+		}
+		deletefilelist(dataPath,dataType);
+		for(let i=0;i<filelist.length;i++){
+			filelist[i].remove();
+		}
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
 		filemodal.modal('hide');
 	});
+	
 	filemodalregister.click(function(){
-		
+		//각종 필요한 리스트 요소(4가지)를 이용해서 같은 방식으로 실제 등록화면에 반영
 		
 	})
 	
@@ -335,16 +351,6 @@ $(document).ready(function(){
 	});
 	
 	
-	function deletefile(){
-		
-		//버튼 클릭을 감지하고 모달창에서 해당 파일만 삭제
-		filemodalresult.css("height","0px");
-		imgfilemodalresult.css("height","0px");
-		filemodalresult.empty();
-		imgfilemodalresult.empty();
-	}
-	
-	
 	function deleteshowfile(){
 		
 		//버튼 클릭을 감지하고 게시물 입력창에서 해당 파일만 삭제
@@ -355,15 +361,6 @@ $(document).ready(function(){
 		
 	}
 	
-	
-	function deletelistfile(){
-		
-		//모달창에서 파일 삭제
-		filemodalresult.css("height","0px");
-		imgfilemodalresult.css("height","0px");
-		filemodalresult.empty();
-		imgfilemodalresult.empty();
-	}
 	
 	function deleteshowlistfile(){
 		
