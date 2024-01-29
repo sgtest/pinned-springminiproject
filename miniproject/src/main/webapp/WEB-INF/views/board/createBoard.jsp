@@ -241,8 +241,47 @@ $(document).ready(function(){
 	});
 	
 	filemodalreset.click(function(){
-		deletefile();
+		const dataPath=[];
+		const dataType=[];
+		const filelist=document.querySelectorAll(".modal_img_file");
+		
+		for (let i = 0; i < filelist.length; i++) {
+			const button=filelist[i].querySelector(".modal_file_btn");
+			dataPath.push(button.dataset.path);
+		    dataType.push(button.dataset.image);
+		}
+		deletefilelist(dataPath,dataType);
+		for(let i=0;i<filelist.length;i++){
+			filelist[i].remove();
+		}
 	});
+	
+	function deletefilelist(dataPath,dataType){
+		 for (let i = 0; i < dataPath.length; i++){
+			 const fileuri=dataPath[i];
+			 const img=dataType[i];
+			 var csrfToken = $("#_csrf").val();
+			 
+			 $.ajax({
+					type:'post',
+					url:'/deletefile',
+					data:{fileuri: fileuri, filetype: img},
+					dataType:'JSON',
+			        beforeSend: function(xhr) {
+			            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			        },
+					success: function(response){
+						alert(response['result']);
+					},
+					error: function(error){
+						console.error('파일삭제 오류');
+					}
+				});	
+			 
+		 }		
+	}
+	
+	
 	filemodalclose.click(function(){
 		
 		deletefile();
