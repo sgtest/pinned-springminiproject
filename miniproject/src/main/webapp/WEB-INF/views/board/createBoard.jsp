@@ -23,8 +23,20 @@
     	height:0px;
 	}
 	.modal_img_file{
+  		display: flex;
+  		flex-direction: column;  
+  		align-items: center; 
+		margin-left: 20px;
 	    width: 100%;
   		height: 100%;
+	}
+	.modal_file_btn{
+		margin-top: 20px;
+	}
+	.modal_thumimg{
+		margin-top: 10px;
+		max-width: 100px;
+		max-height: 100px;
 	}
 	#fileresult_thumb{
   		display: grid;
@@ -191,10 +203,37 @@ $(document).ready(function(){
 	var filemodalclose=$('#fileupload_close');
 	var filemodalreset=$('#fileupload_reset');
 	var filemodalregister=$('#fileupload_tupload');
+	var filemodaltopresult=$('#filemodalresult');
 	var filemodalresult=$('#filemodalresult_common');
 	var imgfilemodalresult=$('#filemodalresult_thumb');
 	var fileresult=$('#fileresult_commen');
 	var imgfileresult=$('#fileresult_thumb');
+	
+	filemodaltopresult.on("click", "button",function(e){
+		var objfile= $(this).data("path");
+		var objtype= $(this).data("image");
+		
+		var objui=$(this).closest("li");
+		var csrfToken = $("#_csrf").val();
+		
+		$.ajax({
+			type:'post',
+			url:'/deletefile',
+			data:{fileuri: objfile, filetype: objtype},
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+			success: function(response){
+				alert(response['result']);
+				objui.remove();
+			},
+			error: function(error){
+				console.error('파일삭제 오류');
+			}
+		});	
+	});
+	
 	
 	filemodalbtn.click(function(){
 		deleteshowfile();
@@ -202,10 +241,10 @@ $(document).ready(function(){
 	});
 	
 	filemodalreset.click(function(){
-		deletefile();	
+		deletefile();
 	});
 	filemodalclose.click(function(){
-
+		
 		deletefile();
 		filemodal.modal('hide');
 	});
@@ -259,18 +298,42 @@ $(document).ready(function(){
 	
 	function deletefile(){
 		
+		//버튼 클릭을 감지하고 모달창에서 해당 파일만 삭제
 		filemodalresult.css("height","0px");
 		imgfilemodalresult.css("height","0px");
 		filemodalresult.empty();
 		imgfilemodalresult.empty();
 	}
 	
+	
 	function deleteshowfile(){
 		
-		fileresult.css("height","0px");
-		imgfileresult.css("height","0px");
-		fileresult.empty();
-		imgfileresult.empty();
+		//버튼 클릭을 감지하고 게시물 입력창에서 해당 파일만 삭제
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
+		
+	}
+	
+	
+	function deletelistfile(){
+		
+		//모달창에서 파일 삭제
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
+	}
+	
+	function deleteshowlistfile(){
+		
+		//게시물 입력창에서 파일 삭제
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
+		
 	}
 	
 	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
@@ -293,16 +356,17 @@ $(document).ready(function(){
 			for(var i=0;i<resultfilelist.length;i++){
 				var imgfile=resultfilelist[i];
 				var thumbfileuri=encodeURIComponent(imgfile.uploadPath+"/th_"+imgfile.uuid+"_"+imgfile.fileName);
+				var imgfileuri=encodeURIComponent(imgfile.uploadPath+"/"+imgfile.uuid+"_"+imgfile.fileName);
 				console.log(thumbfileuri);
 				
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
-				/*
+				
 				str=str+"<li class='modal_img_file'>"+"<span>"+imgfile.fileName+"</span>";
-				str=str+"<button class='modal_file_btn' type='button' data-path="+thumbfileuri+" data-name="+imgfile.fileName+" data-uuid="+imgfile.uuid+" data-image="+imgfile.image+">delete</burron>";
-				str=str+"<img src='/disply?imgfile="+thumbfileuri+"'>";
+				str=str+"<img class='modal_thumimg' src='/display?fileuri="+thumbfileuri+"'>";
+				str=str+"<button class='modal_file_btn' type='button' data-path="+imgfileuri+" data-name="+imgfile.fileName+" data-uuid="+imgfile.uuid+" data-image="+imgfile.image+">delete</burron>";
 				str=str+"</li>";
 				
-				*/
+				
 			}
 			imgfilemodalresult.append(str);
 		}
