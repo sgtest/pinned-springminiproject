@@ -8,7 +8,8 @@
   	select * from tbl_attach where bno=#{bno}
  </select>
  <insert id="insertfile">
- 	insert into pro_file values(#{uuid},#{uploadpath},#{fileName},#{image},#{bno})
+ 	insert into pro_file (uuid, uploadPath, fileName, bno, image) 
+ 	values(#{uuid},#{uploadPath},#{fileName},#{bno},#{image})
  </insert>
  <delete id="deletefile">
  	delete from pro_file where uuid=#{uuid}

@@ -115,7 +115,7 @@
 	<h1><a href="listboard">메인 홈페이지로</a></h1>
 	<h2>게시물 작성</h2>
 	
-	<form action="/board/saveBoard" method="post">
+	<form role="form" action="/board/saveBoard" method="post">
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<h4>게시판 선택</h4>
 		<div class="insert_group">
@@ -234,6 +234,78 @@ $(document).ready(function(){
 	var fileresult=$('#fileresult_common');
 	var imgfileresult=$('#fileresult_thumb');
 	
+	var submitform=$("form[role='form']");
+	
+	
+	$("button[type='submit']").on("click", function(e){
+
+	    e.preventDefault();
+		const dataPath=[];
+		const dataUuid=[];
+		const dataName=[];
+		const dataType=[];
+		const commondataPath=[];
+		const commondataUuid=[];
+		const commondataName=[];
+		const commondataType=[];
+		const showfilelist=document.querySelectorAll(".result_img_file");
+		const showcommonfilelist=document.querySelectorAll(".result_file");
+
+	    var str = "";
+		var i=0;
+		if(showfilelist.length>0){
+			for(i=0;i<showfilelist.length;i++){
+				const button=showfilelist[i].querySelector(".file_btn");
+				const name=showfilelist[i].querySelector("span").textContent;
+				dataPath.push(button.dataset.path);
+				dataUuid.push(button.dataset.uuid);
+				dataName.push(name);
+				dataType.push(button.dataset.image);
+			}
+			for(i=0;i<showfilelist.length;i++){
+				var dataname=dataName[i];
+				var datapath=dataPath[i];
+				var datauuid=dataUuid[i];
+				var datatype=dataType[i];
+				
+				str = str + "<input type='hidden' name='attachlist["+i+"].fileName' value='"+dataname+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+i+"].uuid' value='"+datauuid+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+i+"].uploadPath' value='"+datapath+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+i+"].image' value='"+datatype+"'>";
+			}
+		}
+		var j=0;
+		if(showcommonfilelist.length>0){
+			for(j=i;j<showcommonfilelist.length+i;j++){
+				const button=showcommonfilelist[j-i].querySelector(".file_btn");
+				const name=showcommonfilelist[j-i].querySelector("p").textContent;
+				commondataPath.push(button.dataset.path);
+				commondataUuid.push(button.dataset.uuid);
+				commondataName.push(name);
+				commondataType.push(button.dataset.image);
+			}
+			
+			for(j=i;j<showcommonfilelist.length+i;j++){
+				var commondataname=commondataName[j-i];
+				var commondatapath=commondataPath[j-i];
+				var commondatauuid=commondataUuid[j-i];
+				var commondatatype=commondataType[j-i];
+				
+				str = str + "<input type='hidden' name='attachlist["+j+"].fileName' value='"+commondataname+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+j+"].uuid' value='"+commondatauuid+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+j+"].uploadPath' value='"+commondatapath+"'>";
+			    str = str + "<input type='hidden' name='attachlist["+j+"].image' value='"+commondatatype+"'>";
+			}
+		}
+		
+		if(showfilelist.length===0 && showcommonfilelist.length===0){
+			
+		}
+		submitform.append(str);
+		submitform.submit();		
+	});
+	
+	
 	filemodaltopresult.on("click", "button",function(e){
 		var objfile= $(this).data("path");
 		var objtype= $(this).data("image");
@@ -306,7 +378,10 @@ $(document).ready(function(){
 	});
 	
 	filemodalbtn.click(function(){
-		deleteshowfile();
+		filemodalresult.css("height","0px");
+		imgfilemodalresult.css("height","0px");
+		filemodalresult.empty();
+		imgfilemodalresult.empty();
 		filemodal.modal('show');
 	});
 	
@@ -540,28 +615,7 @@ $(document).ready(function(){
 	    //여기서 드롭을 할때, 실제로 서버에 업로드 아래 result 화면에 순서대로 나열된 리스트 형식으로 보여주면 될듯(이미지+파일이름)
 	    
 	});
-	
-	
-	function deleteshowfile(){
 		
-		//버튼 클릭을 감지하고 게시물 입력창에서 해당 파일만 삭제
-		filemodalresult.css("height","0px");
-		imgfilemodalresult.css("height","0px");
-		filemodalresult.empty();
-		imgfilemodalresult.empty();
-		
-	}
-	
-	
-	function deleteshowlistfile(){
-		
-		//게시물 입력창에서 파일 삭제
-		filemodalresult.css("height","0px");
-		imgfilemodalresult.css("height","0px");
-		filemodalresult.empty();
-		imgfilemodalresult.empty();
-		
-	}
 	
 	function displayfilelist(resultresponse,resultfilelist,thumbnailefilelist){
 		//hidden input에 필요한 값들을 넣으면 될듯
