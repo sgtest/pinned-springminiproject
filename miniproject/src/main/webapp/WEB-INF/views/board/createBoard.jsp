@@ -630,7 +630,7 @@ $(document).ready(function(){
 		//모든 파일은 기본적으로 x버튼을 추가해서 추후에 해당 버튼을 클릭시 삭제를 수행하도록한다.
 		
 		for(var i=0;i<resultfilelist.length;i++){
-		else if(resultfilelist[i].image===true)
+		if(resultfilelist[i].image===true)
 		{
 			//이미지 파일 리스트인 경우	
 			//썸네일 파일을 생성해서 모달창 아래쪽에 최대 5*4인 격자무늬로 보여줌
@@ -652,10 +652,11 @@ $(document).ready(function(){
 			
 			imgfilemodalresult.append(str);
 		}
-		else
+		if(resultfilelist[i].image===false)
 		{
 			//이미지 파일 리스트가 아닌 경우	
 			//파일명 그대로 순서대로 모달창 아래쪽에 목록으로 보여줌
+			str="";
 			filemodalresult.css("height","300px");
 				var normalfile=resultfilelist[i];
 				var normalfileuri=encodeURIComponent(normalfile.uploadPath+"/"+normalfile.uuid+"_"+normalfile.fileName);

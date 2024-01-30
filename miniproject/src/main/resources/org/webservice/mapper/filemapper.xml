@@ -5,7 +5,7 @@
 <mapper namespace="org.webservice.mapper.filemapper">
 
  <select id="getlistfile" resultType="org.webservice.domain.attachfile">
-  	select * from tbl_attach where bno=#{bno}
+  	select * from pro_file where bno=#{bno}
  </select>
  <insert id="insertfile">
  	insert into pro_file (uuid, uploadPath, fileName, bno, image) 

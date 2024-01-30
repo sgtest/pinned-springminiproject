@@ -12,6 +12,11 @@
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
 	<style>
+	.board_content{
+    	border: 2px solid #000;
+		width: 1200px;
+		height: 600px;
+	}
 	textarea{
 		margin: 0;
 		text-align: justify;
@@ -51,7 +56,19 @@
 
 	<h4>게시글 내용</h4>
 	<div class="board_content">
-	<textarea name="content" rows="40" cols="140" readonly="readonly" ><c:out value="${board.content}"/></textarea>
+	<p><c:out value="${board.content}"/></p>
+	</div>
+	
+	<h4>첨부 이미지 목록<h4>
+	<div>
+	<p class="imgfilenumber"></p>
+	<button>해당 이미지들 보기</button>
+	<!--  -->
+	</div>
+	
+	<h4>첨부파일 목록</h4>
+	<div>
+	<!-- 각각의 파일명들을 a 링크 형태로 다운받을수 있게 한다.-->
 	</div>
 	
 	<h4>작성자</h4>
@@ -63,10 +80,6 @@
 	<h4>작성 날짜</h4>
 	<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
 	
-	<h4>첨부파일 목록</h4>
-	<div>
-	
-	</div>
 </div>
 
 <br>
@@ -152,7 +165,13 @@
         	
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
-        	
+        	var attachlist= '<c:out value="${attachlist}"/>';
+
+        	//var attachlist=${attachlist};
+			var imgcount=0;
+			
+        	loadattachfile(attachlist);
+        	loadimgcount(attachlist);
         	$(".commentedit_close_btn").on("click",function(e){
             	e.preventDefault();
             	console.log("cmtmodal_close_click");
@@ -160,11 +179,48 @@
         		cmtmodal.style.display="none";
         		
         	});       	
-   
+        	function loadimgcount(attachlist){
+        		var imgnumber=$('.imgfilenumber');
+    			console.log(attachlist);
+    			var length=attachlist.length;
+				console.log(length);
+    			if(length>0){
+    				for(var i=0;i<length;i++){
+    					const achfile=attachlist[i];					
+    					if(achfile.image===true){
+    						imgcount=imgcount+1;
+    					}					
+    				}
+    			}
+    			imgnumber.text('현재 이미지가 총 ' + imgcount + ' 개 있습니다.');
+    		}
         	
         });
-
-
+        
+		
+		
+		function loadattachfile(attachlist){
+			var str="";
+			if(attachlist.length>0){
+				for(var i=0;i<attachlist.length;i++){
+					const achfile=attachlist[i];
+					
+					if(achfile.image===true){
+						
+					}
+					else{
+						
+					}
+					
+				}
+				
+			}
+			else{
+				
+			}
+			
+		}
+		
     	function loadComments(pageNumValue){
         	var bnoValue = '<c:out value="${board.bno}"/>';
     		$.ajax({

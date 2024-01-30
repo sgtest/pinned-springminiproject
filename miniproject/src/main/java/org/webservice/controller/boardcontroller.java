@@ -29,6 +29,9 @@ import org.webservice.domain.boardsearch;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
 import lombok.AllArgsConstructor;
 import lombok.extern.log4j.Log4j;
 
@@ -44,7 +47,9 @@ public class boardcontroller {
 	public void readBoard(@RequestParam("bno") Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
 		board board=bservice.readBoard(bno);
+		List<attachfile> attachlist=bservice.getfilelist(bno);
 		
+		model.addAttribute("attachlist", attachlist);
 		model.addAttribute("board", board);
 		model.addAttribute("search",search);
 	}
