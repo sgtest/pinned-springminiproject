@@ -628,13 +628,14 @@ $(document).ready(function(){
 			filemodalresult.append(str);
 		}
 		//모든 파일은 기본적으로 x버튼을 추가해서 추후에 해당 버튼을 클릭시 삭제를 수행하도록한다.
-		else if(resultfilelist[0].image===true)
+		
+		for(var i=0;i<resultfilelist.length;i++){
+		else if(resultfilelist[i].image===true)
 		{
 			//이미지 파일 리스트인 경우	
 			//썸네일 파일을 생성해서 모달창 아래쪽에 최대 5*4인 격자무늬로 보여줌
 			//이미지 경로를 받아서 섬네일을 보여주는 컨트롤러 메소드 필요
 			imgfilemodalresult.css("height","300px");
-			for(var i=0;i<resultfilelist.length;i++){
 				var imgfile=resultfilelist[i];
 				var thumbfileuri=encodeURIComponent(imgfile.uploadPath+"/th_"+imgfile.uuid+"_"+imgfile.fileName);
 				var imgfileuri=encodeURIComponent(imgfile.uploadPath+"/"+imgfile.uuid+"_"+imgfile.fileName);
@@ -648,7 +649,7 @@ $(document).ready(function(){
 				str=str+"</li>";
 				
 				
-			}
+			
 			imgfilemodalresult.append(str);
 		}
 		else
@@ -656,7 +657,6 @@ $(document).ready(function(){
 			//이미지 파일 리스트가 아닌 경우	
 			//파일명 그대로 순서대로 모달창 아래쪽에 목록으로 보여줌
 			filemodalresult.css("height","300px");
-			for(var i=0;i<resultfilelist.length;i++){
 				var normalfile=resultfilelist[i];
 				var normalfileuri=encodeURIComponent(normalfile.uploadPath+"/"+normalfile.uuid+"_"+normalfile.fileName);
 				var normalfilelink=normalfileuri
@@ -670,10 +670,9 @@ $(document).ready(function(){
 				str=str+"<button class='modal_file_btn' type='button' data-path=\'"+normalfileuri+"\' data-name="+normalfile.fileName+" data-uuid="+normalfile.uuid+" data-image="+normalfile.image+">delete</burron>";
 				str=str+"</li>";
 				
-			}
 			filemodalresult.append(str);
 		}
-		
+		}
 	}
 	
 	

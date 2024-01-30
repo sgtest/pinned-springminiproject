@@ -49,12 +49,13 @@ public class filecontroller {
 		List<file> filelist=new ArrayList<file>();
 		List<File> thumbnaillist=new ArrayList<>();
 		String result="upload_fail";
-		
 		String topuploadfolder="D:\\server\\temp";
+		
 		Date datevalue=new Date();
 		String uploaddate=new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(datevalue);
 		String uploadfolder=uploaddate.replace("-",File.separator);
 		File upload=new File(topuploadfolder,uploadfolder);
+		
 		if(upload.exists()==false)
 		{
 			upload.mkdirs();
@@ -62,10 +63,10 @@ public class filecontroller {
 		
 		for(MultipartFile multipartFile:uploadFile) {
 			log.info("this is for loop");
+			
 			file achfile=new file();
 			String fileorgname=multipartFile.getOriginalFilename();
 			fileorgname=fileorgname.substring(fileorgname.lastIndexOf("//")+1);
-			log.info("fileorgname:   "+fileorgname);
 			achfile.setFileName(fileorgname);
 			
 			UUID uuid=UUID.randomUUID();
