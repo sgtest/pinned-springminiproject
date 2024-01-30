@@ -64,6 +64,9 @@ public class boardcontroller {
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/saveBoard")
 	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
+		for(int i=0;i<brd.getAttachlist().size();i++) {
+			log.info("this is files: "+brd.getAttachlist().get(i).getFileName());
+		}
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
 		return "redirect:/board/listboard"+search.getListLink();

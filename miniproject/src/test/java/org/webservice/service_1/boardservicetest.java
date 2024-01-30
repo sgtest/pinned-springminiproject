@@ -18,6 +18,7 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 import org.webservice.mapper.boardmapper;
+import org.webservice.mapper.filemapper;
 import org.webservice.mapper.membermapper;
 import org.webservice.persis.DataSourceTests;
 
@@ -33,11 +34,23 @@ public class boardservicetest {
 	@Setter(onMethod_= {@Autowired})
 	public boardmapper bmapper;
 
+	@Setter(onMethod_= {@Autowired})
+	public filemapper fmapper;
 	//@Test
 	public void testmemberinfo() {
 		log.info(bmapper.select_boardaouth("main"));
 	}
 	
+	//@Test 
+	public void Testfileinsert() {
+		attachfile fle=new attachfile();
+		fle.setBno(464L);
+		fle.setFileName("test.txt");
+		fle.setImage(false);
+		fle.setUploadPath("testurl");
+		fle.setUuid("testuuid");
+		fmapper.insertfile(fle);
+	}
 	//@Test
 	@DisplayName("게시판 생성 테스트")
 	public void testregisterboard() {
