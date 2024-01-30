@@ -22,6 +22,25 @@
     	overflow-y: scroll;
     	height:0px;
 	}
+	
+	.result_img_file{
+  		display: flex;
+  		flex-direction: column;  
+  		align-items: center; 
+		margin-left: 20px;
+	    width: 100%;
+  		height: 100%;
+	}
+	.result_img{
+		margin-top: 10px;
+		margin-width: 500px;
+		margin-height:500px;
+	}
+	.file_btn{
+		margin-top: 20px;
+	}
+	.file-modal-content{
+	}
 	.modal_img_file{
   		display: flex;
   		flex-direction: column;  
@@ -43,7 +62,6 @@
   		grid-template-columns: repeat(10, 1fr);
   		grid-template-rows: repeat(5, 1fr);
     	overflow-y: scroll;
-    	height:0px;
 	}
 	#fileUploadModal {
     	top: 50%;
@@ -57,6 +75,7 @@
   		justify-content: center;
   		align-items: center;
   		background-color: rgba(160, 160, 160, 1);
+    	overflow-y: scroll;
 	}
 	#fileUploadModal_box {
 	
@@ -72,8 +91,8 @@
 	#filemodalbtn{
 		margin-top: 80px;
 		margin-bottom: 0px;
-		margin-left: 250px;
-		margin-right: 250px;
+		margin-left: 230px;
+		margin-right: 230px;
 	}
 	#fileupload_reset,#fileupload_tupload,#fileupload_close{
 		align-items:center; 
@@ -84,9 +103,13 @@
 		padding: 10px 5px;	
   		cursor: pointer;
 	}
+	#fileresult_common{
+		
+	}
+	
 	</style>
 </head>
-<body>
+<body style="overflow: auto">
 
 <div class="insert_top">
 	<h1><a href="listboard">메인 홈페이지로</a></h1>
@@ -206,7 +229,9 @@ $(document).ready(function(){
 	var filemodaltopresult=$('#filemodalresult');
 	var filemodalresult=$('#filemodalresult_common');
 	var imgfilemodalresult=$('#filemodalresult_thumb');
-	var fileresult=$('#fileresult_commen');
+	
+	var filetopresult=$('.file_upload_result')
+	var fileresult=$('#fileresult_common');
 	var imgfileresult=$('#fileresult_thumb');
 	
 	filemodaltopresult.on("click", "button",function(e){
@@ -227,13 +252,58 @@ $(document).ready(function(){
 			success: function(response){
 				alert(response['result']);
 				objui.remove();
+
+				const filelist=document.querySelectorAll(".modal_img_file");
+				const commonfilelist=document.querySelectorAll(".modal_file");
+				if(filelist.length===0){
+					imgfilemodalresult.css("height","0px");
+					imgfilemodalresult.empty();
+				}
+				if(commonfilelist.length===0){
+					filemodalresult.css("height","0px");
+					filemodalresult.empty();
+				}
 			},
 			error: function(error){
 				console.error('파일삭제 오류');
 			}
 		});	
 	});
-	
+	filetopresult.on("click", "button",function(e){
+		var objfile= $(this).data("path");
+		var objtype= $(this).data("image");
+		
+		var objui=$(this).closest("li");
+		var csrfToken = $("#_csrf").val();
+
+		$.ajax({
+			type:'post',
+			url:'/deletefile',
+			data:{fileuri: objfile, filetype: objtype},
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+			success: function(response){
+				alert(response['result']);
+				objui.remove();
+				const showfilelist=document.querySelectorAll(".result_img_file");
+				const showcommonfilelist=document.querySelectorAll(".result_file");
+				if(showfilelist.length===0){
+					imgfileresult.css("height","0px");
+					imgfileresult.empty();
+				}
+				if(showcommonfilelist.length===0){
+					fileresult.css("height","0px");
+					fileresult.empty();
+				}
+			},
+			error: function(error){
+				console.error('파일삭제 오류');
+			}
+		});	
+		
+	});
 	
 	filemodalbtn.click(function(){
 		deleteshowfile();
@@ -243,8 +313,13 @@ $(document).ready(function(){
 	filemodalreset.click(function(){
 		const dataPath=[];
 		const dataType=[];
-		const filelist=document.querySelectorAll(".modal_img_file");
+		const commondataPath=[];
+		const commondataType=[];
 		
+		const filelist=document.querySelectorAll(".modal_img_file");
+		const commonfilelist=document.querySelectorAll(".modal_file");
+		
+		if(filelist.length>0){
 		for (let i = 0; i < filelist.length; i++) {
 			const button=filelist[i].querySelector(".modal_file_btn");
 			dataPath.push(button.dataset.path);
@@ -254,6 +329,29 @@ $(document).ready(function(){
 		for(let i=0;i<filelist.length;i++){
 			filelist[i].remove();
 		}
+
+		imgfilemodalresult.css("height","0px");
+		imgfilemodalresult.empty();
+		}
+		else if(commonfilelist.length>0){
+			for (let i = 0; i < commonfilelist.length; i++) {
+			const button=commonfilelist[i].querySelector(".modal_file_btn");
+			commondataPath.push(button.dataset.path);
+		    commondataType.push(button.dataset.image);
+		}
+		deletefilelist(commondataPath,commondataType);
+		for(let i=0;i<filelist.length;i++){
+			commonfilelist[i].remove();
+		}
+
+		filemodalresult.css("height","0px");
+		filemodalresult.empty();
+				
+		}
+		else{			
+			alert('파일이 없습니다');
+		}
+		
 	});
 	
 	function deletefilelist(dataPath,dataType){
@@ -281,31 +379,124 @@ $(document).ready(function(){
 		 }		
 	}
 	
-	
 	filemodalclose.click(function(){
 		const dataPath=[];
 		const dataType=[];
-		const filelist=document.querySelectorAll(".modal_img_file");
+		const commondataPath=[];
+		const commondataType=[];
 		
-		for (let i = 0; i < filelist.length; i++) {
-			const button=filelist[i].querySelector(".modal_file_btn");
-			dataPath.push(button.dataset.path);
-		    dataType.push(button.dataset.image);
-		}
-		deletefilelist(dataPath,dataType);
-		for(let i=0;i<filelist.length;i++){
-			filelist[i].remove();
-		}
-		filemodalresult.css("height","0px");
-		imgfilemodalresult.css("height","0px");
-		filemodalresult.empty();
-		imgfilemodalresult.empty();
-		filemodal.modal('hide');
+		const filelist=document.querySelectorAll(".modal_img_file");
+		const commonfilelist=document.querySelectorAll(".modal_file");
+		const showfilelist=document.querySelectorAll(".result_img_file");
+		const showcommonfilelist=document.querySelectorAll(".result_file");
+		
+			if(filelist.length>0){
+				for (let i = 0; i < filelist.length; i++) {
+				const button=filelist[i].querySelector(".modal_file_btn");
+				dataPath.push(button.dataset.path);
+		    	dataType.push(button.dataset.image);
+				}
+				deletefilelist(dataPath,dataType);
+				for(let i=0;i<filelist.length;i++){
+				filelist[i].remove();
+				}
+
+				imgfilemodalresult.css("height","0px");
+				imgfilemodalresult.empty();
+				}
+			else if(commonfilelist.length>0){
+				for (let i = 0; i < commonfilelist.length; i++) {
+				const button=commonfilelist[i].querySelector(".modal_file_btn");
+				commondataPath.push(button.dataset.path);
+		    	commondataType.push(button.dataset.image);
+				}
+				deletefilelist(commondataPath,commondataType);
+				for(let i=0;i<filelist.length;i++){
+				commonfilelist[i].remove();
+				}
+
+				filemodalresult.css("height","0px");
+				filemodalresult.empty();
+					
+			}
+			else{			
+				alert('파일 등록창을 닫습니다.');
+			}		
+		
+			filemodal.modal('hide');
+		
 	});
 	
 	filemodalregister.click(function(){
 		//각종 필요한 리스트 요소(4가지)를 이용해서 같은 방식으로 실제 등록화면에 반영
+		const dataPath=[];
+		const dataUuid=[];
+		const dataName=[];
+		const dataType=[];
+		const commondataPath=[];
+		const commondataUuid=[];
+		const commondataName=[];
+		const commondataType=[];
+		const filelist=document.querySelectorAll(".modal_img_file");
+		const commonfilelist=document.querySelectorAll(".modal_file");
 		
+		
+		
+		var str="";
+		
+		if(filelist.length>0){
+			imgfileresult.css("height","1000px");
+			for(var i=0;i<filelist.length;i++){
+				const button=filelist[i].querySelector(".modal_file_btn");
+				const name=filelist[i].querySelector("span").textContent;
+				dataPath.push(button.dataset.path);
+				dataUuid.push(button.dataset.uuid);
+				dataName.push(name);
+				dataType.push(button.dataset.image);
+			}
+			for(var i=0;i<filelist.length;i++){
+			var dataname=dataName[i];
+			var datapath=dataPath[i];
+			var datauuid=dataUuid[i];
+			var datatype=dataType[i];
+			
+			str=str+"<li class='result_img_file'>"+"<span>"+dataname+"</span>";
+			str=str+"<img class='reuslt_img' src='/display?fileuri="+datapath+"'>";
+			str=str+"<button class='file_btn' type='button' data-path="+datapath+" data-name="+dataname+" data-uuid="+datauuid+" data-image="+datatype+">delete</button>";
+			str=str+"</li>";
+			}
+			imgfileresult.append(str);
+		}
+		str="";
+		if(commonfilelist.length>0){
+			fileresult.css("height","500px");
+			for(var i=0;i<commonfilelist.length;i++){
+				const button=commonfilelist[i].querySelector(".modal_file_btn");
+				const name=commonfilelist[i].querySelector("p").textContent;
+				commondataPath.push(button.dataset.path);
+				commondataUuid.push(button.dataset.uuid);
+				commondataName.push(name);
+				commondataType.push(button.dataset.image);
+			}
+			for(var i=0;i<commonfilelist.length;i++){
+			var commondataname=commondataName[i];
+			var commondatapath=commondataPath[i];
+			var commondatauuid=commondataUuid[i];
+			var commondatatype=commondataType[i];
+				
+			str=str+"<li class='result_file'>";
+			str=str+"<p class='filename'>"+commondataname+"</p>";
+			str=str+"<button class='file_btn' type='button' data-path=\'"+commondatapath+"\' data-name="+commondataname+" data-uuid="+commondatauuid+" data-image="+commondatatype+">delete</button>";
+			str=str+"</li>";
+			}
+			fileresult.append(str);
+		}
+		
+		if(filelist.length === 0 && commonfilelist.length === 0){
+			alert('파일이 없습니다')
+		}
+		
+		filemodal.modal('hide');
 	})
 	
 	const modal_file_drag=$('#filemodalbody');
