@@ -17,21 +17,43 @@
 		width: 1200px;
 		height: 600px;
 	}
+	button, input[type="button"]{
+  		background-color: #000;
+  		color: #fff;
+  		padding: 10px 20px;
+  		border: 1px solid #fff;
+  		border-radius: 5px;
+  		cursor: pointer;
+	}
+
+	input[type="button"]:hover,button:hover {
+  		background-color: #e5e5e5;
+  		color: #000;
+	}
+	
 	textarea{
 		margin: 0;
 		text-align: justify;
 		font-size: 15px;
 		resize: none;
 	}
-	.comment_insert,.comment_obj {
+	.attachfileform {
+	margin-left: 10px;
+	display: flex;
+	flex-direction: row;
+	justify-content: flex-start;
+	}
+	.comment_insert,.comment_obj,.imgmodalbtnform,.commodalbtnform,#comment_container,.commentedit_modal,.boardinfo_form {
     	background-color: #f0f0f0;
     	padding: 10px; 
     	border: 1px solid #ccc; 
    		margin-bottom: 10px; 
+   		margin-left:5px;
 	}
 	.comment_obj{
 		margin-top: -5px;
 	}
+	
 	.comment_class_page{
         display: flex;
         justify-content: center;
@@ -39,13 +61,35 @@
         margin-bottom: 20px;
 	}
 	.commentpage{
-            margin: 0 5px;
+        margin: 0 5px;
 	}
+	.imgfile_modal{
+		width: 1500px;
+		hight: 1200px;
+	}
+	.imgfile_view{
+  		display: flex;
+ 	    flex-direction: row;
+  		overflow-x: scroll;
+    	height:1200px;	
+	}
+	.img_obj{
+		margin-top:20px;
+		margin-left:20px;
+	}
+	.img_class{
+		max-height: 1200px;
+		max-width: 1200px;
+	}
+
 	</style>
 </head>
 <body>
-<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a><br>
-<a href="updateBoard?bno=${board.bno}">게시물 수정하기</a>
+
+<div class="boardform">
+	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
+	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
+</div>
 <div class="readcontent_top">
 
 	<h4>제목</h4>
@@ -59,29 +103,55 @@
 	<p><c:out value="${board.content}"/></p>
 	</div>
 	
-	<h4>첨부 이미지 목록</h4>
-	<div>
-	<p class="imgfilenumber"></p>
-	<button class="imgfile_modal_btn">해당 이미지들 보기</button><br><br>
-	<!--  -->
+	<div class="attachfileform">
+		<div class="imgmodalbtnform">
+		<h4>첨부 이미지 목록</h4>
+		<p class="imgfilenumber"></p>
+		<button class="imgfile_modal_btn">해당 이미지들 보기</button><br><br>
+		</div>
+		
+		<div class="commodalbtnform">
+		<h4>일반 첨부 파일 목록</h4>
+		<p class="comfilenumber"></p>
+		<button class="comfile_modal_btn">일반 첨부 파일 목록 보기</button><br><br>
+		</div>
 	</div>
 	
-	<h4>일반 첨부 파일 목록</h4>
-	<div>
-	<p class="comfilenumber"></p>
-	<button class="comfile_modal_btn">일반 첨부 파일 목록 보기</button><br><br>
+	<div class="boardinfo_form">
+		<h4>작성자</h4>
+		<p>${board.writer}</p>
+
+		<h4>수정 날짜</h4>
+		<p><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
+
+		<h4>작성 날짜</h4>
+		<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
+	
 	</div>
-	
-	<h4>작성자</h4>
-	<p>${board.writer}</p>
+		
+	<div id="imgfile_modal" class="imgfile_modal" role="dialog" aria-hidden="true">		
+		<div role="document">
+			<button id="imgfile_modal_btn">닫기</button>
+			<div class="imgfile_content" >
+			<div class="imgfile_view" id="imgfile_view">
+			<!-- 사진의 제목, 사진 순으로 보여주고 옆으로 넘겨서 다음사진을 본다.-->
+			
+			</div>
+			</div>
+		</div>
+	</div>
 
-	<h4>수정 날짜</h4>
-	<p><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
-
-	<h4>작성 날짜</h4>
-	<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
-	
-</div>
+	<div id="cmnfile_modal" class="cmnfile_modal" role="dialog" aria-hidden="true">		
+		<div role="document">
+			<div class="cmnfile_content">
+			<button id="cmnfile_modal_btn">닫기</button>
+			<div class="cmnfile_veiw" id="cmnfile_view">
+			<!-- 일반 파일의 이름을 목차별로 보여준다. -->
+			
+			</div>
+			</div>
+		</div>
+	</div>
 
 <br>
 <div class="comment_insert">
@@ -105,7 +175,7 @@
 </div>
 <br>
 
-<div class="comment_class top">
+<div id="comment_container" class="comment_class top">
 	<div class="comment_class class">
 	<h4>댓글 목록</h4>
 	<input type="button" value="댓글 다시 불러오기" onclick="loadComments(1)"><br><br>
@@ -160,6 +230,7 @@
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
+        
         <script>
         $(document).ready(function(){
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
@@ -168,7 +239,10 @@
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
         	loadattachfile();
-        	
+        	$("#boardupdatebtn").on("click",function(e){
+        		window.location.href=this.dataset.href;
+        		
+        	});
         	$(".commentedit_close_btn").on("click",function(e){
             	e.preventDefault();
             	console.log("cmtmodal_close_click");
@@ -179,9 +253,12 @@
         	imgmodalbtn.on("click",function(e){
         		
         	});
+        	
         	commonmodalbtn.on("click",function(e){
         		
         	});
+        	
+        	
         });
         
 		
@@ -198,7 +275,10 @@
 						var filelist=response['attachlist'];
 						loadattachfileview(filelist);
 					}else{
-						
+						var imgcountform=$('.imgfilenumber');
+						var comcountform=$('.comfilenumber');
+						imgcountform.text('현재 이미지가 총 0 개 있습니다.');	
+						comcountform.text('현재 일반 파일이 총 0 개 있습니다.');
 					}
 				},
 				error: function(){
@@ -212,26 +292,36 @@
 			console.log('첨부파일이 총 '+filelist.length+'개 있습니다');
 			var imgcountform=$('.imgfilenumber');
 			var comcountform=$('.comfilenumber');
+			var imgmodalview=$('.imgfile_view');
 			
-			
+			var str="";
 			var imgcount=0;
 			var cmcount=0;
+			
 			//각각의 파일의 이미지 또는 
 			for(var i=0;i<filelist.length;i++){
+				//var cmnmodalview=$('');
 				var achfile=filelist[i];
-				var str="";
 				if(achfile.image===true){
 					imgcount=imgcount+1;
-					
+					var imgfile=achfile;
+					 str = str + '<div class="img_obj">';
+					 str = str + '<p>'+imgfile.fileName+'</p>';
+				   str = str + '<img class="img_class" src="/display?fileuri=' + imgfile.uploadPath + '" onclick="opendwindow(/display?fileuri=' + imgfile.uploadPath + ')">';
+				   str = str + '<button class="downloadbtn">Download</button>'
+				   str = str + '</div>';
 				}
 				if(achfile.image===false){
 					cmcount=cmcount+1;
 				}	
 			}
+			imgmodalview.append(str);
 			imgcountform.text('현재 이미지가 총 '+imgcount+' 개 있습니다.');	
 			comcountform.text('현재 일반 파일이 총 '+cmcount+' 개 있습니다.');
 		}
-		
+		function opendwindow(src){
+			window.open(src);
+		}
     	function loadComments(pageNumValue){
         	var bnoValue = '<c:out value="${board.bno}"/>';
     		$.ajax({
