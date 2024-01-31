@@ -59,16 +59,17 @@
 	<p><c:out value="${board.content}"/></p>
 	</div>
 	
-	<h4>첨부 이미지 목록<h4>
+	<h4>첨부 이미지 목록</h4>
 	<div>
 	<p class="imgfilenumber"></p>
-	<button>해당 이미지들 보기</button>
+	<button class="imgfile_modal_btn">해당 이미지들 보기</button><br><br>
 	<!--  -->
 	</div>
 	
-	<h4>첨부파일 목록</h4>
+	<h4>일반 첨부 파일 목록</h4>
 	<div>
-	<!-- 각각의 파일명들을 a 링크 형태로 다운받을수 있게 한다.-->
+	<p class="comfilenumber"></p>
+	<button class="comfile_modal_btn">일반 첨부 파일 목록 보기</button><br><br>
 	</div>
 	
 	<h4>작성자</h4>
@@ -162,16 +163,12 @@
         <script>
         $(document).ready(function(){
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
-        	
+        	var imgmodalbtn=$('.imgfile_modal_btn');
+        	var commonmodalbtn=$('.comfile_modal_btn');
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
-        	var attachlist= '<c:out value="${attachlist}"/>';
-
-        	//var attachlist=${attachlist};
-			var imgcount=0;
-			
-        	loadattachfile(attachlist);
-        	loadimgcount(attachlist);
+        	loadattachfile();
+        	
         	$(".commentedit_close_btn").on("click",function(e){
             	e.preventDefault();
             	console.log("cmtmodal_close_click");
@@ -179,46 +176,60 @@
         		cmtmodal.style.display="none";
         		
         	});       	
-        	function loadimgcount(attachlist){
-        		var imgnumber=$('.imgfilenumber');
-    			console.log(attachlist);
-    			var length=attachlist.length;
-				console.log(length);
-    			if(length>0){
-    				for(var i=0;i<length;i++){
-    					const achfile=attachlist[i];					
-    					if(achfile.image===true){
-    						imgcount=imgcount+1;
-    					}					
-    				}
-    			}
-    			imgnumber.text('현재 이미지가 총 ' + imgcount + ' 개 있습니다.');
-    		}
-        	
+        	imgmodalbtn.on("click",function(e){
+        		
+        	});
+        	commonmodalbtn.on("click",function(e){
+        		
+        	});
         });
         
 		
-		
-		function loadattachfile(attachlist){
-			var str="";
-			if(attachlist.length>0){
-				for(var i=0;i<attachlist.length;i++){
-					const achfile=attachlist[i];
-					
-					if(achfile.image===true){
+		function loadattachfile(){
+			//var bno='<c:out value="${board.bno}"/>';
+			var fbno=${board.bno};
+			$.ajax({
+				type: 'get',
+				url: 'fileload',
+				data: {bno: fbno},
+				dataType: 'JSON',
+				success: function(response){
+					if(response['result'] == 'exist'){
+						var filelist=response['attachlist'];
+						loadattachfileview(filelist);
+					}else{
 						
 					}
-					else{
-						
-					}
-					
+				},
+				error: function(){
+					console.error('첨부파일 불러오기 실패');
 				}
 				
-			}
-			else{
-				
-			}
+			});
+		}
+		
+		function loadattachfileview(filelist){
+			console.log('첨부파일이 총 '+filelist.length+'개 있습니다');
+			var imgcountform=$('.imgfilenumber');
+			var comcountform=$('.comfilenumber');
 			
+			
+			var imgcount=0;
+			var cmcount=0;
+			//각각의 파일의 이미지 또는 
+			for(var i=0;i<filelist.length;i++){
+				var achfile=filelist[i];
+				var str="";
+				if(achfile.image===true){
+					imgcount=imgcount+1;
+					
+				}
+				if(achfile.image===false){
+					cmcount=cmcount+1;
+				}	
+			}
+			imgcountform.text('현재 이미지가 총 '+imgcount+' 개 있습니다.');	
+			comcountform.text('현재 일반 파일이 총 '+cmcount+' 개 있습니다.');
 		}
 		
     	function loadComments(pageNumValue){
@@ -279,7 +290,7 @@
 
     	function loadCommentspage(pageNumValue, cmtcnt, cmtamount){
     		var commentspageform=$('.comment_class_page');
-    		console.log(cmtcnt);
+    		console.log('댓글이 총 '+cmtcnt+'개 있습니다.');
     		
     		var endpage=Math.ceil(pageNumValue/cmtamount)*10;
     		var startpage=endpage-9;

@@ -5,9 +5,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
@@ -19,6 +22,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.attachfile;
@@ -161,7 +165,7 @@ public class boardcontroller {
 				log.info("삭제하려는 파일이 없거나 실패하였습니다.");
 			}
 			if(rmfile.isImage()) {
-				sumfpath=Paths.get(firstfilelink+rmfile.getUploadPath()+"\\"+"thum_"+rmfile.getUuid()+"_"+rmfile.getFileName());
+				sumfpath=Paths.get(firstfilelink+rmfile.getUploadPath()+"\\"+"th_"+rmfile.getUuid()+"_"+rmfile.getFileName());
 				try {
 					Files.delete(sumfpath);
 				} catch (IOException e) {
@@ -171,20 +175,22 @@ public class boardcontroller {
 			}
 		}
 	}
-
-	private void Fileupload(attachfile file) {
-		String firstfilelink="D:\\server\\temp";
-		Calendar celendar=Calendar.getInstance();
-		String year=Integer.toString(celendar.get(Calendar.YEAR));
-		String month=Integer.toString(celendar.get(Calendar.MONTH)+1);
-		String day=Integer.toString(celendar.get(Calendar.DATE));
-		String hour = Integer.toString(celendar.get(Calendar.HOUR)); 
-		String min = Integer.toString(celendar.get(Calendar.MINUTE));
-		String sec = Integer.toString(celendar.get(Calendar.SECOND));
+	
+	@GetMapping("/fileload")
+	@ResponseBody
+	public Map<String,Object> fileload(Long bno){
+		Map<String, Object> response=new HashMap<String, Object>();
+		List<attachfile> Filelist=new ArrayList<attachfile>();	
+		Filelist=bservice.getfilelist(bno);
 		
-		Path fpath;
-		
-		
+		if(Filelist.size()>0) {
+		response.put("attachlist", Filelist);
+		response.put("result","exist");
+		}
+		else {
+		response.put("result", "none");	
+		}
+		return response;
 	}
 	
 }
