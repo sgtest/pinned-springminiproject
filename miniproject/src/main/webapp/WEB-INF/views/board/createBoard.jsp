@@ -183,13 +183,14 @@
 	<div class="modal-dialog modal-dialog-centered" id="fileUploadModal_box" role="document">
 		<div class="file-modal-content">
 			<div class="file-modal-header">
-			<h5 class="file-modal-title" id="fileUploadModalLabel">파일을 드래그해서 업로드 해주세요</h5>
+			<h5 class="file-modal-title" id="fileUploadModalLabel">파일을 드래그하거나 직접 업로드 버튼을 눌러서 업로드 해주세요</h5>
 			</div>
 			<div id="filemodalbody" class="file-modal-body">
 			<!-- 파일 업로드 영역 -->
 			
 			</div>
-			<h5 class="file-modal-title">파일을 드래그해서 업로드 해주세요</h5>
+			<input type="file" id="filemodaldirect" name="upload" multiple>
+			<h5 class="file-modal-title">파일을 드래그하거나 직접 업로드 버튼을 눌러서 업로드 해주세요</h5>
 			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>이미지 파일은 따로 이미지 파일끼리 업로드 해주세요!!!</h5>
 			<div id="filemodalresult">
 			<!-- 파일 업로드 리스트 영역 -->
@@ -278,7 +279,7 @@ $(document).ready(function(){
 		if(showcommonfilelist.length>0){
 			for(j=i;j<showcommonfilelist.length+i;j++){
 				const button=showcommonfilelist[j-i].querySelector(".file_btn");
-				const name=showcommonfilelist[j-i].querySelector("p").textContent;
+				const name=showcommonfilelist[j-i].querySelector("span").textContent;
 				commondataPath.push(button.dataset.path);
 				commondataUuid.push(button.dataset.uuid);
 				commondataName.push(name);
@@ -307,10 +308,13 @@ $(document).ready(function(){
 	
 	
 	filemodaltopresult.on("click", "button",function(e){
-		var objfile= $(this).data("path");
+		var orgobjfile= $(this).data("path");
 		var objtype= $(this).data("image");
-		
+		var objuuid= $(this).data("uuid");
 		var objui=$(this).closest("li");
+		var objname = objui.find("span").text();
+		
+		var objfile=encodeURIComponent(orgobjfile+"/"+objuuid+"_"+objname);
 		var csrfToken = $("#_csrf").val();
 		
 		$.ajax({
@@ -342,10 +346,13 @@ $(document).ready(function(){
 		});	
 	});
 	filetopresult.on("click", "button",function(e){
-		var objfile= $(this).data("path");
+		var orgobjfile= $(this).data("path");
 		var objtype= $(this).data("image");
-		
+		var objuuid= $(this).data("uuid");
 		var objui=$(this).closest("li");
+		var objname = objui.find("span").text();
+		var objfile=encodeURIComponent(orgobjfile+"/"+objuuid+"_"+objname);
+		
 		var csrfToken = $("#_csrf").val();
 
 		$.ajax({
@@ -387,9 +394,13 @@ $(document).ready(function(){
 	
 	filemodalreset.click(function(){
 		const dataPath=[];
+		const dataName=[];
+		const dataUuid=[];
 		const dataType=[];
 		const commondataPath=[];
 		const commondataType=[];
+		const commondataName=[];
+		const commondataUuid=[];
 		
 		const filelist=document.querySelectorAll(".modal_img_file");
 		const commonfilelist=document.querySelectorAll(".modal_file");
@@ -397,10 +408,13 @@ $(document).ready(function(){
 		if(filelist.length>0){
 		for (let i = 0; i < filelist.length; i++) {
 			const button=filelist[i].querySelector(".modal_file_btn");
+			const name=filelist[i].querySelector("span").textContent;
 			dataPath.push(button.dataset.path);
 		    dataType.push(button.dataset.image);
+		    dataUuid.push(button.dataset.uuid);
+		    dataName.push(name);
 		}
-		deletefilelist(dataPath,dataType);
+		deletefilelist(dataPath,dataType,dataUuid,dataName);
 		for(let i=0;i<filelist.length;i++){
 			filelist[i].remove();
 		}
@@ -411,8 +425,11 @@ $(document).ready(function(){
 		else if(commonfilelist.length>0){
 			for (let i = 0; i < commonfilelist.length; i++) {
 			const button=commonfilelist[i].querySelector(".modal_file_btn");
+			const name=commonfilelist[i].querySelector("span").textContent;
 			commondataPath.push(button.dataset.path);
 		    commondataType.push(button.dataset.image);
+	    	commondataUuid.push(button.dataset.uuid)
+	    	commondataName.push(name);
 		}
 		deletefilelist(commondataPath,commondataType);
 		for(let i=0;i<filelist.length;i++){
@@ -429,10 +446,14 @@ $(document).ready(function(){
 		
 	});
 	
-	function deletefilelist(dataPath,dataType){
+	function deletefilelist(dataPath,dataType,dataUuid,dataName){
 		 for (let i = 0; i < dataPath.length; i++){
-			 const fileuri=dataPath[i];
+			 const orgfileuri=dataPath[i];
 			 const img=dataType[i];
+			 const fileuuid=dataUuid[i];
+			 const filename=dataName[i]
+			 
+			 const fileuri=encodeURIComponent(orgfileuri+"/"+fileuuid+"_"+filename);
 			 var csrfToken = $("#_csrf").val();
 			 
 			 $.ajax({
@@ -456,9 +477,13 @@ $(document).ready(function(){
 	
 	filemodalclose.click(function(){
 		const dataPath=[];
+		const dataName=[];
+		const dataUuid=[];
 		const dataType=[];
 		const commondataPath=[];
 		const commondataType=[];
+		const commondataName=[];
+		const commondataUuid=[];
 		
 		const filelist=document.querySelectorAll(".modal_img_file");
 		const commonfilelist=document.querySelectorAll(".modal_file");
@@ -468,10 +493,13 @@ $(document).ready(function(){
 			if(filelist.length>0){
 				for (let i = 0; i < filelist.length; i++) {
 				const button=filelist[i].querySelector(".modal_file_btn");
+				const name=filelist[i].querySelector("span").textContent;
 				dataPath.push(button.dataset.path);
 		    	dataType.push(button.dataset.image);
+		    	dataUuid.push(button.dataset.uuid)
+		    	dataName.push(name);
 				}
-				deletefilelist(dataPath,dataType);
+				deletefilelist(dataPath,dataType,dataUuid,dataName);
 				for(let i=0;i<filelist.length;i++){
 				filelist[i].remove();
 				}
@@ -482,10 +510,13 @@ $(document).ready(function(){
 			else if(commonfilelist.length>0){
 				for (let i = 0; i < commonfilelist.length; i++) {
 				const button=commonfilelist[i].querySelector(".modal_file_btn");
+				const name=commonfilelist[i].querySelector("span").textContent;
 				commondataPath.push(button.dataset.path);
 		    	commondataType.push(button.dataset.image);
+		    	commondataUuid.push(button.dataset.uuid)
+		    	comondataName.push(name);
 				}
-				deletefilelist(commondataPath,commondataType);
+				deletefilelist(commondataPath,commondataType,commondataUuid,comondataName);
 				for(let i=0;i<filelist.length;i++){
 				commonfilelist[i].remove();
 				}
@@ -534,9 +565,10 @@ $(document).ready(function(){
 			var datapath=dataPath[i];
 			var datauuid=dataUuid[i];
 			var datatype=dataType[i];
+			var imgfileuri=encodeURIComponent(datapath+"/"+datauuid+"_"+dataname);
 			
 			str=str+"<li class='result_img_file'>"+"<span>"+dataname+"</span>";
-			str=str+"<img class='reuslt_img' src='/display?fileuri="+datapath+"'>";
+			str=str+"<img class='reuslt_img' src='/display?fileuri="+imgfileuri+"'>";
 			str=str+"<button class='file_btn' type='button' data-path="+datapath+" data-name="+dataname+" data-uuid="+datauuid+" data-image="+datatype+">delete</button>";
 			str=str+"</li>";
 			}
@@ -547,7 +579,8 @@ $(document).ready(function(){
 			fileresult.css("height","500px");
 			for(var i=0;i<commonfilelist.length;i++){
 				const button=commonfilelist[i].querySelector(".modal_file_btn");
-				const name=commonfilelist[i].querySelector("p").textContent;
+				const name=commonfilelist[i].querySelector("span").textContent;
+				
 				commondataPath.push(button.dataset.path);
 				commondataUuid.push(button.dataset.uuid);
 				commondataName.push(name);
@@ -560,7 +593,7 @@ $(document).ready(function(){
 			var commondatatype=commondataType[i];
 				
 			str=str+"<li class='result_file'>";
-			str=str+"<p class='filename'>"+commondataname+"</p>";
+			str=str+"<span class='filename'>"+commondataname+"</span>";
 			str=str+"<button class='file_btn' type='button' data-path=\'"+commondatapath+"\' data-name="+commondataname+" data-uuid="+commondatauuid+" data-image="+commondatatype+">delete</button>";
 			str=str+"</li>";
 			}
@@ -578,6 +611,42 @@ $(document).ready(function(){
 	modal_file_drag.on("dragover",function(e){
 	    console.log("파일 드래그 감지");
 	    e.preventDefault();
+	});
+	
+	const modal_file_direct=$('#filemodaldirect');
+	modal_file_direct.on("change",function(e){
+		console.log("파일 직접 등록 완료");
+	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		
+		var formData = new FormData();
+	    var files =this.files;
+	    for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+	    }
+
+	    $.ajax({
+	    	type: 'post',
+			url:'/uploadFile',
+			data: formData,
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+            success: function(response){
+            	var resultresponse=response['result'];
+				var resultfilelist=response['attachfilelist'];
+				var thumbnailefilelist=response['thumbnaillist'];
+				displayfilelist(resultresponse,resultfilelist,thumbnailefilelist);
+            },
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+	    });
 	});
 	
 	modal_file_drag.on("drop",function(e){
@@ -645,7 +714,7 @@ $(document).ready(function(){
 				
 				str=str+"<li class='modal_img_file'>"+"<span>"+imgfile.fileName+"</span>";
 				str=str+"<img class='modal_thumimg' src='/display?fileuri="+thumbfileuri+"'>";
-				str=str+"<button class='modal_file_btn' type='button' data-path="+imgfileuri+" data-name="+imgfile.fileName+" data-uuid="+imgfile.uuid+" data-image="+imgfile.image+">delete</burron>";
+				str=str+"<button class='modal_file_btn' type='button' data-path="+imgfile.uploadPath+" data-name="+imgfile.fileName+" data-uuid="+imgfile.uuid+" data-image="+imgfile.image+">delete</burron>";
 				str=str+"</li>";
 				
 				
@@ -667,8 +736,8 @@ $(document).ready(function(){
 				//파일의 이미지 여부, 파일의 경로정보, 파일의 이름, 파일의 uuid 등을 따로 저장해야(나중에 파일 등록버튼 누를시 필요)
 				
 				str=str+"<li class='modal_file'>";
-				str=str+"<p class='filename'>"+normalfile.fileName+"</p>";
-				str=str+"<button class='modal_file_btn' type='button' data-path=\'"+normalfileuri+"\' data-name="+normalfile.fileName+" data-uuid="+normalfile.uuid+" data-image="+normalfile.image+">delete</burron>";
+				str=str+"<span class='filename'>"+normalfile.fileName+"</span>";
+				str=str+"<button class='modal_file_btn' type='button' data-path=\'"+normalfile.uploadPath+"\' data-name="+normalfile.fileName+" data-uuid="+normalfile.uuid+" data-image="+normalfile.image+">delete</burron>";
 				str=str+"</li>";
 				
 			filemodalresult.append(str);

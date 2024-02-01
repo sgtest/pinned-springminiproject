@@ -289,25 +289,21 @@
         	});
         	
         	cmnview.on("click","button",function(e){
-        		var obj=$(this).closest(".cmn_obj");
-        		//var cmnuri = obj.data("fileuri");
+        		var obj= $(this).closest(".cmn_obj");
         		
-        		var cmnuri=encodeURIComponent(obj.data("fileuri"));
-        		//cmnuri=encodeURIComponent(cmnuri);
+        		var cmnuri=encodeURIComponent(obj.data("fileuri")+"/"+obj.data("uuid")+"_"+obj.find("p").text());
         		self.location="/download?fileuri="+cmnuri;
         	});
 			imgview.on("click","button",function(e){
 				var obj=$(this).closest(".img_obj");
-				//var imguri=obj.data("fileuri");
 				
-        		var imguri=encodeURIComponent(obj.data("fileuri"));
-        		//imguri=encodeURIComponent(imguri);
+        		var imguri=encodeURIComponent(obj.data("fileuri")+"/"+obj.data("uuid")+"_"+obj.find("p").text());
         		self.location="/download?fileuri="+imguri;
         	});
 			
         	imgview.on("click","img",function(e){
-        		var imguri=$(this).data("uri");
-        		var imgsrc="/display?fileuri="+imguri;
+        		var obj=$(this).closest(".img_obj");
+        		var imgsrc="/display?fileuri="+encodeURIComponent(obj.data("fileuri")+"/"+obj.data("uuid")+"_"+obj.find("p").text());
         		console.log(imgsrc);
         		window.open(imgsrc,'_blank');
         	});
@@ -366,9 +362,11 @@
 				if(achfile.image===true){
 					imgcount=imgcount+1;
 					var imgfile=achfile;
+					var orgimglink=encodeURIComponent(imgfile.uploadPath+"/"+imgfile.uuid+"_"+imgfile.fileName);
+					
 					 str = str + '<div class="img_obj" data-fileuri="'+imgfile.uploadPath+'" data-filename="'+imgfile.fileName+'" data-uuid="'+imgfile.uuid+'" data-type="'+imgfile.image+'">';
 					 str = str + '<p>'+imgfile.fileName+'</p>';
-				   str = str + '<img class="img_class" data-uri="'+imgfile.uploadPath +'" src="/display?fileuri=' + imgfile.uploadPath + '">';
+				   str = str + '<img class="img_class" data-uri="'+imgfile.uploadPath +'" src="/display?fileuri=' + orgimglink + '">';
 				   str = str + '<button class="downloadbtn">Download</button>';
 				   str = str + '</div>';
 				}
@@ -388,6 +386,8 @@
 				cmnmodalview.append(cstr);
 			
 		}
+		
+		
 		
 		function opendwindow(src){
 			window.open(src);
@@ -530,7 +530,8 @@
         	}
     	
         function goBack(){
-        	
+        	//var search=${search};
+        	//window.location.href="listboard?type="+search.type+"&keyword="+search.keyword+"pageNum="+search.pageNum+"amount="+search.amount;
         	window.history.back();
         }
         </script>
