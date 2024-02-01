@@ -64,6 +64,11 @@
         margin: 0 5px;
 	}
 	.imgfile_modal,.cmnfile_modal{
+		background-color: #f0f0f0;
+    	padding: 10px; 
+    	border: 1px solid #ccc; 
+   		margin-bottom: 10px; 
+   		margin-left:5px;
 		width: 1500px;
 		hight: 1200px;
 	}
@@ -87,7 +92,14 @@
 		max-height: 1200px;
 		max-width: 1200px;
 	}
-
+	.img_obj{
+		margin-top:20px;
+		margin-left:20px;
+	}
+	.img_class{
+		max-height: 1200px;
+		max-width: 1200px;
+	}
 	</style>
 </head>
 <body>
