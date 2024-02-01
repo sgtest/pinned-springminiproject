@@ -27,7 +27,7 @@
 		flex-direction: row;
 		justify-content: flex-start;
 	}
-	.update_imgfile_modal,.update_cmnfile_modal{
+	#update_imgfile_modal,#update_cmnfile_modal{
 		width: 1500px;
 		hight: 1200px;
 	}
@@ -49,7 +49,7 @@
 <body>
 
 <h1>게시물 수정 페이지</h1>
-<a href="#" onclick="goBack()">이전 페이지로 되돌아가기</a><br><br>
+<button onclick="goBack()">이전페이지로 돌아가기</button><br><br>
 <div>
 
 <form action="updatesaveBoard" method="post">
@@ -97,29 +97,6 @@
 	</div>
 		
 		
-	<div id="update_imgfile_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">		
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<button id="update_imgfile_modal_close_btn" data-dismiss="modal">닫기</button>
-			<div class="imgfile_content" >
-			<div class="imgfile_view" id="imgfile_view">
-			<!-- 사진의 제목, 사진 순으로 보여주고 옆으로 넘겨서 다음사진을 본다.-->
-			
-			</div>
-			</div>
-		</div>
-	</div>
-
-	<div id="update_cmnfile_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">		
-		<div class="modal-dialog modal-dialog-centered" role="document">
-			<div class="cmnfile_content">
-			<button id="update_cmnfile_modal_close_btn" data-dismiss="modal">닫기</button>
-			<div class="cmnfile_view" id="cmnfile_view">
-			<!-- 일반 파일의 이름을 목차별로 보여준다. -->
-			
-			</div>
-			</div>
-		</div>
-	</div>
 <h4> 게시글 작성일자</h4>
 <div class="update_group">
 	<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
@@ -133,6 +110,42 @@
 </form>
 </div>
 
+	<div id="update_imgfile_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">		
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="imgfile_content" >
+			<button id="update_imgfile_modal_close_btn" data-dismiss="modal">닫기</button>
+			<div id="imgupdate">
+			
+			<div id="imgdragupdate">
+			
+			</div>
+			</div>
+			<div class="updateimgfile_view" id="imgfile_view">
+			<!-- 현재 업로드된 사진들을 보여주고 아래에 삭제버튼으로 삭제를 가능하게 한다-->
+			<ul class="upimgfile_layout">
+			
+			</ul>
+			</div>
+			</div>
+		</div>
+	</div>
+
+	<div id="update_cmnfile_modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">		
+		<div class="modal-dialog modal-dialog-centered" role="document">
+			<div class="cmnfile_content">
+			<button id="update_cmnfile_modal_close_btn" data-dismiss="modal">닫기</button>
+			<div id="cmnupdate">
+			
+			<div id="cmndragupdate">
+			
+			</div>
+			</div>
+			<div class="updatecmnfile_view" id="cmnfile_view">
+			<!-- 현재 업로드된 일반 파일의 이름을 목차별로 보여주고 삭제도 가능하게 한다. -->
+			</div>
+			</div>
+		</div>
+	</div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
@@ -146,8 +159,16 @@
 
 $(document).ready(function(){
 	var bno=${board.bno};
-	var imgview=$('.imgfile_view');
-	var cmnview=$('.cmnfile_view');
+	var imgumodal=$('#update_imgfile_modal');
+	var cmnumodal=$('#update_cmnfile_modal');
+	var imgview=$('.upimgfile_layout');
+	var cmnview=$('.updatecmnfile_view');
+	var imgmodalbtn=$('.imgfile_modal_btn');
+	var cmnmodalbtn=$('.comfile_modal_btn');
+	var imgmodalclbtn=$('#update_imgfile_modal_close_btn');
+	var cmnmodalclbtn=$('#update_cmnfile_modal_close_btn');
+	
+	
 	loadattachfile(bno);
 	
 	function loadattachfile(bno){
@@ -178,23 +199,46 @@ $(document).ready(function(){
 		for(var i=0;i<vachfilelist.length;i++){
 			var file=vachfilelist[i];
 			if(file.image===true){
-				
+				//<div><p></p><img></img><button></button></div>
+				//파일의 이름과 uuid, 'th_', 경로를 조합해서 썸네일 이미지 정보를 가져옴
+				var orguri=file.uploadPath;
+				var thuri=encodeURIComponent(file.uploadPath+"/th_"+file.uuid+"_"+file.fileName);
+				str=str+'<div class="upimg_obj"><p>'+file.fileName+'</p>';
+				str=str+'<img src="/display?fileuri='+thuri+'"></img>';
+				str=str+'<button></button>';
+				str=str+'</div>';
 			}
 			else{
-				
+				//<div><p></p><button></button></div>
+				//파일의 이름만 보여준다.
+				vstr=vstr+'<div class="upcmn_obj"><p>'+file.fileName+'</p>';
+				vstr=vstr+'<button></button>';
+				vstr=vstr+'</div>';
 			}
 		}
-		
-		
+		imgview.append(str);
+		cmnview.append(vstr);		
 	}
 	
-	
-
+	imgmodalbtn.on("click",function(){
+		imgumodal.modal('show');
+	});
+	cmnmodalbtn.on("click",function(){
+		cmnumodal.modal('show');
+	});
+	imgmodalclbtn.on("click",function(e){
+		imgumodal.modal('hide'); 
+        //$("#update_imgfile_modal_close_btn").attr("data-dismiss", "modal");
+	});
+	cmnmodalclbtn.on("click",function(e){
+		cmnumodal.modal('hide');
+        //$("#update_cmnfile_modal_close_btn").attr("data-dismiss", "modal");
+	});
 });
 	
 	function goBack(){
-		
-		window.history.back();
+		//window.location.href="readBoard?bno="+${board.bno};
+    	window.history.back();
 	}
 </script>
 </body>
