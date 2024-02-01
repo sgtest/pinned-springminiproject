@@ -5,6 +5,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
+import java.net.URLEncoder;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -174,6 +175,27 @@ public class filecontroller {
 			e.printStackTrace();
 		}
 		
+		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
+	}
+	
+	@GetMapping(value="/download",produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
+	@ResponseBody
+	public ResponseEntity<Resource> download(String fileuri) throws IOException {
+		String orifileuri=URLDecoder.decode(fileuri, "UTF-8");
+		Resource resource=new FileSystemResource("D:\\server\\temp\\"+orifileuri);
+		
+		log.info(resource.getURI());
+		
+		String orignalfilename=resource.getFilename();
+		
+		String realfilename=orignalfilename.substring(orignalfilename.indexOf("_") + 1);
+		HttpHeaders header=new HttpHeaders();
+		try {
+			header.add("Content-Disposition", "attachment; filename="+new String(realfilename.getBytes("UTF-8"),"ISO-8859-1"));
+		} catch (UnsupportedEncodingException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
 	}
 	
