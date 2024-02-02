@@ -191,7 +191,7 @@
 			</div>
 			<input type="file" id="filemodaldirect" name="upload" multiple>
 			<h5 class="file-modal-title">파일을 드래그하거나 직접 업로드 버튼을 눌러서 업로드 해주세요</h5>
-			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>이미지 파일은 따로 이미지 파일끼리 업로드 해주세요!!!</h5>
+			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>이미지 파일은 이미지 파일끼리 따로 업로드 해주세요!!!</h5>
 			<div id="filemodalresult">
 			<!-- 파일 업로드 리스트 영역 -->
 				<ul class="thumgrid" id="filemodalresult_thumb">
