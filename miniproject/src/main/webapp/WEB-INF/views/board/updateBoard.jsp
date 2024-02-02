@@ -29,7 +29,16 @@
 	}
 	#update_imgfile_modal,#update_cmnfile_modal{
 		width: 1500px;
-		hight: 1200px;
+		height: 1300px;
+    	transform: translateY(-50%);
+    	position: absolute;
+    	display: none;
+    	left: 30%;
+    	margin: 0;
+  		justify-content: center;
+  		align-items: center;
+  		background-color: rgba(160, 160, 160, 1);
+    	overflow-y: scroll;
 	}
 	
 	.imgfile_view{
@@ -43,6 +52,26 @@
   		flex-direction: column;
   		overflow-y: scroll;
     	height:1200px;	
+	}
+	#imgdragupdate{
+		width: 1300px;
+		height: 600px;
+		margin-left:100px;
+		margin-right:100px;
+    	border: 2px solid #000;
+	}
+	.upimgfile_layout{
+		display: grid;
+  		grid-template-columns: repeat(10, 1fr);
+    	overflow-y: scroll;
+	}
+	.upimg_obj{
+  		display: flex;
+  		flex-direction: column;  
+  		align-items: center; 
+		margin-left: 20px;
+	    width: 100%;
+  		height: 100%;
 	}
 </style>
 </head>
@@ -115,10 +144,13 @@
 			<div class="imgfile_content" >
 			<button id="update_imgfile_modal_close_btn" data-dismiss="modal">닫기</button>
 			<div id="imgupdate">
-			
+			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<div id="imgdragupdate">
 			
-			</div>
+			</div><br><br>
+			<input type="file" id="imgfileupdatedirect" name="upload" multiple>
+			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
+			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>여기는 이미지 파일을 업로드하는 곳 입니다.</h5>
 			</div>
 			<div class="updateimgfile_view" id="imgfile_view">
 			<!-- 현재 업로드된 사진들을 보여주고 아래에 삭제버튼으로 삭제를 가능하게 한다-->
@@ -135,13 +167,19 @@
 			<div class="cmnfile_content">
 			<button id="update_cmnfile_modal_close_btn" data-dismiss="modal">닫기</button>
 			<div id="cmnupdate">
-			
+			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<div id="cmndragupdate">
 			
-			</div>
+			</div><br><br>
+			<input type="file" id="cmnfileupdatedirect" name="upload" multiple>
+			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
+			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>여기는 이미지 파일을 업로드하는 곳 입니다.</h5>
 			</div>
 			<div class="updatecmnfile_view" id="cmnfile_view">
 			<!-- 현재 업로드된 일반 파일의 이름을 목차별로 보여주고 삭제도 가능하게 한다. -->
+			<ul class="upcmnfile_layout">
+			
+			</ul>
 			</div>
 			</div>
 		</div>
@@ -168,8 +206,156 @@ $(document).ready(function(){
 	var imgmodalclbtn=$('#update_imgfile_modal_close_btn');
 	var cmnmodalclbtn=$('#update_cmnfile_modal_close_btn');
 	
+	const imguposition=$('#imgdragupdate');
+	const cmnuposition=$('#cmndragupdate');
+	var direcimg=$('#imgfileupdatedirect');
+	var direccmn=$('#cmnfileupdatedirect');
 	
 	loadattachfile(bno);
+	
+	//파일 인식후 등록
+	imguposition.on("dragover",function(e){
+		console.log('파일 감지');
+	});
+	cmnuposition.on("dragover",function(e){
+		console.log('파일 감지');
+	});
+	imguposition.on("drop",function(e){
+		console.log("파일 드롭 완료");
+	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		var formData = new FormData();
+		var files = e.originalEvent.dataTransfer.files;
+		for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+		}
+		$.ajax({
+			type:'post', url:'/uploadFile', data:formData, dataType:'json', 
+			beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+			success:function(response){
+				resultfilelist=response['attachfilelist'];
+				thumfilelist=response['thumbnaillist'];
+				upresult=response['result'];
+				if(upresult==="upload_success"){
+					dispalyfileview(resultfilelist);
+				}else{
+					
+				}
+			},
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+		});
+	});
+	cmnuposition.on("drop",function(e){
+		console.log("파일 드롭 완료");
+	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		var formData = new FormData();
+		var files = e.originalEvent.dataTransfer.files;
+		for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+		}
+		$.ajax({
+			type:'post', url:'/uploadFile', data:formData, dataType:'json', 
+			beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+			success:function(response){
+				resultfilelist=response['attachfilelist'];
+				thumfilelist=response['thumbnaillist'];
+				upresult=response['result'];
+				if(upresult==="upload_success"){
+					dispalyfileview(resultfilelist);
+				}else{
+					
+				}
+				
+			},
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+		});
+	});
+	direcimg.on("change",function(e){
+	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		var formData = new FormData();
+	    var files =this.files;
+		for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+		}
+		
+		$.ajax({
+			type:'post', url:'/uploadFile', data:formData, dataType:'json',
+			beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+			success:function(response){
+				resultfilelist=response['attachfilelist'];
+				thumfilelist=response['thumbnaillist'];
+				upresult=response['result'];
+				if(upresult==="upload_success"){
+					dispalyfileview(resultfilelist);
+				}else{
+					
+				}
+				
+			},
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+		});
+	});
+	direccmn.on("change",function(e){
+	    e.preventDefault();
+		var csrfToken = $("#_csrf").val();
+		var formData = new FormData();
+	    var files =this.files;
+		for(var i=0;i<files.length;i++){
+		    console.log(files[i].name);	
+		    console.log(files[i].size);
+		    formData.append("uploadFile",files[i]);
+		}
+
+		$.ajax({
+			type:'post', url:'/uploadFile', data:formData, dataType:'json', 
+			beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+            contentType: false,
+            processData: false,
+			success:function(response){
+				resultfilelist=response['attachfilelist'];
+				thumfilelist=response['thumbnaillist'];
+				upresult=response['result'];
+				if(upresult==="upload_success"){
+					dispalyfileview(resultfilelist);
+				}
+				else{
+					
+				}
+			},
+            error: function(error){
+            	console.error('파일 업로드 에러!!');
+            }
+		});
+	});
+	
 	
 	function loadattachfile(bno){
 		var vbno=bno;
@@ -205,14 +391,14 @@ $(document).ready(function(){
 				var thuri=encodeURIComponent(file.uploadPath+"/th_"+file.uuid+"_"+file.fileName);
 				str=str+'<div class="upimg_obj"><p>'+file.fileName+'</p>';
 				str=str+'<img src="/display?fileuri='+thuri+'"></img>';
-				str=str+'<button></button>';
+				str=str+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-name="'+file.fileName+'">delete</button>';
 				str=str+'</div>';
 			}
 			else{
 				//<div><p></p><button></button></div>
 				//파일의 이름만 보여준다.
 				vstr=vstr+'<div class="upcmn_obj"><p>'+file.fileName+'</p>';
-				vstr=vstr+'<button></button>';
+				vstr=vstr+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-name="'+file.fileName+'">delete</button>';
 				vstr=vstr+'</div>';
 			}
 		}
@@ -228,16 +414,13 @@ $(document).ready(function(){
 	});
 	imgmodalclbtn.on("click",function(e){
 		imgumodal.modal('hide'); 
-        //$("#update_imgfile_modal_close_btn").attr("data-dismiss", "modal");
 	});
 	cmnmodalclbtn.on("click",function(e){
 		cmnumodal.modal('hide');
-        //$("#update_cmnfile_modal_close_btn").attr("data-dismiss", "modal");
 	});
 });
 	
 	function goBack(){
-		//window.location.href="readBoard?bno="+${board.bno};
     	window.history.back();
 	}
 </script>
