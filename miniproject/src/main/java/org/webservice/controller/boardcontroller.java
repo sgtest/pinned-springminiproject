@@ -73,8 +73,10 @@ public class boardcontroller {
 	//@PreAuthorize("authenticated()")
 	@PostMapping("/saveBoard")
 	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
+		if(brd.getAttachlist()!=null) {
 		for(int i=0;i<brd.getAttachlist().size();i++) {
 			log.info("this is files: "+brd.getAttachlist().get(i).getFileName());
+		}
 		}
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
@@ -122,6 +124,7 @@ public class boardcontroller {
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updatesaveBoard")
 	public String updatesaveBoard(board brd, boardsearch search,RedirectAttributes rttr) {
+		log.info(brd.getBno()+"  "+brd.getTitle()+"  "+brd.getContent()+"  "+brd.getUdate());
 		if(bservice.updateboard(brd))
 			rttr.addFlashAttribute("result", "success");
 		
@@ -139,14 +142,14 @@ public class boardcontroller {
 	
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/removeBoard")
-	public String removeBoard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr, String writer) {
+	public String removeBoard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr) {
+		log.info(bno);
+		Filedelete(bservice.getfilelist(bno));
+		log.info(bservice.getfilelist(bno).size());
+		bservice.deletefilelist(bno);
+		bservice.deleteboard(bno);
+		rttr.addFlashAttribute("result", "success");
 		
-		if(bservice.deleteboard(bno)) {
-			//파일 직접 삭제 함수
-			Filedelete(bservice.getfilelist(bno));
-			bservice.deletefilelist(bno);
-			rttr.addFlashAttribute("result", "success");
-		}
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
@@ -159,6 +162,7 @@ public class boardcontroller {
 		
 		for(attachfile rmfile:filelist) {
 			fpath=Paths.get(firstfilelink+rmfile.getUploadPath()+"\\"+rmfile.getUuid()+"_"+rmfile.getFileName());
+			log.info(fpath.toString());
 			try {
 				Files.deleteIfExists(fpath);
 			} catch (IOException e) {

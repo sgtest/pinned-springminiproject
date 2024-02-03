@@ -81,7 +81,7 @@
 <button onclick="goBack()">이전페이지로 돌아가기</button><br><br>
 <div>
 
-<form role="form" action="updatesaveBoard" method="post">
+<form role="form" action="/board/updatesaveBoard" method="post">
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<input type="hidden" name="bno" value="${board.bno}">
 	
@@ -249,8 +249,9 @@ $(document).ready(function(){
 		}
 		}
 		
+		var k=i;
 		if(dataobj.length>0){
-		for(var j=0;i<dataobj.length;j++){"C:/Users/윤석효/Desktop/maxresdefault.jpg"
+		for(var j=0;j<dataobj.length;j++){
 			var file=dataobj[i].querySelector(".up_obj");
 			var name=dataobj[i].querySelector("p").textContent;
 			datapath.push(file.dataset.path);
@@ -259,6 +260,7 @@ $(document).ready(function(){
 			datatype.push(file.dataset.image);
 		}
 		for(var j=i;j<dataobj.length+i;j++){
+			console.log(j-i);
 			var cdataname=dataname[j-i];
 			var cdatauuid=datauuid[j-i];
 			var cdatapath=datapath[j-i];
@@ -282,6 +284,7 @@ $(document).ready(function(){
 		var filepath=$(this).data("path");
 		var obj=$(this).closest("div");
 		var filename=obj.find("p").text();
+		var csrfToken = $("#_csrf").val();
 		var orgfileuri=encodeURIComponent(filepath+"/"+fileuuid+"_"+filename);
 		
 		$.ajax({
@@ -313,7 +316,8 @@ $(document).ready(function(){
 		var obj=$(this).closest("div");
 		var filename=obj.find("p").text();
 		var orgfileuri=encodeURIComponent(filepath+"/"+fileuuid+"_"+filename);		
-
+		var csrfToken = $("#_csrf").val();
+		
 		$.ajax({
 			type:'post',
 			url:'/deletefile',

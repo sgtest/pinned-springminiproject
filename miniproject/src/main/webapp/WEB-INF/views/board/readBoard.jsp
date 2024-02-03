@@ -103,10 +103,10 @@
 	</style>
 </head>
 <body>
-
-<div class="boardform">
 	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
+<div class="boardform">
 	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
+	<button id="boarddeletebtn" type="button" data-href="listboard">게시물 삭제하기</button>
 </div>
 <div class="readcontent_top">
 
@@ -263,9 +263,29 @@
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
         	loadattachfile();
+        	$("#boarddeletebtn").on("click",function(e){
+        		
+        		var csrfToken = $("#_csrf").val();
+        		var bno=${board.bno};
+        		$.ajax({
+        			type:'post',
+        			url:'removeBoard',
+        			data:{bno: bno},
+        	        beforeSend: function(xhr) {
+        	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+        	        },
+        			success:function(e){
+                		var redirect=$("#boarddeletebtn").data("href");
+                		window.location.href=redirect;
+        				alert(bno+'번 게시물을 삭제하셨습니다');
+        			},
+        			error:function(error){
+    					console.error('게시물 삭제 실패');
+        			}
+        		});
+        	});
         	$("#boardupdatebtn").on("click",function(e){
         		window.location.href=this.dataset.href;
-        		
         	});
         	$(".commentedit_close_btn").on("click",function(e){
             	e.preventDefault();

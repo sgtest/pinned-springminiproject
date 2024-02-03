@@ -121,8 +121,6 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean deleteboard(Long bno) {
 		fmapper.deleteallfile(bno);
-		if(mapper.deleteboard(bno)==1)
-			log.info(mapper.readboard(bno).getBoardname()+"_"+bno+"_board delete");
 		return mapper.deleteboard(bno)==1;
 	}
 
@@ -160,14 +158,14 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public List<attachfile> getfilelist(Long bno) {
 		board bd=mapper.readboard(bno);
-		log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is existed");
+		//log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is existed");
 		return fmapper.getlistfile(bno);
 	}
 
 	@Override
 	public void deletefilelist(Long bno) {
 		board bd=mapper.readboard(bno);
-		log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is deleted");
+		//log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is deleted");
 		fmapper.deleteallfile(bno);
 	}
 
