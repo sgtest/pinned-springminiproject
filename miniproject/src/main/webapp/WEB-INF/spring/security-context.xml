@@ -11,10 +11,9 @@
 		class="org.webservice.security.customUserDetailService"></bean>
 	<security:http>
 		
-	<security:intercept-url pattern="/board/listboard"
-			access="permitAll" />
+	<security:intercept-url pattern="/board/listboard" access="permitAll" />
+	<security:intercept-url pattern="/board/createBoard" access="hasRole('ROLE_MEMBER')"/>
 		<security:form-login/>
-		
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 	</security:http>
