@@ -4,12 +4,33 @@
   "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
   <mapper namespace="org.webservice.mapper.membermapper">
   	
-  	<resultMap type="org.webservice.domain.member" id="membermap">
   	
+  	<resultMap type="org.webservice.domain.auth" id="authmap">
+    	<result property="userid" column="userid"/>
+    	<result property="auth" column="auth"/>
   	</resultMap>
   	
-  	<select id="readmember" resultMap="membermap">
   	
+  	
+  	<select id="readmember" resultMap="org.webservice.domain.member">
+  	select * from pro_member where userid=#{userid}
+  	</select>  	
+  	<select id="memberlist" resultMap="org.webservice.domain.member">
+  	select * from pro_member;
   	</select>
+  	
+  	<select id="readauth" resultMap="authmap">
+  	select * from pro_member_auth where userid=#{userid}
+  	</select>
+  	<insert id="insertmember">
+  	insert into pro_member values(#{userid},#{userpw},#{username},sysdate,sysdate,1,#{phone})
+  	</insert>
+  	<update id="updatemember">
+  	update pro_member set userpw=#{userpw},username=#{username},udate=sysdate,phone=#{phone} where userid=#{userid}
+  	</update>
+  	<delete id="deletemember">
+  	delete from pro_member where userid=#{userid}
+  	</delete>
+  	
   	
   </mapper>
