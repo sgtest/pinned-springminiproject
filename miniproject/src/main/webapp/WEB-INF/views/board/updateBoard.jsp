@@ -53,7 +53,7 @@
   		overflow-y: scroll;
     	height:1200px;	
 	}
-	#imgdragupdate{
+	#imgdragupdate,#cmndragupdate{
 		width: 1300px;
 		height: 600px;
 		margin-left:100px;
@@ -81,8 +81,8 @@
 <button onclick="goBack()">이전페이지로 돌아가기</button><br><br>
 <div>
 
-<form action="updatesaveBoard" method="post">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<form role="form" action="updatesaveBoard" method="post">
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<input type="hidden" name="bno" value="${board.bno}">
 	
 <h4>게시판 종류 수정</h4>
@@ -143,7 +143,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="imgfile_content" >
 			<button id="update_imgfile_modal_close_btn" data-dismiss="modal">닫기</button>
-			<div id="imgupdate">
+			
 			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<div id="imgdragupdate">
 			
@@ -151,7 +151,7 @@
 			<input type="file" id="imgfileupdatedirect" name="upload" multiple>
 			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>여기는 이미지 파일을 업로드하는 곳 입니다.</h5>
-			</div>
+			
 			<div class="updateimgfile_view" id="imgfile_view">
 			<!-- 현재 업로드된 사진들을 보여주고 아래에 삭제버튼으로 삭제를 가능하게 한다-->
 			<ul class="upimgfile_layout">
@@ -166,7 +166,7 @@
 		<div class="modal-dialog modal-dialog-centered" role="document">
 			<div class="cmnfile_content">
 			<button id="update_cmnfile_modal_close_btn" data-dismiss="modal">닫기</button>
-			<div id="cmnupdate">
+			
 			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<div id="cmndragupdate">
 			
@@ -174,7 +174,7 @@
 			<input type="file" id="cmnfileupdatedirect" name="upload" multiple>
 			<h5>파일을 드래그하거나 직접 선택하여 추가하고, delete버튼으로 삭제해 주세요.</h5>
 			<h5 id="fileuplaodrule">zip, js, exe, sh, alz 형태의 확장자를 가진 파일은 업로드가 제한됩니다!!!<br>여기는 이미지 파일을 업로드하는 곳 입니다.</h5>
-			</div>
+			
 			<div class="updatecmnfile_view" id="cmnfile_view">
 			<!-- 현재 업로드된 일반 파일의 이름을 목차별로 보여주고 삭제도 가능하게 한다. -->
 			<ul class="upcmnfile_layout">
@@ -210,20 +210,147 @@ $(document).ready(function(){
 	const cmnuposition=$('#cmndragupdate');
 	var direcimg=$('#imgfileupdatedirect');
 	var direccmn=$('#cmnfileupdatedirect');
+
+	var submitform=$("form[role='form']");
 	
 	loadattachfile(bno);
-	
+	$("button[type='submit']").on("click", function(e){
+		var str="";
+		const imgdatapath=[];
+		const imgdatauuid=[];
+		const imgdataname=[];
+		const imgdatatype=[];
+		const datapath=[];
+		const datauuid=[];
+		const dataname=[];
+		const datatype=[];
+		const imgdataobj=document.querySelectorAll(".upimg_obj");
+		const dataobj=document.querySelectorAll(".upcmn_obj");
+		var i=0;
+		if(imgdataobj.length>0){
+		for(i=0;i<imgdataobj.length;i++){
+			var imgfile=imgdataobj[i].querySelector(".up_obj");
+			var name=imgdataobj[i].querySelector("p").textContent;
+			imgdatapath.push(imgfile.dataset.path);
+			imgdatauuid.push(imgfile.dataset.uuid);
+			imgdataname.push(name);
+			imgdatatype.push(imgfile.dataset.image);
+		}
+		for(i=0;i<imgdataobj.length;i++){
+			var idataname=imgdataname[i];
+			var idatauuid=imgdatauuid[i];
+			var idatapath=imgdatapath[i];
+			var idatatype=imgdatatype[i];
+			
+			str = str + "<input type='hidden' name='attachlist["+i+"].fileName' value='"+idataname+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+i+"].uuid' value='"+idatauuid+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+i+"].uploadPath' value='"+idatapath+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+i+"].image' value='"+idatatype+"'>";
+		}
+		}
+		
+		if(dataobj.length>0){
+		for(var j=0;i<dataobj.length;j++){"C:/Users/윤석효/Desktop/maxresdefault.jpg"
+			var file=dataobj[i].querySelector(".up_obj");
+			var name=dataobj[i].querySelector("p").textContent;
+			datapath.push(file.dataset.path);
+			datauuid.push(file.dataset.uuid);
+			dataname.push(name);
+			datatype.push(file.dataset.image);
+		}
+		for(var j=i;j<dataobj.length+i;j++){
+			var cdataname=dataname[j-i];
+			var cdatauuid=datauuid[j-i];
+			var cdatapath=datapath[j-i];
+			var cdatatype=datatype[j-i];
+			
+			str = str + "<input type='hidden' name='attachlist["+j+"].fileName' value='"+cdataname+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+j+"].uuid' value='"+cdatauuid+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+j+"].uploadPath' value='"+cdatapath+"'>";
+		    str = str + "<input type='hidden' name='attachlist["+j+"].image' value='"+cdatatype+"'>";
+		}
+		}
+		console.log(str);
+		submitform.append(str);
+		submitform.submit();		
+		
+	});
 	//파일 인식후 등록
+	imgview.on("click", "button",function(e){
+		var fileuuid=$(this).data("uuid");
+		var fileimg=$(this).data("image");
+		var filepath=$(this).data("path");
+		var obj=$(this).closest("div");
+		var filename=obj.find("p").text();
+		var orgfileuri=encodeURIComponent(filepath+"/"+fileuuid+"_"+filename);
+		
+		$.ajax({
+			type:'post',
+			url:'/deletefile',
+			data:{fileuri:orgfileuri,filetype:fileimg},
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+			success: function(response){
+				obj.remove();
+				const filelist=document.querySelectorAll(".upimg_obj");
+				if(filelist.length===0){
+					imgview.css("height","0px");
+					imgview.empty();
+				}
+			},
+			error: function(error){
+				console.error('파일삭제 오류');
+			}
+				
+		});
+	});
+	cmnview.on("click", "button",function(e){
+		var fileuuid=$(this).data("uuid");
+		var fileimg=$(this).data("image");
+		var filepath=$(this).data("path");
+		var obj=$(this).closest("div");
+		var filename=obj.find("p").text();
+		var orgfileuri=encodeURIComponent(filepath+"/"+fileuuid+"_"+filename);		
+
+		$.ajax({
+			type:'post',
+			url:'/deletefile',
+			data:{fileuri:orgfileuri,filetype:fileimg},
+			dataType:'JSON',
+	        beforeSend: function(xhr) {
+	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+	        },
+			success: function(response){
+				obj.remove();
+				const filelist=document.querySelectorAll(".upcmn_obj");
+				if(filelist.length===0){
+					cmnview.css("height","0px");
+					cmnview.empty();
+				}
+			},
+			error: function(error){
+				console.error('파일삭제 오류');
+			}
+				
+		});
+	});
+	
+	
 	imguposition.on("dragover",function(e){
 		console.log('파일 감지');
+		 e.preventDefault();
 	});
 	cmnuposition.on("dragover",function(e){
 		console.log('파일 감지');
+		 e.preventDefault();
 	});
 	imguposition.on("drop",function(e){
 		console.log("파일 드롭 완료");
 	    e.preventDefault();
 		var csrfToken = $("#_csrf").val();
+		
 		var formData = new FormData();
 		var files = e.originalEvent.dataTransfer.files;
 		for(var i=0;i<files.length;i++){
@@ -232,7 +359,10 @@ $(document).ready(function(){
 		    formData.append("uploadFile",files[i]);
 		}
 		$.ajax({
-			type:'post', url:'/uploadFile', data:formData, dataType:'json', 
+			type:'post', 
+			url:'/uploadFile', 
+			data:formData, 
+			dataType:'json', 
 			beforeSend: function(xhr) {
 	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 	        },
@@ -257,6 +387,7 @@ $(document).ready(function(){
 		console.log("파일 드롭 완료");
 	    e.preventDefault();
 		var csrfToken = $("#_csrf").val();
+		
 		var formData = new FormData();
 		var files = e.originalEvent.dataTransfer.files;
 		for(var i=0;i<files.length;i++){
@@ -265,7 +396,10 @@ $(document).ready(function(){
 		    formData.append("uploadFile",files[i]);
 		}
 		$.ajax({
-			type:'post', url:'/uploadFile', data:formData, dataType:'json', 
+			type:'post', 
+			url:'/uploadFile', 
+			data:formData, 
+			dataType:'json', 
 			beforeSend: function(xhr) {
 	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 	        },
@@ -299,7 +433,10 @@ $(document).ready(function(){
 		}
 		
 		$.ajax({
-			type:'post', url:'/uploadFile', data:formData, dataType:'json',
+			type:'post', 
+			url:'/uploadFile', 
+			data:formData, 
+			dataType:'json',
 			beforeSend: function(xhr) {
 	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 	        },
@@ -391,14 +528,14 @@ $(document).ready(function(){
 				var thuri=encodeURIComponent(file.uploadPath+"/th_"+file.uuid+"_"+file.fileName);
 				str=str+'<div class="upimg_obj"><p>'+file.fileName+'</p>';
 				str=str+'<img src="/display?fileuri='+thuri+'"></img>';
-				str=str+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-name="'+file.fileName+'">delete</button>';
+				str=str+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-image="'+file.image+'" data-name="'+file.fileName+'">delete</button>';
 				str=str+'</div>';
 			}
 			else{
 				//<div><p></p><button></button></div>
 				//파일의 이름만 보여준다.
 				vstr=vstr+'<div class="upcmn_obj"><p>'+file.fileName+'</p>';
-				vstr=vstr+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-name="'+file.fileName+'">delete</button>';
+				vstr=vstr+'<button class="up_obj" type="button" data-path="'+file.uploadPath+'" data-uuid="'+file.uuid+'" data-image="'+file.image+'" data-name="'+file.fileName+'">delete</button>';
 				vstr=vstr+'</div>';
 			}
 		}

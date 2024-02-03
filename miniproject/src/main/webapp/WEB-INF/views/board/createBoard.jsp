@@ -617,8 +617,8 @@ $(document).ready(function(){
 	modal_file_direct.on("change",function(e){
 		console.log("파일 직접 등록 완료");
 	    e.preventDefault();
+	    
 		var csrfToken = $("#_csrf").val();
-		
 		var formData = new FormData();
 	    var files =this.files;
 	    for(var i=0;i<files.length;i++){
@@ -653,7 +653,6 @@ $(document).ready(function(){
 		console.log("파일 드롭 완료");
 	    e.preventDefault();
 		var csrfToken = $("#_csrf").val();
-		
 		var formData = new FormData();
 	    var files = e.originalEvent.dataTransfer.files;
 	    for(var i=0;i<files.length;i++){
