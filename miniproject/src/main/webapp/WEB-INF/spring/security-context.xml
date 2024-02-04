@@ -9,11 +9,18 @@
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
 	<bean id="customUserDetailsService"
 		class="org.webservice.security.customUserDetailService"></bean>
-	<security:http>
+	<security:http auto-config="true">
 		
-	<security:intercept-url pattern="/board/listboard" access="permitAll" />
-	<security:intercept-url pattern="/board/createBoard" access="hasRole('ROLE_MEMBER')"/>
-		<security:form-login/>
+	<security:intercept-url pattern="/board/listboard" access="permitAll" />	
+	<security:intercept-url pattern="/board/readBoard" access="permitAll" />
+	
+	<security:intercept-url pattern="/board/createBoard" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/board/createBoardlist" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/mypage" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/board/updateBoard" access="isAuthenticated()"/>
+	
+        <security:csrf disabled="true" />
+		<security:form-login login-page="/loginboard" />
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 	</security:http>
@@ -21,6 +28,7 @@
 	<security:authentication-manager>
 		<security:authentication-provider
 			user-service-ref="customUserDetailsService">
+			
 			<security:password-encoder
 				ref="bcryptPasswordEncoder" />
 		</security:authentication-provider>
