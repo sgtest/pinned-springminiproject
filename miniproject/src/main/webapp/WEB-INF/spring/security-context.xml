@@ -7,7 +7,7 @@
 		
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-	<bean id="customUserDetailsService"
+	<bean id="customUserDetailService"
 		class="org.webservice.security.customUserDetailService"></bean>
 	<security:http auto-config="true">
 		
@@ -20,14 +20,14 @@
 	<security:intercept-url pattern="/board/updateBoard" access="isAuthenticated()"/>
 	
         <security:csrf disabled="true" />
-		<security:form-login login-page="/loginboard" />
+		<security:form-login username-parameter="id" password-parameter="passwd" login-page="/loginboard" />
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 	</security:http>
-
-	<security:authentication-manager>
+		
+		<security:authentication-manager>
 		<security:authentication-provider
-			user-service-ref="customUserDetailsService">
+			user-service-ref="customUserDetailService">
 			
 			<security:password-encoder
 				ref="bcryptPasswordEncoder" />
