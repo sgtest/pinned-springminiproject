@@ -1,3 +1,4 @@
+
 package org.webservice.security;
 
 import java.util.ArrayList;
@@ -9,11 +10,16 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.webservice.domain.auth;
 import org.webservice.domain.member;
 
-public class secmemberdetail implements UserDetails{
+public class userdetail implements UserDetails{
 
-	private final member mem;
+	private member mem;
+	private String ID;
+	private String PASSWORD;
+	private String NAME;
+	private String AUTHORITY;
+	private boolean ENABLED;
 	
-	public secmemberdetail(member m) {
+	public userdetail(member m) {
 		this.mem=m;
 	}
 	@Override

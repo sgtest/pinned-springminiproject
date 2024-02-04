@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.webservice.domain.member;
 import org.webservice.mapper.membermapper;
 import org.webservice.security.customUserDetailService;
-import org.webservice.security.secmemberdetail;
+import org.webservice.security.userdetail;
 
 import lombok.extern.log4j.Log4j;
 
