@@ -49,7 +49,7 @@
 <body>
 	<h2><a href="listboard">이것은 게시판이다</a></h2>
 	
-	<h1><a href="login">로그인</a></h1>
+	<h1><a href="/loginboard">로그인</a></h1>
 	
 	<div class="boardlist">
 	<div class=default_board_top align="center">

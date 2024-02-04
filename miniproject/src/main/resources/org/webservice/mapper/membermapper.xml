@@ -12,10 +12,10 @@
   	
   	
   	
-  	<select id="readmember" resultMap="org.webservice.domain.member">
+  	<select id="readmember" resultType="org.webservice.domain.member">
   	select * from pro_member where userid=#{userid}
   	</select>  	
-  	<select id="memberlist" resultMap="org.webservice.domain.member">
+  	<select id="memberlist" resultType="org.webservice.domain.member">
   	select * from pro_member;
   	</select>
   	
