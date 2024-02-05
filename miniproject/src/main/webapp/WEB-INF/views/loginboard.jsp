@@ -40,7 +40,7 @@
 
 </div>
 
-<button type="submit">Login</button>
+<button id="loginbtn" type="submit">Login</button>
 </form>
 
 <div class="logbtn_set">
@@ -60,7 +60,12 @@
         crossorigin="anonymous"></script>
         <script>
         $(document).ready(function(){
+        	var login=$('#loginbtn');
         	
+        	login.on("click",function(e){
+        	    e.preventDefault();
+        	    $("form").submit();
+        	})
         });
 
     	function goBack(){

@@ -7,27 +7,30 @@
 		
 	<bean id="bcryptPasswordEncoder"
 		class="org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder" />
-	<bean id="customUserDetailService"
-		class="org.webservice.security.customUserDetailService"></bean>
+	<bean id="customuserdetailservice2"
+		class="org.webservice.security.customuserdetailservice2"></bean>
 	<security:http auto-config="true">
 		
 	<security:intercept-url pattern="/board/listboard" access="permitAll" />	
 	<security:intercept-url pattern="/board/readBoard" access="permitAll" />
 	
-	<security:intercept-url pattern="/board/createBoard" access="isAuthenticated()"/>
+	<security:intercept-url pattern="/board/createBoard" access="hasAuthority('common')"/>
 	<security:intercept-url pattern="/board/createBoardlist" access="isAuthenticated()"/>
 	<security:intercept-url pattern="/mypage" access="isAuthenticated()"/>
 	<security:intercept-url pattern="/board/updateBoard" access="isAuthenticated()"/>
 	
         <security:csrf disabled="true" />
-		<security:form-login username-parameter="id" password-parameter="passwd" login-page="/loginboard" />
+		<security:form-login username-parameter="id" password-parameter="passwd" login-page="/loginboard" login-processing-url="/loginaction"/>
+		<security:access-denied-handler/>
+		<security:logout/>
 		<security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
+			
 	</security:http>
 		
 		<security:authentication-manager>
 		<security:authentication-provider
-			user-service-ref="customUserDetailService">
+			user-service-ref="customuserdetailservice2">
 			
 			<security:password-encoder
 				ref="bcryptPasswordEncoder" />

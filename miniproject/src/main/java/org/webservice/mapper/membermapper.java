@@ -10,6 +10,7 @@ public interface membermapper {
 	public int insertmember(member member);
 	public int updatemember(member member);
 	public int deletemember(member member);
+	public int insertauth(auth au);
 	public List<auth> readauth(String userid);
 	public List<member> memberlist();
 }

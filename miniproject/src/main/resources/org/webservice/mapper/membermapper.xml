@@ -22,6 +22,9 @@
   	<select id="readauth" resultMap="authmap">
   	select * from pro_member_auth where userid=#{userid}
   	</select>
+  	<insert id="insertauth">
+  	insert into pro_member_auth values(#{userid},#{auth})
+  	</insert>
   	<insert id="insertmember">
   	insert into pro_member values(#{userid},#{userpw},#{username},sysdate,sysdate,1,#{phone})
   	</insert>

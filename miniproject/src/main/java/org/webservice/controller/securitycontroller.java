@@ -11,8 +11,6 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.webservice.domain.member;
 import org.webservice.mapper.membermapper;
-import org.webservice.security.customUserDetailService;
-import org.webservice.security.userdetail;
 
 import lombok.extern.log4j.Log4j;
 
@@ -28,8 +26,7 @@ public String loginview() {
 	return "loginboard";
 }
 @PostMapping("/loginaction")
-public String loginaction(@RequestParam String id, @RequestParam String passwd, Model model) {
-	log.info(id);
+public String loginaction() {
 	//member mem=mmapper.readmember(id);
 	//secmemberdetail ud=(secmemberdetail) csuser.loadUserByUsername(id);
 	//m.setUserid(id);
