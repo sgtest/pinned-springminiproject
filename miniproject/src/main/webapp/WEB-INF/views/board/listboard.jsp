@@ -23,7 +23,7 @@
   			border-radius: 5px;
   			cursor: pointer;
 		}
-		button.reloadlistboard{
+		.hrefbtn{
 			height:40px;
 		}
      	.listboardtop{
@@ -66,11 +66,11 @@
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<sec:authentication property="principal" var="userinfo"/>
 <div class="listboardtop">
-	<button class="reloadlistboard" data-href="listboard">종합 게시판</button>
+	<button class="hrefbtn" id="reloadlistboard" data-href="listboard">종합 게시판</button>
 	
 <div>
 	<sec:authorize access="!isAuthenticated()">
-	<button class="boardlogin" data-href="/loginboard">로그인</button>
+	<button class="hrefbtn" id="boardlogin" data-href="/loginboard">로그인</button>
 	</sec:authorize>
 	
 	<sec:authorize access="isAuthenticated()">
@@ -113,7 +113,6 @@
 		</table>		
 	</div>
 	</div>
-	
 	<div class="pagination">
     <c:if test="${page.prev}">
         <li class="page-item previous">
@@ -152,12 +151,12 @@
     </form>
 	</div>
 	
-		<div class="boardmake_insert"><a href="createBoard">게시판에 글쓰기</a></div><br>
-		<div class="boardmake_list">
-			<div class="boardmake_select"><a href="selectBoardlist">게시판 리스트 살펴보기</a></div>
-			<div class="boardmake_create"><a href="createBoardlist">게시판 만들기(가입이후 한달 이후에 가능합니다)</a></div><br>
-			<div class="boardmake_delete"><a href="removeBoardlist">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</a></div>
-		</div>
+		<div class="boardmake_insert"><button onclick="location.href='createBoard'">게시판에 글쓰기</button></div><br>
+	<div class="boardmake_list">
+    	<div class="boardmake_select"><button onclick="location.href='selectBoardlist'">게시판 리스트 살펴보기</button></div>
+    	<div class="boardmake_create"><button onclick="location.href='createBoardlist'">게시판 만들기(가입이후 한달 이후에 가능합니다)</button></div><br>
+    	<div class="boardmake_delete"><button onclick="location.href='removeBoardlist'">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</button></div>
+	</div>
 		
 <form id='boardmove' method='get'>
 <!-- 타입하고 키워드 추가 -->
@@ -184,17 +183,17 @@
         	boardmove.attr("action","listboard");
         	boardmove.submit();
         });
-        var listbtn=$('.reloadlistboard');
-        var loginbtn=$('.boardlogin');
+        var topboardbtn=$('#reloadlistboard');
+        var toploginbtn=$('#boardlogin');
         var logoutbtn=$('.boardlogout');
 
-        listbtn.on("click",function(e){
-        	window.location.href=listbtn.data("href");	
+        topboardbtn.on("click",function(e){
+        	window.location.href=topboardbtn.data("href");	
+        });
+        toploginbtn.on("click",function(e){
+        	window.location.href=toploginbtn.data("href");	
         });
         
-        loginbtn.on("click",function(e){
-        	window.location.href=loginbtn.data("href");	
-        });
         logoutbtn.on("click",function(e){
         	var href=logoutbtn.data("href");
     		var csrfToken = $("#_csrf").val();
