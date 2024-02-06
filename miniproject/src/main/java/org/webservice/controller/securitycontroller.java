@@ -27,6 +27,7 @@ public class securitycontroller {
 
 	//@Autowired
 	//private customUserDetailService csuser;
+	@Autowired
 	private membermapper mmapper;
 @GetMapping("/loginboard")
 public String loginview() {
@@ -40,10 +41,23 @@ public String loginaction() {
 @PostMapping("/getuserinfo")
 @ResponseBody
 public Map<String, Object> getuserinfo(String userid){
+	log.info(userid);
 	member minfo=mmapper.readmember(userid);
 	Map<String,Object> result=new HashMap<String, Object>();
 	
 	result.put("userinformation", minfo);
+	return result;
+}
+
+@PostMapping("/getuserinfoname")
+@ResponseBody
+public Map<String, Object> getuserinfoname(String userid){
+	log.info(userid);
+	member minfo=mmapper.readmember(userid);
+	String realname=minfo.getUsername();
+	Map<String,Object> result=new HashMap<String, Object>();
+	
+	result.put("userrealname", realname);
 	return result;
 }
 

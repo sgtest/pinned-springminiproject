@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -103,6 +104,7 @@
 	</style>
 </head>
 <body>
+	<sec:authentication property="principal" var="userinfo"/>
 	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
 <div class="boardform">
 	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
@@ -174,6 +176,7 @@
 <br>
 <div class="comment_insert">
 	<div class="comment_form">
+	
 		<form action="/comment/insertcomment" method="post">
 			<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 			
@@ -189,6 +192,7 @@
 				</div>
 			<button class="commment_insert_btn" type="submit">댓글 입력하기</button>
 		</form>
+		
 	</div>
 </div>
 <br>
