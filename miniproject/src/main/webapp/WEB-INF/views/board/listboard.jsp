@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,6 +15,22 @@
           crossorigin="anonymous">
           
      <style>
+		button, input[type="button"]{
+  			background-color: #000;
+  			color: #fff;
+  			padding: 10px 20px;
+  			border: 1px solid #fff;
+  			border-radius: 5px;
+  			cursor: pointer;
+		}
+		
+		button.reloadlistboard{
+			height:40px;
+		}
+     	.listboardtop{
+     		display: flex;
+     		justify-content: space-between;
+     	}
         .boardlist {
             margin-top: 20px;
         }
@@ -47,10 +64,26 @@
           
 </head>
 <body>
-	<h2><a href="listboard">이것은 게시판이다</a></h2>
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<sec:authentication property="principal" var="userinfo"/>
+<div class="listboardtop">
+	<button class="reloadlistboard" data-href="listboard">종합 게시판</button>
 	
-	<h1><a href="/loginboard">로그인</a></h1>
+<div>
+	<sec:authorize access="!isAuthenticated()">
+	<button class="boardlogin" data-href="/loginboard">로그인</button>
+	</sec:authorize>
 	
+	<sec:authorize access="isAuthenticated()">
+	<div class="loginuser_info">
+	<h4 class="username">${userinfo.username} 님 반갑습니다.</h4>
+	<button class="boardlogout" data-href="/logoutaction">로그아웃</button>
+	</div>
+	</sec:authorize>
+</div>
+
+</div>	
+
 	<div class="boardlist">
 	<div class=default_board_top align="center">
 		<table boarder="1" class="board_table">
@@ -155,7 +188,36 @@
         	boardmove.attr("action","listboard");
         	boardmove.submit();
         });
+        var listbtn=$('.reloadlistboard');
+        var loginbtn=$('.boardlogin');
+        var logoutbtn=$('.boardlogout');
+
+        listbtn.on("click",function(e){
+        	window.location.href=listbtn.data("href");	
+        });
         
+        loginbtn.on("click",function(e){
+        	window.location.href=loginbtn.data("href");	
+        });
+        logoutbtn.on("click",function(e){
+        	var href=logoutbtn.data("href");
+    		var csrfToken = $("#_csrf").val();
+        	 $.ajax({
+        		 type:'post',
+        		 url:'/logoutaction',
+     	         beforeSend: function(xhr) {
+     	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+     	         },
+        		 success:function(){
+        			location.reload();
+        			alert("로그아웃");
+        		 },
+        		 error: function(){
+        			console.error("로그아웃 실패"); 
+        		 }
+        			 
+        	 });
+        });
     });
 </script>
 </body>

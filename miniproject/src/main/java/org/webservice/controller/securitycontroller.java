@@ -1,6 +1,12 @@
 package org.webservice.controller;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import javax.naming.spi.DirStateFactory.Result;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -9,6 +15,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.webservice.domain.member;
 import org.webservice.mapper.membermapper;
 
@@ -27,14 +34,19 @@ public String loginview() {
 }
 @PostMapping("/loginaction")
 public String loginaction() {
-	//member mem=mmapper.readmember(id);
-	//secmemberdetail ud=(secmemberdetail) csuser.loadUserByUsername(id);
-	//m.setUserid(id);
-	//m.setUserpw(passwd);
-    //Authentication authentication = new UsernamePasswordAuthenticationToken();
-    
 	return "redirect:/board/listboard";
 }
+
+@PostMapping("/getuserinfo")
+@ResponseBody
+public Map<String, Object> getuserinfo(String userid){
+	member minfo=mmapper.readmember(userid);
+	Map<String,Object> result=new HashMap<String, Object>();
+	
+	result.put("userinformation", minfo);
+	return result;
+}
+
 @GetMapping("/loginerror")
 public void loginerror() {
 	
@@ -42,7 +54,7 @@ public void loginerror() {
 
 @PostMapping("/logoutaction")
 public String logoutaction() {
-	return null;
+	return "redirect:/board/listboard";
 }
 
 @GetMapping("/boardjoin")

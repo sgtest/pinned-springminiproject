@@ -55,6 +55,7 @@ public class customuserdetailservice2 implements UserDetailsService{
 		}
 		log.warn("loading service "+username);
 		return cususer;
+		
 	}
 
 }

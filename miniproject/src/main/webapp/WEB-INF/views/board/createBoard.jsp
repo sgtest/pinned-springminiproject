@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -11,6 +12,14 @@
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
 	<style>
+	button, input[type="button"]{
+  		background-color: #000;
+  		color: #fff;
+  		padding: 10px 20px;
+  		border: 1px solid #fff;
+  		border-radius: 5px;
+  		cursor: pointer;
+	}
 	.thumgrid {
   		display: grid;
   		grid-template-columns: repeat(8, 1fr);
