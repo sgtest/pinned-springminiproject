@@ -15,6 +15,9 @@
   	<select id="readmember" resultType="org.webservice.domain.member">
   	select * from pro_member where userid=#{userid}
   	</select>  	
+  	<select id="readmembername" resultType="String">
+  	select username from pro_member where userid=#{userid}
+  	</select>
   	<select id="memberlist" resultType="org.webservice.domain.member">
   	select * from pro_member;
   	</select>

@@ -75,7 +75,8 @@
 	
 	<sec:authorize access="isAuthenticated()">
 	<div class="loginuser_info">
-	<h4 class="username">${userinfo.username} 님 반갑습니다.</h4>
+	<h4 class="userId">${userinfo.username}</h4>
+	<h4 class="username"></h4>
 	<button class="boardlogout" data-href="/logoutaction">로그아웃</button>
 	</div>
 	</sec:authorize>
@@ -91,7 +92,7 @@
 				<th>#게시물 번호</th>
 				<th>게시판 이름</th>				
 				<th>게시물 제목</th>
-				<th>작성자</th>
+				<th>작성자의 아이디</th>
 				<th>등록 날짜</th>
 				<th>수정 날짜</th>
 				<th>댓글 숫자</th>
@@ -103,7 +104,7 @@
 					<td>${board.bno}</td>					
 					<td>${board.boardname}</td>
 					<td><a href="readBoard?bno=${board.bno}"> ${board.title}</a></td>
-					<td>${board.writer}</td>
+					<td class="boardusername">${board.writer}</td>
 					<td><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td>${board.comment_num}</td>					
@@ -140,9 +141,9 @@
 			<option value="G" <c:out value="${page.srh.type == 'G' ? 'selected' : ''}"/> >게시판이름</option>
 			<option value="T" <c:out value="${page.srh.type == 'T' ? 'selected' : ''}"/>>제목</option>
 			<option value="C" <c:out value="${page.srh.type == 'C' ? 'selected' : ''}"/>>내용</option>
-			<option value="W" <c:out value="${page.srh.type == 'W' ? 'selected' : ''}"/>>작성자</option>
+			<option value="W" <c:out value="${page.srh.type == 'W' ? 'selected' : ''}"/>>작성자의 아이디</option>
 			<option value="TC" <c:out value="${page.srh.type == 'TC' ? 'selected' : ''}"/>>제목+내용</option>
-			<option value="GW" <c:out value="${page.srh.type == 'GW' ? 'selected' : ''}"/>>게사판이름+작성자</option>
+			<option value="GW" <c:out value="${page.srh.type == 'GW' ? 'selected' : ''}"/>>게사판이름+작성자의 아이디</option>
 		</select>
     	<input type="text" name="keyword" value='<c:out value="${page.srh.keyword}"/>' placeholder="검색어 입력"/>
     	<input type="hidden" name="pageNum" value='<c:out value="${page.srh.pageNum}"/>'>
@@ -183,6 +184,7 @@
         	boardmove.attr("action","listboard");
         	boardmove.submit();
         });
+        loaduserinfo();
         var topboardbtn=$('#reloadlistboard');
         var toploginbtn=$('#boardlogin');
         var logoutbtn=$('.boardlogout');
@@ -213,6 +215,59 @@
         			 
         	 });
         });
+        
+        function loaduserinfo(){
+        	var useri= document.querySelector('h4.userId');
+        	var username=document.querySelector('h4.username');
+    		var csrfToken = $("#_csrf").val();
+    		
+        	if(useri === null){
+        		alert('비로그인 상태입니다.');
+        	}else{
+        		var useristr=useri.textContent;
+        		console.log(useristr);
+        		$.ajax({
+        			type:'post',
+        			url:'/getuserinfoname',
+        			data:{userid: useristr},
+        			dataType: 'json',
+        	         beforeSend: function(xhr) {
+          	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+          	         },
+            		 success:function(result){
+            			 var realusername=result['userrealname'];
+            			 username.textContent=realusername+' 님 안녕하세요.';
+             		 },
+             		 error: function(error){
+             			console.error("유저정보 가져오기 실패"); 
+             		 }
+             			 
+        			
+        		});
+        	}
+        }
+        function loadusernamelist(id){
+    		var csrfToken = $("#_csrf").val();
+    		var usrid=id;
+    		$.ajax({
+    			type:'post',
+    			url:'/getuserinfoname',
+    			data:{userid: usrid},
+    			dataType: 'json',
+    	         beforeSend: function(xhr) {
+      	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+      	         },
+        		 success:function(result){
+        			 var realusername=result['userrealname'];
+        			 return realusername;
+         		 },
+         		 error: function(error){
+         			console.error("유저정보 가져오기 실패"); 
+         			var str="null"
+         			return str;
+         		 }         		   			
+    		});
+        }
     });
 </script>
 </body>

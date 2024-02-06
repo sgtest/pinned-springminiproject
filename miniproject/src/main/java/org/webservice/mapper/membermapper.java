@@ -7,6 +7,7 @@ import org.webservice.domain.member;
 
 public interface membermapper {
 	public member readmember(String userid);
+	public String readmembername(String userid);
 	public int insertmember(member member);
 	public int updatemember(member member);
 	public int deletemember(member member);

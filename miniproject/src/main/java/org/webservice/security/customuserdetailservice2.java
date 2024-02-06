@@ -57,5 +57,4 @@ public class customuserdetailservice2 implements UserDetailsService{
 		return cususer;
 		
 	}
-
 }

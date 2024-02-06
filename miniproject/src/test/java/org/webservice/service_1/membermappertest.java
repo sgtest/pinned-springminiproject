@@ -28,7 +28,7 @@ public class membermappertest {
 	
 	//@Test
 	public void testread() {
-		member m=mapper.readmember("master");
+		member m=mapper.readmember("user11");
 		log.info(m.getUserpw());
 		
 	}

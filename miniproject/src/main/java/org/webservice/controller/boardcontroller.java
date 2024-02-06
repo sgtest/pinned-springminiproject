@@ -12,6 +12,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -30,6 +31,7 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
+import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
 
@@ -46,7 +48,8 @@ import lombok.extern.log4j.Log4j;
 public class boardcontroller {
 
 	public boardservice bservice;
-	
+	@Autowired
+	public membermapper mmapper;
 	@GetMapping("/readBoard")
 	public void readBoard(@RequestParam("bno") Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
@@ -62,10 +65,16 @@ public class boardcontroller {
 	public void listboard(boardsearch search, Model model) {
 		
 		List<board> boardList=bservice.getList(search);
-		
+		List<String> username=new ArrayList<String>();
+		for(int i=0;i<boardList.size();i++) {
+			String userid=boardList.get(i).getWriter();
+			String realname=mmapper.readmembername(userid);
+			username.add(realname);
+		}
 		boardpage page=new boardpage(search, bservice.getlisttotal(search));
 		
 		model.addAttribute("boardList", boardList);
+		model.addAttribute("realnamelist", username);
 		model.addAttribute("page", page);
 		
 	}
