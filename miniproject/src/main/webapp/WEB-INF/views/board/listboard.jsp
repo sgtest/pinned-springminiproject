@@ -23,7 +23,6 @@
   			border-radius: 5px;
   			cursor: pointer;
 		}
-		
 		button.reloadlistboard{
 			height:40px;
 		}
