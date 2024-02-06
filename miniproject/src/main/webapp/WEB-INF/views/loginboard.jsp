@@ -23,7 +23,7 @@
 </head>
 <body>
 
-<button onclick="goBack()">이전페이지로 돌아가기</button><br><br>
+<button class="homebtn" data-href="/board/listboard">이전페이지로 돌아가기</button><br><br>
 
 <form role="form" action="/loginaction" method="post">
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
@@ -61,16 +61,16 @@
         <script>
         $(document).ready(function(){
         	var login=$('#loginbtn');
-        	
+        	var backbtn=$('.homebtn');
         	login.on("click",function(e){
         	    e.preventDefault();
         	    $("form").submit();
+        	});
+        	
+        	backbtn.on("click",function(e){
+        		window.location.href=backbtn.data("href");
         	})
         });
-
-    	function goBack(){
-        	window.history.back();
-    	}
         </script>
 </body>
 </html>
