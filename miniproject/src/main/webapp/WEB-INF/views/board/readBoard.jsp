@@ -127,20 +127,22 @@
 	</style>
 </head>
 <body>
-
 <input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
-<sec:authentication property="principal" var="userinfo"/>
-	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
-	
-	
-<sec:authorize access="${board.writer ne userinfo.username}">
+<sec:authentication property="principal" var="principal"/>
 
+<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>	
+
+<sec:authorize access="!isAuthenticated()"></sec:authorize>
+<sec:authorize access="isAuthenticated()">
+<sec:authorize access="${board.writer ne principal.username}"></sec:authorize>
 </sec:authorize>
-<sec:authorize access="${board.writer eq userinfo.username} or hasAuthority('master')">
+<sec:authorize access="isAuthenticated()">
+<sec:authorize access="${board.writer eq principal.username} or hasAuthority('master')">
 <div class="boardform">
 	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
 	<button id="boarddeletebtn" type="button" data-href="listboard">게시물 삭제하기</button>
 </div>
+</sec:authorize>
 </sec:authorize>
 
 <div class="readcontent_top">
@@ -214,11 +216,7 @@
 		<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
 		</div>	
 	</div>
-
 <br>
-<sec:authorize access="!isAuthenticated()">
-
-</sec:authorize>
 <sec:authorize access="isAuthenticated()">
 <div class="comment_insert">
 	<div class="comment_form">
@@ -228,7 +226,7 @@
 			<input type="hidden" id="bno" name="bno" value="${board.bno}"/>
 			<h5>댓글 작성자</h5>
 		        <div class="comment_insert_group">
-			    	<input type="text" id="writer" name="writer" value="${userinfo.username}" readonly><br>
+			    	<input type="text" id="writer" name="writer" value="${principal.username}" readonly><br>
 			    </div>
 			
 			<h5>댓글 내용</h5>
@@ -300,7 +298,7 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
         
-        <script>
+<script>
         $(document).ready(function(){
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
         	var imgmodalbtn=$('.imgfile_modal_btn');
@@ -490,51 +488,39 @@
     	}
     
     	function displaycomments(cmtpage){
-    		var commentContainer=$('.comment_list');
-    		commentContainer.empty();
-    		var str="";
-    		if(cmtpage==null||cmtpage.replyCnt==0){
-    			return;
-    		}
-    		
-    		
-    		$.each(cmtpage.list, function(index, comment) {
-    		if(comment.writer === '${userinfo.username}' || 'masteruser' === '${userinfo.username}')
-    		{
-    		str = str + '<div class="comment_obj">';
-    		str = str + '<div class="comment_info">';
-    		str = str + '<h4>유저의 이름</h4>';
-    		str = str + '<p class="commentusername" id="cmtnamerno_'+comment.rno+'">'+comment.writer+'</p>';
-    		str = str + '<h4>유저의 아이디</h4>';
-    		str = str + '<p>' + comment.writer + '</p>';
-    		str = str + '<h4>댓글 작성 및 수정일</h4>';
-        	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
-        	str = str + '</div>'
-    		str = str + '<h4>댓글의 내용</h4>';
-        	str = str + '<p>' + comment.comments + '</p>';
-        	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
-        	str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
-        	str = str + '</div><br>';
-   		 	}
-    		else{
+      		var commentContainer=$('.comment_list');
+      		commentContainer.empty();
+      		var str="";
+      		if(cmtpage==null||cmtpage.replyCnt==0){
+      			return;
+      		}
+      		
+      		
+      		$.each(cmtpage.list, function(index, comment) {
 
-        		str = str + '<div class="comment_obj">';
-        		str = str + '<div class="comment_info">';
-        		str = str + '<h4>유저의 이름</h4>';
-        		str = str + '<p class="commentusername" id="cmtnamerno_'+comment.rno+'">'+comment.writer+'</p>';
-        		str = str + '<h4>유저의 아이디</h4>';
-        		str = str + '<p>' + comment.writer + '</p>';
-        		str = str + '<h4>댓글 작성 및 수정일</h4>';
-            	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
-            	str = str + '</div>'
-        		str = str + '<h4>댓글의 내용</h4>';
-            	str = str + '<p>' + comment.comments + '</p>';
-            	str = str + '</div><br>';
-    		}
-    		}
-    		);
-    		commentContainer.append(str);
-    	}
+      			str = str + '<div class="comment_obj">';
+      			str = str + '<div class="comment_info">';
+      			str = str + '<h4>유저의 이름</h4>';
+      			str = str + '<p class="commentusername" id="cmtnamerno_'+comment.rno+'">'+comment.writer+'</p>';
+      			str = str + '<h4>유저의 아이디</h4>';
+      			str = str + '<p>' + comment.writer + '</p>';
+      			str = str + '<h4>댓글 작성 및 수정일</h4>';
+        		str = str + '<p>' + formatDateToCustomString(comment.regdate) + '</p>';
+        		str = str + '</div>';
+      			str = str + '<h4>댓글의 내용</h4>';
+        		str = str + '<p>' + comment.comments + '</p>';
+        	if('${principal}'==='anonymousUser'){}
+        	else if(comment.writer === '${principal.username}' || 'masteruser' === '${principal.username}')
+        	{      		
+        		str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
+        		str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
+        	}
+        	str = str + '</div><br>';
+      		}
+      		);
+      		commentContainer.append(str);
+      		
+      	}
 
     	function formatDateToCustomString(date) {
     	    const options = {
