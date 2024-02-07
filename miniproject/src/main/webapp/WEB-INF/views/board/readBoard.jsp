@@ -495,7 +495,7 @@
       			return;
       		}
       		
-      		
+      	  	var loggedInUser = '<%= request.getUserPrincipal() != null ? request.getUserPrincipal().getName() : "" %>';
       		$.each(cmtpage.list, function(index, comment) {
 
       			str = str + '<div class="comment_obj">';
@@ -509,11 +509,13 @@
         		str = str + '</div>';
       			str = str + '<h4>댓글의 내용</h4>';
         		str = str + '<p>' + comment.comments + '</p>';
-        	if('${principal}'==='anonymousUser'){}
-        	else if(comment.writer === '${principal.username}' || 'masteruser' === '${principal.username}')
-        	{      		
-        		str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
-        		str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
+        	if(loggedInUser !== '')
+        	{
+        		if(comment.writer === loggedInUser || 'masteruser' === loggedInUser)
+        		{      		
+        			str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
+        			str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
+        		}
         	}
         	str = str + '</div><br>';
       		}
