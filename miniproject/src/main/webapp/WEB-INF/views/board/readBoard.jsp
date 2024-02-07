@@ -39,12 +39,26 @@
 		resize: none;
 	}
 	.attachfileform {
-	margin-left: 10px;
-	display: flex;
-	flex-direction: row;
-	justify-content: flex-start;
+		margin-left: 10px;
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
 	}
-	.comment_insert,.comment_obj,.imgmodalbtnform,.commodalbtnform,#comment_container,.commentedit_modal,.boardinfo_form {
+	.board_userinfo{
+		display: flex;
+		flex-direction: row;
+		justify-content: flex-start;
+	}
+	.comment_insert,.comment_obj,.imgmodalbtnform,.commodalbtnform,#comment_container,.commentedit_modal,.boardinfo_form{
+    	background-color: #f0f0f0;
+    	padding: 10px; 
+    	border: 1px solid #ccc; 
+   		margin-bottom: 10px; 
+   		margin-left:5px;
+	}
+	.board_userid,.board_username{
+		width:180px;
+		height:140px;
     	background-color: #f0f0f0;
     	padding: 10px; 
     	border: 1px solid #ccc; 
@@ -119,7 +133,7 @@
 	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
 	
 	
-<sec:authorize access="${board.writer ne userinfo.username} or hasAuthority('master')">
+<sec:authorize access="${board.writer ne userinfo.username}">
 
 </sec:authorize>
 <sec:authorize access="${board.writer eq userinfo.username} or hasAuthority('master')">
@@ -181,12 +195,17 @@
 	</div>
 	
 	<div class="boardinfo_form">
-		<div>
+		<div class="board_userinfo">
+		<div class="board_userid">
 		<h4>작성자의 아이디</h4>
 		<p>${board.writer}</p>
-		
-		
 		</div>
+		<div class="board_username">
+		<h4>작성자의 이름</h4>
+		<p>${board.writer}</p>
+		</div>
+		</div>
+		
 		<div class="board_dateinfo">
 		<h4>수정 날짜</h4>
 		<p><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
@@ -194,7 +213,6 @@
 		<h4>작성 날짜</h4>
 		<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
 		</div>	
-		
 	</div>
 
 <br>
@@ -253,9 +271,9 @@
 					<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 					<input type="hidden" id="bno" name="bno" value=""/>
 					<input type="hidden" id="rno" name="rno" value=""/>
-				<h5>댓글 작성자</h5>
+				<h5>댓글 작성자 아이디</h5>
 		        	<div class="comment_update_group">
-			    		<input type="text" id="writer_obj" name="writer" value="" required>
+			    		<input type="text" id="writer_obj" name="writer" value="" readonly>
 			    	</div>
 			
 				<h5>댓글 내용</h5>
@@ -296,6 +314,7 @@
 			var pageNumValue = 1;
         	loadComments(pageNumValue);
         	loadattachfile();
+        	loadbrdusername();
         	$("#boarddeletebtn").on("click",function(e){
         		
         		var csrfToken = $("#_csrf").val();
@@ -480,6 +499,8 @@
     		
     		
     		$.each(cmtpage.list, function(index, comment) {
+    		if(comment.writer === '${userinfo.username}' || 'masteruser' === '${userinfo.username}')
+    		{
     		str = str + '<div class="comment_obj">';
     		str = str + '<div class="comment_info">';
     		str = str + '<h4>유저의 이름</h4>';
@@ -491,12 +512,28 @@
         	str = str + '</div>'
     		str = str + '<h4>댓글의 내용</h4>';
         	str = str + '<p>' + comment.comments + '</p>';
-        	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">'
-        	str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">'
+        	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
+        	str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
         	str = str + '</div><br>';
-   		 	});
+   		 	}
+    		else{
 
-        	commentContainer.append(str);
+        		str = str + '<div class="comment_obj">';
+        		str = str + '<div class="comment_info">';
+        		str = str + '<h4>유저의 이름</h4>';
+        		str = str + '<p class="commentusername" id="cmtnamerno_'+comment.rno+'">'+comment.writer+'</p>';
+        		str = str + '<h4>유저의 아이디</h4>';
+        		str = str + '<p>' + comment.writer + '</p>';
+        		str = str + '<h4>댓글 작성 및 수정일</h4>';
+            	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
+            	str = str + '</div>'
+        		str = str + '<h4>댓글의 내용</h4>';
+            	str = str + '<p>' + comment.comments + '</p>';
+            	str = str + '</div><br>';
+    		}
+    		}
+    		);
+    		commentContainer.append(str);
     	}
 
     	function formatDateToCustomString(date) {
@@ -543,7 +580,30 @@
     		commentspageform.append(str);
     		
     	}
-    	
+    	function loadbrdusername(){
+        	var csrfToken = $("#_csrf").val();
+        	var ruserid='${board.writer}';
+        	var brdrealnameobj=$('.board_username');
+    		$.ajax({
+    			type:'post',
+    			url:'/getuserinfoname',
+    			data:{userid: ruserid},
+    			dataType: 'json',
+    	         beforeSend: function(xhr) {
+      	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+      	         },
+        		 success:function(result){
+        			 var realusername=result['userrealname'];
+        			 brdrealnameobj.find('p').text(realusername);
+         		 },
+         		 error: function(error){
+         			console.error("유저정보 가져오기 실패"); 
+       			 brdrealnameobj.find('p').text("nothing");
+         		 }
+         			 
+    			
+    		});
+    	}
     	function loadcmtusername(rno,userid){
         	var csrfToken = $("#_csrf").val();
     		$.ajax({
@@ -572,6 +632,7 @@
     	
     	function removeComment(rno){
     		var csrfToken = $("#_csrf").val();
+    		
     		$.ajax({
     			type: 'post',
     			url: '/comment/deletecomment',
@@ -589,6 +650,7 @@
     				console.error('댓글 삭제 실패');
     			}
     		});
+    		
     	}
     	
     	//댓글 등록과 업데이트 코드

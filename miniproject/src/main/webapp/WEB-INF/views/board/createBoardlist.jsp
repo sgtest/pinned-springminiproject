@@ -2,6 +2,7 @@
     pageEncoding="UTF-8"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
 <%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -14,13 +15,14 @@
     </style>
 </head>
 <body>
+	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<sec:authentication property="principal" var="userinfo"/>
 <h1><a href="listboard">메인 홈페이지로</a></h1>
 <div class="boardlist_add">
 	
 	<h2>게시판 리스트에 추가</h2>
 	
 	<form action="/board/createBoardlistaction" method="post">
-	<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	
 	<h4>게시판의 이름</h4>
 		<div class="listinsert">
@@ -32,7 +34,7 @@
 		</div>
 	<h4>게시판 개설자</h4>
 		<div class="listinsert">
-			<textarea id="reguserid" name="reguserid" rows="1" cols="100"></textarea>
+			<input type="text" id="reguserid" name="reguserid" value="${userinfo.username}" readonly><br>
 		</div>
 		
 		<button type="submit" id="brdlist_btn">게시판 개설완료</button>

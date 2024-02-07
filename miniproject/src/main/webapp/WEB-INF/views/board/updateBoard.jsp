@@ -109,7 +109,7 @@
 
 <h4>게시글 작성자</h4>
 <div class="update_group">
-	<input type="text" id="writer" name="writer" value="${board.writer}" required><br>
+	<input type="text" id="writer" name="writer" value="${board.writer}" readonly required><br>
 </div>
 
 <h4>게시글 첨부파일 수정</h4>
@@ -277,7 +277,8 @@ $(document).ready(function(){
 		submitform.submit();		
 		
 	});
-	//파일 인식후 등록
+	
+	
 	imgview.on("click", "button",function(e){
 		var fileuuid=$(this).data("uuid");
 		var fileimg=$(this).data("image");
