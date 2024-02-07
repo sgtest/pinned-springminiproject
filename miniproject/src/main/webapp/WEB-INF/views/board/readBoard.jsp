@@ -51,10 +51,19 @@
    		margin-bottom: 10px; 
    		margin-left:5px;
 	}
+	.board_dateinfo{
+  		display: flex;
+ 	    justify-content: space-around;
+  		align-items: center;
+	}
 	.comment_obj{
 		margin-top: -5px;
 	}
-	
+	.comment_info {
+  		display: flex;
+ 	    justify-content: space-around;
+  		align-items: center;
+	}
 	.comment_class_page{
         display: flex;
         justify-content: center;
@@ -104,12 +113,22 @@
 	</style>
 </head>
 <body>
-	<sec:authentication property="principal" var="userinfo"/>
+
+<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+<sec:authentication property="principal" var="userinfo"/>
 	<button type="button" onclick="goBack()">이전 페이지로 되돌아가기</button>
+	
+	
+<sec:authorize access="${board.writer ne userinfo.username} or hasAuthority('master')">
+
+</sec:authorize>
+<sec:authorize access="${board.writer eq userinfo.username} or hasAuthority('master')">
 <div class="boardform">
 	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
 	<button id="boarddeletebtn" type="button" data-href="listboard">게시물 삭제하기</button>
 </div>
+</sec:authorize>
+
 <div class="readcontent_top">
 
 	<h4>제목</h4>
@@ -162,28 +181,36 @@
 	</div>
 	
 	<div class="boardinfo_form">
-		<h4>작성자</h4>
+		<div>
+		<h4>작성자의 아이디</h4>
 		<p>${board.writer}</p>
-
+		
+		
+		</div>
+		<div class="board_dateinfo">
 		<h4>수정 날짜</h4>
 		<p><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
 
 		<h4>작성 날짜</h4>
 		<p><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></p>
-	
+		</div>	
+		
 	</div>
 
 <br>
+<sec:authorize access="!isAuthenticated()">
+
+</sec:authorize>
+<sec:authorize access="isAuthenticated()">
 <div class="comment_insert">
 	<div class="comment_form">
 	
 		<form action="/comment/insertcomment" method="post">
-			<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 			
 			<input type="hidden" id="bno" name="bno" value="${board.bno}"/>
 			<h5>댓글 작성자</h5>
 		        <div class="comment_insert_group">
-			    	<input type="text" id="writer" name="writer" required><br>
+			    	<input type="text" id="writer" name="writer" value="${userinfo.username}" readonly><br>
 			    </div>
 			
 			<h5>댓글 내용</h5>
@@ -195,6 +222,8 @@
 		
 	</div>
 </div>
+</sec:authorize>
+
 <br>
 
 <div id="comment_container" class="comment_class top">
@@ -429,6 +458,11 @@
     				var cmtamount=10;
 					displaycomments(cmtpage);
 					loadCommentspage(pageNumValue,cmtcnt,cmtamount);
+					$(".commentusername").each(function() {
+						var rno=$(this).attr("id").split('_')[1];
+						var cmtuserid=$(this).text();
+						loadcmtusername(rno,cmtuserid);
+					});
 				},
     			error: function(){
     				console.error('댓글 불러오기 실패');
@@ -446,9 +480,17 @@
     		
     		
     		$.each(cmtpage.list, function(index, comment) {
-    		str = str + '<div class="comment_obj">' + '<p>' + comment.writer + '</p>';
-        	str = str + '<p>' + comment.comments + '</p>';
+    		str = str + '<div class="comment_obj">';
+    		str = str + '<div class="comment_info">';
+    		str = str + '<h4>유저의 이름</h4>';
+    		str = str + '<p class="commentusername" id="cmtnamerno_'+comment.rno+'">'+comment.writer+'</p>';
+    		str = str + '<h4>유저의 아이디</h4>';
+    		str = str + '<p>' + comment.writer + '</p>';
+    		str = str + '<h4>댓글 작성 및 수정일</h4>';
         	str = str + '<p>' +  formatDateToCustomString(comment.regdate) + '</p>';
+        	str = str + '</div>'
+    		str = str + '<h4>댓글의 내용</h4>';
+        	str = str + '<p>' + comment.comments + '</p>';
         	str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">'
         	str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">'
         	str = str + '</div><br>';
@@ -499,6 +541,32 @@
     		    str += '<li class="commentpage next"><a href="#" onclick="loadComments(' + (startpage + 1) + ');"> next </a></li>';
     		}
     		commentspageform.append(str);
+    		
+    	}
+    	
+    	function loadcmtusername(rno,userid){
+        	var csrfToken = $("#_csrf").val();
+    		$.ajax({
+    			type:'post',
+    			url:'/getuserinfoname',
+    			data:{userid: userid},
+    			dataType: 'json',
+    	         beforeSend: function(xhr) {
+      	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+      	         },
+        		 success:function(result){
+        			 var realusername=result['userrealname'];
+        			 var usernameobj=$('#cmtnamerno_'+rno);
+        			 usernameobj.text(realusername);
+         		 },
+         		 error: function(error){
+         			console.error("유저정보 가져오기 실패"); 
+       			 	var usernameobj=$('#cmtnamerno_'+rno);
+       			 	usernameobj.text("nothing");
+         		 }
+         			 
+    			
+    		});
     		
     	}
     	

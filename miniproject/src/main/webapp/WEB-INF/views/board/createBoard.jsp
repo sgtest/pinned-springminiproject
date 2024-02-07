@@ -119,13 +119,14 @@
 	</style>
 </head>
 <body style="overflow: auto">
-
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<sec:authentication property="principal" var="userinfo"/>
+	
 <div class="insert_top">
 	<h1><a href="listboard">메인 홈페이지로</a></h1>
 	<h2>게시물 작성</h2>
 	
 	<form role="form" action="/board/saveBoard" method="post">
-	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<h4>게시판 선택</h4>
 		<div class="insert_group">
 			<!-- 여기에는 현재 존재하는 게시판 중 하나를 선택할 수 있게 한다 -->
@@ -147,7 +148,7 @@
 	
 	<h4>작성자의 이름</h4>
 		<div class="insert_group">
-			<input type="text" id="writer" name="writer" required><br>
+			<input type="text" id="writer" name="writer" value="${userinfo.username}" readonly><br>
 		</div>		
 		
 		<button type="submit" class="btn_boardinsert">작성완료</button>
