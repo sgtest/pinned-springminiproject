@@ -79,7 +79,7 @@ public class boardcontroller {
 		
 	}
 	
-	//@PreAuthorize("authenticated()")
+	@PreAuthorize("authenticated()")
 	@PostMapping("/saveBoard")
 	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
 		if(brd.getAttachlist()!=null) {
@@ -91,7 +91,7 @@ public class boardcontroller {
 		rttr.addFlashAttribute("result","success");
 		return "redirect:/board/listboard"+search.getListLink();
 	}	
-	//@PreAuthorize("authenticated()")
+	@PreAuthorize("authenticated()")
 	@GetMapping("/createBoard")
 	public void createBoard(boardsearch search, Model model) {
 		List<String> boardname=bservice.select_boardlist();
@@ -108,7 +108,7 @@ public class boardcontroller {
 		}
 	}
 	
-	//@PreAuthorize("authenticated()")
+	@PreAuthorize("authenticated()")
 	@PostMapping("createBoardlistaction")
 	public String createBoardlistaction(boardlist brdli, boardsearch search, RedirectAttributes rttr) {
 		
@@ -124,7 +124,7 @@ public class boardcontroller {
 		rttr.addAttribute("result", "success");
 		return "redirect:/board/listboard"+search.getListLink();
 	}
-	//@PreAuthorize("authenticated()")
+	@PreAuthorize("authenticated()")
 	@GetMapping("createBoardlist")
 	public void createBoardlist(Model model) {
 		

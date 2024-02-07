@@ -92,7 +92,7 @@
 				<th>#게시물 번호</th>
 				<th>게시판 이름</th>				
 				<th>게시물 제목</th>
-				<th>작성자의 아이디</th>
+				<th>작성자의 이름(아이디)</th>
 				<th>등록 날짜</th>
 				<th>수정 날짜</th>
 				<th>댓글 숫자</th>
@@ -104,7 +104,7 @@
 					<td>${board.bno}</td>					
 					<td>${board.boardname}</td>
 					<td><a href="readBoard?bno=${board.bno}"> ${board.title}</a></td>
-					<td class="boardusername">${board.writer}</td>
+					<td class="boardusername" id="writer_${board.bno}">${board.writer}</td>
 					<td><fmt:formatDate value="${board.regdate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td><fmt:formatDate value="${board.udate}" pattern="yyyy/MM/dd HH:mm:ss" /></td>
 					<td>${board.comment_num}</td>					
@@ -246,29 +246,36 @@
         		});
         	}
         }
-        function loadusernamelist(id){
-    		var csrfToken = $("#_csrf").val();
-    		var usrid=id;
-    		$.ajax({
-    			type:'post',
-    			url:'/getuserinfoname',
-    			data:{userid: usrid},
-    			dataType: 'json',
-    	         beforeSend: function(xhr) {
-      	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-      	         },
-        		 success:function(result){
-        			 var realusername=result['userrealname'];
-        			 return realusername;
-         		 },
-         		 error: function(error){
-         			console.error("유저정보 가져오기 실패"); 
-         			var str="null"
-         			return str;
-         		 }         		   			
-    		});
-        }
+        
+        $(".boardusername").each(function() {
+            var bno = $(this).closest("tr").find("td:first").text();
+            var writerid = $(this).text();
+            loadwriternamelist(bno, writerid);
+        });
     });
+    
+
+    function loadwriternamelist(bno, writerid){
+    	var csrfToken = $("#_csrf").val();
+		$.ajax({
+			type:'post',
+			url:'/getuserinfoname',
+			data:{userid: writerid},
+			dataType: 'json',
+	         beforeSend: function(xhr) {
+  	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+  	         },
+    		 success:function(result){
+    			 var realusername=result['userrealname'];
+    	         $("#writer_" + bno).text(realusername);
+     		 },
+     		 error: function(error){
+     			console.error("유저정보 가져오기 실패"); 
+                $("#writer_" + bno).text(writerid);
+     		 }         		   			
+		});
+    }
+    
 </script>
 </body>
 </html>
