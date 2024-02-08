@@ -151,7 +151,7 @@
 			<input type="text" id="writer" name="writer" value="${userinfo.username}" readonly><br>
 		</div>		
 		
-		<button type="submit" class="btn_boardinsert">작성완료</button>
+		<button type="submit" class="btn_boardinsert" data-beforeunloads="false">작성완료</button>
 	</form>
 	
 	<h4>첨부파일 (다시 업로드 버튼을 누르면 기존의 파일 목록이 초기화됩니다!!)</h4>
@@ -402,7 +402,42 @@ $(document).ready(function(){
 		filemodal.modal('show');
 	});
 	
+	//새로고침과 뒤로가기 버튼을 누르거나 링크 이동시에만 파일 삭제해야 게시물 등록때는 작동을 안해야한다
+	window.addEventListener('beforeunload', function(event) {
+		
+	//var target = event.target || event.srcElement;
+	//(event.returnValue && event.returnValue.includes(' 새로고침'))
+	    e.preventDefault();
+	if (event.target.dataset.beforeunloads === 'false') {
+        return;
+    }
+	else
+	{
+	    fileclear();
+	}
+	});
+
+	function fileclear(){
+		//모달창이 열린상태이면
+		var filemodalobj=$('#fileUploadModal');
+		var filemodalopen=filemodalobj.css('display') === 'block';
+		if(filemodalopen){
+			modalfiledelete();
+			resultfiledelete();
+		}
+		else{
+			//모달창이 숨겨진 상태이면
+			resultfiledelete();	
+		}
+	}
 	filemodalreset.click(function(){
+		modalfiledelete();
+	});
+	filemodalclose.click(function(){
+		modalfiledelete();
+		filemodal.modal('hide');
+	});
+	function modalfiledelete(){
 		const dataPath=[];
 		const dataName=[];
 		const dataUuid=[];
@@ -432,7 +467,7 @@ $(document).ready(function(){
 		imgfilemodalresult.css("height","0px");
 		imgfilemodalresult.empty();
 		}
-		else if(commonfilelist.length>0){
+		if(commonfilelist.length>0){
 			for (let i = 0; i < commonfilelist.length; i++) {
 			const button=commonfilelist[i].querySelector(".modal_file_btn");
 			const name=commonfilelist[i].querySelector("span").textContent;
@@ -441,8 +476,8 @@ $(document).ready(function(){
 	    	commondataUuid.push(button.dataset.uuid)
 	    	commondataName.push(name);
 		}
-		deletefilelist(commondataPath,commondataType);
-		for(let i=0;i<filelist.length;i++){
+		deletefilelist(commondataPath,commondataType,commondataUuid,commondataName);
+		for(let i=0;i<commonfilelist.length;i++){
 			commonfilelist[i].remove();
 		}
 
@@ -450,11 +485,63 @@ $(document).ready(function(){
 		filemodalresult.empty();
 				
 		}
-		else{			
+		if(commonfilelist.length === 0 && filelist.length === 0){			
 			alert('파일이 없습니다');
 		}
+	}
+	function resultfiledelete(){
+		const dataPath=[];
+		const dataName=[];
+		const dataUuid=[];
+		const dataType=[];
+		const commondataPath=[];
+		const commondataType=[];
+		const commondataName=[];
+		const commondataUuid=[];
 		
-	});
+		const showfilelist=document.querySelectorAll(".result_img_file");
+		const showcommonfilelist=document.querySelectorAll(".result_file");
+		
+		if(showfilelist.length>0){
+			for (let i = 0; i < showfilelist.length; i++) {
+				const button=showfilelist[i].querySelector(".file_btn");
+				const name=showfilelist[i].querySelector("span").textContent;
+				dataPath.push(button.dataset.path);
+			    dataType.push(button.dataset.image);
+			    dataUuid.push(button.dataset.uuid);
+			    dataName.push(name);
+			}
+			deletefilelist(dataPath,dataType,dataUuid,dataName);
+			for(let i=0;i<showfilelist.length;i++){
+				showfilelist[i].remove();
+			}
+
+			imgfileresult.css("height","0px");
+			imgfileresult.empty();
+			}
+			if(showcommonfilelist.length>0){
+				for (let i = 0; i < showcommonfilelist.length; i++) {
+				const button=showcommonfilelist[i].querySelector(".file_btn");
+				const name=showcommonfilelist[i].querySelector("span").textContent;
+				commondataPath.push(button.dataset.path);
+			    commondataType.push(button.dataset.image);
+		    	commondataUuid.push(button.dataset.uuid)
+		    	commondataName.push(name);
+			}
+			deletefilelist(commondataPath,commondataType,commondataUuid,commondataName);
+			for(let i=0;i<showcommonfilelist.length;i++){
+				showcommonfilelist[i].remove();
+			}
+
+			fileresult.css("height","0px");
+			fileresult.empty();
+					
+			}
+			if(showcommonfilelist.length === 0 && showfilelist.length === 0){			
+				alert('파일이 없습니다');
+			}
+			
+	}
 	
 	function deletefilelist(dataPath,dataType,dataUuid,dataName){
 		 for (let i = 0; i < dataPath.length; i++){
@@ -484,64 +571,6 @@ $(document).ready(function(){
 			 
 		 }		
 	}
-	
-	filemodalclose.click(function(){
-		const dataPath=[];
-		const dataName=[];
-		const dataUuid=[];
-		const dataType=[];
-		const commondataPath=[];
-		const commondataType=[];
-		const commondataName=[];
-		const commondataUuid=[];
-		
-		const filelist=document.querySelectorAll(".modal_img_file");
-		const commonfilelist=document.querySelectorAll(".modal_file");
-		const showfilelist=document.querySelectorAll(".result_img_file");
-		const showcommonfilelist=document.querySelectorAll(".result_file");
-		
-			if(filelist.length>0){
-				for (let i = 0; i < filelist.length; i++) {
-				const button=filelist[i].querySelector(".modal_file_btn");
-				const name=filelist[i].querySelector("span").textContent;
-				dataPath.push(button.dataset.path);
-		    	dataType.push(button.dataset.image);
-		    	dataUuid.push(button.dataset.uuid)
-		    	dataName.push(name);
-				}
-				deletefilelist(dataPath,dataType,dataUuid,dataName);
-				for(let i=0;i<filelist.length;i++){
-				filelist[i].remove();
-				}
-
-				imgfilemodalresult.css("height","0px");
-				imgfilemodalresult.empty();
-				}
-			else if(commonfilelist.length>0){
-				for (let i = 0; i < commonfilelist.length; i++) {
-				const button=commonfilelist[i].querySelector(".modal_file_btn");
-				const name=commonfilelist[i].querySelector("span").textContent;
-				commondataPath.push(button.dataset.path);
-		    	commondataType.push(button.dataset.image);
-		    	commondataUuid.push(button.dataset.uuid)
-		    	comondataName.push(name);
-				}
-				deletefilelist(commondataPath,commondataType,commondataUuid,comondataName);
-				for(let i=0;i<filelist.length;i++){
-				commonfilelist[i].remove();
-				}
-
-				filemodalresult.css("height","0px");
-				filemodalresult.empty();
-					
-			}
-			else{			
-				alert('파일 등록창을 닫습니다.');
-			}		
-		
-			filemodal.modal('hide');
-		
-	});
 	
 	filemodalregister.click(function(){
 		//각종 필요한 리스트 요소(4가지)를 이용해서 같은 방식으로 실제 등록화면에 반영
@@ -756,7 +785,6 @@ $(document).ready(function(){
 	
 	
 });
-
 </script>
 </body>
 </html>
