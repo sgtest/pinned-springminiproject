@@ -14,5 +14,4 @@ public interface commentmapper {
 	
 	public List<comment> getlistcomment(@Param("search")boardsearch search,@Param("bno") Long bno);
 	public int getcountcomment(Long bno);
-	
 }
