@@ -215,7 +215,6 @@ $(document).ready(function(){
 	
 	loadattachfile(bno);
 	$("button[type='submit']").on("click", function(e){
-		var str="";
 		const imgdatapath=[];
 		const imgdatauuid=[];
 		const imgdataname=[];
@@ -226,6 +225,7 @@ $(document).ready(function(){
 		const datatype=[];
 		const imgdataobj=document.querySelectorAll(".upimg_obj");
 		const dataobj=document.querySelectorAll(".upcmn_obj");
+		var str="";
 		var i=0;
 		if(imgdataobj.length>0){
 		for(i=0;i<imgdataobj.length;i++){
@@ -249,11 +249,11 @@ $(document).ready(function(){
 		}
 		}
 		
-		var k=i;
+		var j=0;
 		if(dataobj.length>0){
-		for(var j=0;j<dataobj.length;j++){
-			var file=dataobj[i].querySelector(".up_obj");
-			var name=dataobj[i].querySelector("p").textContent;
+		for(var j=i;j<dataobj.length+i;j++){
+			var file=dataobj[j-i].querySelector(".up_obj");
+			var name=dataobj[j-i].querySelector("p").textContent;
 			datapath.push(file.dataset.path);
 			datauuid.push(file.dataset.uuid);
 			dataname.push(name);

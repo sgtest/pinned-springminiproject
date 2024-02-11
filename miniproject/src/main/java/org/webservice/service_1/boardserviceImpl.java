@@ -9,6 +9,8 @@ import java.util.List;
 import java.util.ListIterator;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webservice.domain.attachfile;
@@ -17,6 +19,7 @@ import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
+import org.webservice.domain.memberfile;
 import org.webservice.mapper.boardmapper;
 import org.webservice.mapper.filemapper;
 import org.webservice.mapper.boardmapper;
@@ -106,12 +109,24 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public void insertboard(board bd) {
 		mapper.insertboard(bd);
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		String pro_mem_file_code;
 		if(bd.getAttachlist()==null||bd.getAttachlist().size()<=0) {
 			log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+bd.getTitle()+"_"+bd.getContent()+"_"+bd.getWriter());
 			return;
 		}
+		
 		for(attachfile file:bd.getAttachlist()) {
 			file.setBno(bd.getBno());
+			if(file.isImage()) {
+				 pro_mem_file_code=userid+"_"+file.getUploadPath()+"_"+file.getUuid()+"_"+file.getFileName()+"_"+"1";
+			}else {
+				 pro_mem_file_code=userid+"_"+file.getUploadPath()+"_"+file.getUuid()+"_"+file.getFileName()+"_"+"0";
+			}
+			memberfile mfile=fmapper.getmemberfilebycode(pro_mem_file_code);
+			mfile.setBno(bd.getBno());
+			fmapper.updatememfile(mfile);			
 			fmapper.insertfile(file);
 		}
 		log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+bd.getTitle()+"_"+bd.getContent()+"_"+bd.getWriter());
@@ -121,6 +136,7 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean deleteboard(Long bno) {
 		fmapper.deleteallfile(bno);
+		fmapper.deletememfilebybno(bno);
 		return mapper.deleteboard(bno)==1;
 	}
 
@@ -128,6 +144,10 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean updateboard(board bd) {
 		fmapper.deleteallfile(bd.getBno());
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		String pro_mem_file_code;
+		
 		boolean result=mapper.updateboard(bd)==1;
 		if(bd.getAttachlist()==null&& result) {
 			log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+"board update");
@@ -135,33 +155,43 @@ public class boardserviceImpl implements boardservice{
 		}
 		for(attachfile file:bd.getAttachlist()) {
 			file.setBno(bd.getBno());
+			if(file.isImage()) {
+				 pro_mem_file_code=userid+"_"+file.getUploadPath()+"_"+file.getUuid()+"_"+file.getFileName()+"_"+"1";
+			}else {
+				 pro_mem_file_code=userid+"_"+file.getUploadPath()+"_"+file.getUuid()+"_"+file.getFileName()+"_"+"0";
+			}
+			memberfile mfile=fmapper.getmemberfilebycode(pro_mem_file_code);
+			mfile.setBno(bd.getBno());
+			fmapper.updatememfile(mfile);
 			fmapper.insertfile(file);
 		}
 		log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+"board update");
 		return result;
 	}
-
+	
+	
+	
 	@Override
 	public int getlisttotal(boardsearch search) {
 		
 		log.info(search.getKeyword()+" has "+mapper.gettotalcntboard(search)+" number ");
 		return mapper.gettotalcntboard(search);
 	}
-
+	
 	@Override
 	public List<board> getList(boardsearch search) {
 		
 		log.info(search.getKeyword()+" has "+mapper.getlistsearchboard(search).size()+" number");
 		return mapper.getlistsearchboard(search);
 	}
-
+	
 	@Override
 	public List<attachfile> getfilelist(Long bno) {
 		board bd=mapper.readboard(bno);
 		//log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is existed");
 		return fmapper.getlistfile(bno);
 	}
-
+	@Transactional
 	@Override
 	public void deletefilelist(Long bno) {
 		board bd=mapper.readboard(bno);
@@ -190,5 +220,37 @@ public class boardserviceImpl implements boardservice{
 		List<String> boardlist=mapper.selectboardlist();
 		return boardlist;
 	}
+
+	@Transactional
+	@Override
+	public void insertMemfile(memberfile memberfile) {
+		fmapper.insertmemfile(memberfile);
+	}
+	@Transactional
+	@Override
+	public boolean deleteMemfile(String pro_mem_file_code) {
+		return fmapper.deletememfile(pro_mem_file_code)==1;
+	}
+	@Transactional
+	@Override
+	public void deleteMemfileall(String userid) {
+		fmapper.deletememfileall(userid);
+	}
+	@Transactional
+	@Override
+	public List<memberfile> getMemberfilebyuserid(String userid) {
+		return fmapper.getmemberfilelist(userid);
+	}
+	@Transactional
+	@Override
+	public List<memberfile> getMemberfilebybno(Long bno) {
+		return fmapper.getmemberfilebybno(bno);
+	}
+	@Transactional
+	@Override
+	public memberfile getMemberfilebycode(String pro_mem_file_code) {
+		return fmapper.getmemberfilebycode(pro_mem_file_code);
+	}
+
 
 }

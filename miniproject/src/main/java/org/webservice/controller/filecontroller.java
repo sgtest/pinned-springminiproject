@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.UUID;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.FileSystemResource;
 import org.springframework.core.io.Resource;
 import org.springframework.http.HttpHeaders;
@@ -24,6 +25,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -32,6 +35,10 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.file;
+import org.webservice.domain.memberfile;
+import org.webservice.mapper.filemapper;
+import org.webservice.mapper.membermapper;
+import org.webservice.service_1.boardservice;
 
 import lombok.extern.log4j.Log4j;
 import net.coobird.thumbnailator.Thumbnailator;
@@ -40,13 +47,19 @@ import net.coobird.thumbnailator.Thumbnailator;
 @Log4j
 public class filecontroller {
 
+	@Autowired
+	private boardservice bservice;
+	
 	// 결국 attachlist로 값을 반환해야할듯
+	@PreAuthorize("authenticated()")
 	@PostMapping(value="/uploadFile",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
 	public Map<String,Object> uploadfile(MultipartFile[] uploadFile) {
 		
 		Map<String, Object> response=new HashMap<String, Object>();
-	
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		
 		List<file> filelist=new ArrayList<file>();
 		List<File> thumbnaillist=new ArrayList<>();
 		String result="upload_fail";
@@ -66,17 +79,24 @@ public class filecontroller {
 			log.info("this is for loop");
 			
 			file achfile=new file();
+			memberfile memfile=new memberfile();
+			String pro_mfile_code;
+			memfile.setUserid(userid);
+			
 			String fileorgname=multipartFile.getOriginalFilename();
 			fileorgname=fileorgname.substring(fileorgname.lastIndexOf("//")+1);
 			achfile.setFileName(fileorgname);
+			memfile.setFileName(fileorgname);
 			
 			UUID uuid=UUID.randomUUID();
 			String filerename=uuid+"_"+fileorgname;
 			achfile.setUuid(uuid.toString());
+			memfile.setUuid(uuid.toString());
 			
 			File saveFile=new File(upload,filerename);
 			log.info(saveFile.getAbsolutePath());
 			achfile.setUploadPath(uploadfolder);
+			memfile.setUploadPath(uploadfolder);
 			try {
 				if(!checkFile(saveFile)) {
 					log.info("this file is reject");
@@ -91,6 +111,10 @@ public class filecontroller {
 				if(checkImg(saveFile)) 
 				{
 					achfile.setImage(true);
+					memfile.setImage(true);
+					
+					pro_mfile_code=userid+"_"+uploadfolder+"_"+uuid.toString()+"_"+fileorgname+"_"+"1";
+					
 					File thimgfile=new File(upload,"th_"+filerename);
 					FileOutputStream thumboutfile=new FileOutputStream(thimgfile);
 					Thumbnailator.createThumbnail(multipartFile.getInputStream(),thumboutfile, 100, 100);
@@ -101,9 +125,12 @@ public class filecontroller {
 				}
 				else 
 				{
+					memfile.setImage(false);
+					pro_mfile_code=userid+"_"+uploadfolder+"_"+uuid.toString()+"_"+fileorgname+"_"+"0";
+					
 					achfile.setImage(false);
 				}
-				
+				memfile.setPro_mem_file_code(pro_mfile_code);
 				
 			} catch (IllegalStateException e) {
 				e.printStackTrace();
@@ -111,6 +138,7 @@ public class filecontroller {
 				e.printStackTrace();
 			}
 			log.info("file class info: "+achfile.getFileName()+",  "+achfile.getUploadPath()+",  "+achfile.getUuid());
+			bservice.insertMemfile(memfile);
 			filelist.add(achfile);
 			
 		}
@@ -200,20 +228,43 @@ public class filecontroller {
 	}
 	
 	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
-	//@PreAuthorize("isAuthenticated()")
+	@PreAuthorize("authenticated()")
 	@PostMapping("/deletefile")
 	@ResponseBody
 	public Map<String,Object> serverdeletefile(String fileuri, boolean filetype){
 		Map<String, Object> response=new HashMap<String, Object>();
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		String pro_mfile_code="";
 		
 		String topuri="D:\\server\\temp";
 		try {
-			File file=new File(topuri, URLDecoder.decode(fileuri, "UTF-8"));
+			String detailuri=URLDecoder.decode(fileuri, "UTF-8");
+			File file=new File(topuri, detailuri);
+			
 			file.delete();
+			String orgfileuri=file.getAbsolutePath();
+			String orgfilename=orgfileuri.substring(orgfileuri.lastIndexOf("\\") + 1);
+
+			
+			String onlyuri=detailuri.substring(0,detailuri.lastIndexOf("/"));
+			String orguuid=orgfilename.substring(0, orgfilename.indexOf("_")-1);
+			log.info(orgfilename);
+			if(filetype) {
+			pro_mfile_code=userid+"_"+onlyuri+"_"+orgfilename+"_"+"1";
+			}else {
+				pro_mfile_code=userid+"_"+onlyuri+"_"+orgfilename+"_"+"0";
+			}
+			
+			log.info(pro_mfile_code);
+			if(bservice.deleteMemfile(pro_mfile_code)) {
+				log.info("파일 기록도 삭제됨");
+			}
+			else {
+				log.info("파일 기록 삭제 실패");
+			}
 			
 			if(filetype) {
-				String orgfileuri=file.getAbsolutePath();
-				String orgfilename=orgfileuri.substring(orgfileuri.lastIndexOf("\\") + 1);
 				String thfilename="th_"+orgfilename;
 				String thfileuri=orgfileuri.replace(orgfilename,thfilename);		
 				File thfile=new File(thfileuri);

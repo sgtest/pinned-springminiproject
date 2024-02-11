@@ -29,6 +29,7 @@ public class securitycontroller {
 	//private customUserDetailService csuser;
 	@Autowired
 	private membermapper mmapper;
+	
 @GetMapping("/loginboard")
 public String loginview() {
 	return "loginboard";
@@ -44,7 +45,6 @@ public Map<String, Object> getuserinfo(String userid){
 	//log.info(userid);
 	member minfo=mmapper.readmember(userid);
 	Map<String,Object> result=new HashMap<String, Object>();
-	
 	result.put("userinformation", minfo);
 	return result;
 }
@@ -69,6 +69,11 @@ public void loginerror() {
 @PostMapping("/logoutaction")
 public String logoutaction() {
 	return "redirect:/board/listboard";
+}
+
+@GetMapping("/myPage")
+public void myPage(String userid) {
+	
 }
 
 @GetMapping("/boardjoin")
