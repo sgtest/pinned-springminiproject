@@ -21,4 +21,29 @@
  <select id="getoldfile" resultType="org.webservice.domain.attachfile">
  	select * from pro_file where uploadpath=to_char(sysdate-1,'yyyy/mm/dd')
  </select>
+ 
+ 
+ <select id="getmemberfilelist" resultType="org.webservice.domain.memberfile">
+ select * from pro_member_file where userid=#{userid} order by regdate
+ </select>
+ 
+ <select id="getmemberfilebybno" resultType="org.webservice.domain.memberfile">
+ select * from pro_member_file where bno=#{bno} order by regdate
+ </select>
+ <update id="updatememfile">
+ update pro_member_file set bno=#{bno} where pro_mem_file_code=#{pro_mem_file_code}
+ </update>
+ 
+ <insert id="insertmemfile">
+ insert into pro_member_file values(#{pro_mem_file_code},#{userid},#{uuid},#{uploadPath},#{fileName},#{image},null,sysdate)
+ </insert>
+ 
+ <delete id="deletememfile">
+ delete from pro_member_file where pro_mem_file_code=#{pro_mem_file_code}
+ </delete>
+ 
+ <delete id="deletememfileall">
+ delete from pro_member_file where userid=#{userid}
+ </delete>
+ 
 </mapper>
