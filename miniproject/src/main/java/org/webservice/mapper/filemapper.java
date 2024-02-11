@@ -17,9 +17,11 @@ public interface filemapper {
 	
 	//유저별 파일 목록 관리
 	public void insertmemfile(memberfile mfile);
-	public int updatememfile(Long bno, String pro_mem_file_code);
+	public int updatememfile(memberfile mfile);
 	public int deletememfile(String pro_mem_file_code);
+	public int deletememfilebybno(Long bno);
 	public void deletememfileall(String userid);
+	public memberfile getmemberfilebycode(String pro_mem_file_code);
 	public List<memberfile> getmemberfilelist(String userid);
-	public memberfile getmemberfilebybno(Long bno);
+	public List<memberfile> getmemberfilebybno(Long bno);
 }

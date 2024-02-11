@@ -403,7 +403,7 @@ $(document).ready(function(){
 	});
 	
 	//새로고침과 뒤로가기 버튼을 누르거나 링크 이동시에만 파일 삭제해야 게시물 등록때는 작동을 안해야한다
-	window.addEventListener('beforeunload', function(e) {
+	/*window.addEventListener('beforeunload', function(e) {
 		
 	//var target = event.target || event.srcElement;
 	//(event.returnValue && event.returnValue.includes(' 새로고침'))
@@ -418,7 +418,7 @@ $(document).ready(function(){
 	      return;
 	    }
 	    
-	  });
+	  });*/
 
 	function fileclear(){
 		//모달창이 열린상태이면

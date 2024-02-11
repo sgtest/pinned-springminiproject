@@ -14,6 +14,8 @@ import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -31,6 +33,7 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
+import org.webservice.domain.memberfile;
 import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
