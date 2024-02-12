@@ -29,7 +29,7 @@
  </select>
  
  <select id="getmemberfilelist" resultType="org.webservice.domain.memberfile">
- select * from pro_member_file where userid=#{userid} order by regdate
+ select * from pro_member_file where userid=#{userid} order by regdate desc
  </select>
  
  <select id="getmemberfilebybno" resultType="org.webservice.domain.memberfile">

@@ -165,6 +165,7 @@ public class boardcontroller {
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
+	
 	private void Filedelete(List<attachfile> filelist) {
 		String firstfilelink="D:\\server\\temp\\";
 		Path fpath,sumfpath;
