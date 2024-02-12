@@ -65,4 +65,14 @@ public class commentserviceImpl implements commentservice{
 		return cmtmapper.getcountcomment(bno);
 	}
 
+	@Override
+	public int gettotalcommentcntbyid(String userid) {
+		return cmtmapper.getcountcommentbyid(userid);
+	}
+
+	@Override
+	public List<comment> getcmtlistbyid(String userid) {
+		return cmtmapper.getlistcommentbyid(userid);
+	}
+
 }

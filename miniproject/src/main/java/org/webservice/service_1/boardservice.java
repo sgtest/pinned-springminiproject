@@ -29,7 +29,9 @@ public interface boardservice {
 	public boolean deleteboard(Long bno);
 	public boolean updateboard(board bd);
 	public int getlisttotal(boardsearch search);
+	public int getlisttotalbyid(String userid);
 	public List<board> getList(boardsearch search);
+	public List<board> getListbyid(String userid);
 	public List<attachfile> getfilelist(Long bno);
 	public void deletefilelist(Long bno);
 	

@@ -23,6 +23,10 @@
   			border-radius: 5px;
   			cursor: pointer;
 		}
+		input[type="button"]:hover,button:hover {
+  			background-color: #e5e5e5;
+ 	 		color: #000;
+		}
 		.hrefbtn{
 			height:40px;
 		}
@@ -77,6 +81,7 @@
 	<div class="loginuser_info">
 	<h4 class="userId">${userinfo.username}</h4>
 	<h4 class="username"></h4>
+	<button class="boardmypage" data-href="/myPage">마이 페이지</button>
 	<button class="boardlogout" data-href="/logoutaction">로그아웃</button>
 	</div>
 	</sec:authorize>
@@ -188,12 +193,16 @@
         var topboardbtn=$('#reloadlistboard');
         var toploginbtn=$('#boardlogin');
         var logoutbtn=$('.boardlogout');
-
-        topboardbtn.on("click",function(e){
+		var mypagebtn=$('.boardmypage');
+        
+		topboardbtn.on("click",function(e){
         	window.location.href=topboardbtn.data("href");	
         });
         toploginbtn.on("click",function(e){
         	window.location.href=toploginbtn.data("href");	
+        });
+        mypagebtn.on("click",function(e){
+        	window.location.href=mypagebtn.data("href");	
         });
         
         logoutbtn.on("click",function(e){

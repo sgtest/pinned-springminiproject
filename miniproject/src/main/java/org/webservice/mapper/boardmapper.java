@@ -28,7 +28,8 @@ public interface boardmapper {
 	public void insertboard(board bd);
 	public List<board> getlistboard();
 	public List<board> getlistsearchboard(boardsearch search);
-	
+	public List<board> getlistboardbyid(String userid);
+	public int getcntbyid(String userid);
 	
 	public void updatecmtcnt(@Param("bno") Long bno, @Param("amount") int amount);
 	public int gettotalcntboard(boardsearch search);
