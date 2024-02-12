@@ -89,7 +89,7 @@
   	]]>
   	</select>
   	<select id="getlistboardbyid" resultType="org.webservice.domain.board">
-  	select * from pro_board where writer=#{userid} 
+  	select * from pro_board where writer=#{userid} order by regdate desc
   	</select>
   	<select id="getcntbyid" resultType="int">
   	select count(*) from pro_board where writer=#{userid}

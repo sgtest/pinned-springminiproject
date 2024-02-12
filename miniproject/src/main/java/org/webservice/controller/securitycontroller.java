@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.webservice.domain.board;
+import org.webservice.domain.boardpage;
+import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
 import org.webservice.domain.member;
 import org.webservice.domain.memberfile;
@@ -95,11 +97,14 @@ public void myPage(Model model) {
 	List<board> mbrdlist=bservice.getListbyid(userid);
 	List<comment> mcmtlist=cmtservice.getcmtlistbyid(userid);
 	List<memberfile> mfilelistList=bservice.getMemberfilebyuserid(userid);
-	model.addAttribute("memberinfo", minfo);
-	model.addAttribute("boardrecord", mbrdlist);
-	model.addAttribute("commentrecord", mcmtlist);
-	model.addAttribute("filerecord", mfilelistList);
 	
+	model.addAttribute("memberinfo", minfo);
+	model.addAttribute("boardrecordsize", mbrdlist.size());
+	model.addAttribute("boardrecord", mbrdlist);
+	model.addAttribute("commentrecordsize", mcmtlist.size());
+	model.addAttribute("commentrecord", mcmtlist);
+	model.addAttribute("filerecordsize", mfilelistList.size());
+	model.addAttribute("filerecord", mfilelistList);
 }
 
 @GetMapping("/boardjoin")

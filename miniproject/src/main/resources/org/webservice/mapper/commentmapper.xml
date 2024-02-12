@@ -36,7 +36,7 @@
   	select count(rno) from pro_comment where bno=#{bno}
   	</select>
   	<select id="getlistcommentbyid" resultType="org.webservice.domain.comment">
-  	select * from pro_comment where writer=#{userid}
+  	select * from pro_comment where writer=#{userid} order by regdate desc
   	</select>
   	<select id="getcountcommentbyid" resultType="int">  	
   	select count(*) from pro_comment where writer=#{userid}
