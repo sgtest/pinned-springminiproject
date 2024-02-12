@@ -13,5 +13,7 @@ public interface commentmapper {
 	public int updatecomment(comment cmt);
 	
 	public List<comment> getlistcomment(@Param("search")boardsearch search,@Param("bno") Long bno);
+	public List<comment> getlistcommentbyid(String userid);
+	public int getcountcommentbyid(String userid);
 	public int getcountcomment(Long bno);
 }

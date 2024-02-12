@@ -20,6 +20,10 @@
   		border-radius: 5px;
   		cursor: pointer;
 	}
+	input[type="button"]:hover,button:hover {
+  		background-color: #e5e5e5;
+  		color: #000;
+	}
 	.thumgrid {
   		display: grid;
   		grid-template-columns: repeat(8, 1fr);

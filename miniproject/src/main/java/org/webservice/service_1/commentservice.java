@@ -13,7 +13,9 @@ public interface commentservice {
 	public int updatecomment(comment cmt);
 	public int deletecomment(Long rno);
 	public int gettotalcommentcnt(Long bno);
+	public int gettotalcommentcntbyid(String userid);
 	
 	public List<comment> getcmtlist(boardsearch search, Long bno);
+	public List<comment> getcmtlistbyid(String userid);
 	public commentpage getcmtlistpage(boardsearch search, Long bno);
 }

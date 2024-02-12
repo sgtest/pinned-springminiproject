@@ -177,12 +177,22 @@ public class boardserviceImpl implements boardservice{
 		log.info(search.getKeyword()+" has "+mapper.gettotalcntboard(search)+" number ");
 		return mapper.gettotalcntboard(search);
 	}
+
+	@Override
+	public int getlisttotalbyid(String userid) {
+		return mapper.getcntbyid(userid);
+	}
 	
 	@Override
 	public List<board> getList(boardsearch search) {
 		
 		log.info(search.getKeyword()+" has "+mapper.getlistsearchboard(search).size()+" number");
 		return mapper.getlistsearchboard(search);
+	}
+
+	@Override
+	public List<board> getListbyid(String userid) {
+		return mapper.getlistboardbyid(userid);
 	}
 	
 	@Override
@@ -251,6 +261,5 @@ public class boardserviceImpl implements boardservice{
 	public memberfile getMemberfilebycode(String pro_mem_file_code) {
 		return fmapper.getmemberfilebycode(pro_mem_file_code);
 	}
-
 
 }
