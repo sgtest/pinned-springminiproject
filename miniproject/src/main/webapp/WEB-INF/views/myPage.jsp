@@ -25,6 +25,10 @@
   			background-color: #e5e5e5;
   			color: #000;
 		}
+		.totalmypage{
+			
+    		text-align: center;
+		}
 		.mypagerecordtab,.totalmypage{
 			list-style-type: none;
 		}
@@ -40,6 +44,7 @@
 		}
 		.infomypage-tabcontent,.toppagetab{
    			display: none;
+   			width:1500px;
     		padding: 10px;
 		}
 		.show{
@@ -48,13 +53,28 @@
 		.boardrecordcontent,.commentrecordcontent{
     		padding: 10px;
     		text-align: center;
+			max-height:1000px;
+    		overflow-y: scroll;
+		}
+		.recordtable{
+			max-height:1000px;
+    		overflow-y: scroll;
 		}
 		#memberinfocontent{
+		
+    		text-align: center;
             width: 80%;
 		}
+		
 		.board-record,.comment-record{
-            width: 80%;
+            width: 100%;
 		}
+		.file-record{
+			width: 100%;
+		}
+		.userinfo{
+		}
+		
 		.boardrecord-title,.commentrecord-cmt {
 			width: 300px;
 			overflow: hidden;
@@ -105,23 +125,23 @@
 					<div class="infomypage-tabcontent show" data-tabid="memberinfotab">
 						<div id="memberinfocontent">
 							<div>
-								<h4>${memberinfo.userid}</h4>
+								<h5>사용자의 아이디</h5><h3>${memberinfo.userid}</h3><br>
 							</div>
 							
-							<div>							
-								<h4>${memberinfo.username}</h4>
+							<div class="userinfo">							
+								<h5>사용자의 이름</h5><h3>${memberinfo.username}</h3><br>
 							</div>
 							
-							<div>
-								<h4>${memberinfo.regDate}</h4>						
+							<div class="userinfo">
+								<h5>사용자의 가입날짜</h5><h3>${memberinfo.regDate}</h3><br>						
 							</div>
 							
-							<div>
-								<h4>${memberinfo.phone}</h4>
+							<div class="userinfo">
+								<h5>사용자의 휴대폰 번호</h5><h3>${memberinfo.phone}</h3><br>
 							</div>
 							
-							<div>
-								<h4>${memberinfo.udate}</h4>							
+							<div class="userinfo">
+								<h5>사용자의 정보 수정일자</h5><h3>${memberinfo.udate}</h3><br>							
 							</div>
 						</div>
 					</div>
@@ -140,6 +160,7 @@
 									<th>삭제하기</th>
 								</tr>
 							</thead>
+							
 							<tbody>
 								<c:forEach var="board" items="${boardrecord}">
 									<tr>
@@ -152,6 +173,7 @@
 									</tr>
 								</c:forEach>
 							</tbody>
+							
 						</table>
 						</div>						
 					</div>
@@ -169,6 +191,7 @@
 										<th>삭제하기</th>
 									</tr>
 								</thead>
+								
 								<tbody>
 									<c:forEach var="comment" items="${commentrecord}">
 										<tr>
@@ -180,14 +203,15 @@
 										</tr>
 									</c:forEach>
 								</tbody>
+								
 							</table>
 						</div>
 					</div>
 
 					<div class="infomypage-tabcontent" data-tabid="filerecordtab">
 						<p class="filerecordsize">지금 까지 업로드한 파일의 총 개수는 ${filerecordsize} 개 입니다.</p>
-						<div>
-							<table>
+						<div class="recordtable">
+							<table class="file-record">
 								<thead>
 									<tr>
 										<th>파일 코드</th>
@@ -195,10 +219,11 @@
 										<th>파일의 이름</th>
 										<th>이미지 여부</th>
 										<th>게시물 번호</th>
-										<th>등록 일자</th>
+										<th>등록일자</th>
 										<th>삭제하기</th>
 									</tr>
 								</thead>
+								
 								<tbody>
 									<c:forEach var="memberfile" items="${filerecord}">
 										<tr>
@@ -213,6 +238,7 @@
 										</tr>
 									</c:forEach>
 								</tbody>
+								
 							</table>
 						</div>
 						
@@ -359,26 +385,6 @@ $(document).ready(function(){
 		window.location.href=homebt.data("href")	
 	});
 	
-	function loadbrdrepage(){
-		
-	}
-	function loadboardrecordpage(pagenum,amount,totalcnt){
-		
-	}
-
-	function loadcmtrepage(){
-		
-	}
-	function loadcommentrecordpage(pagenum,amount,totalcnt){
-		
-	}
-	
-	function loadfilrepage(){
-		
-	}
-	function loadfilerecordpage(pagenum,amount,totalcnt){
-		
-	}
 });
 </script>
 </body>
