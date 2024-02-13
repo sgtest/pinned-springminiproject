@@ -65,6 +65,7 @@
 </style>
 </head>
 <body>
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
 	<div class="mypagetotal">
 
@@ -147,7 +148,7 @@
 										<td><div class="boardrecord-title"><a href="board/readBoard?bno=${board.bno}">${board.title}</a></div></td>
 										<td>${board.regdate}</td>
 										<td>${board.udate}</td>	
-										<td><button data-href="board/directdeleteboard">삭제하기</button></td>									
+										<td><button class="recordbrd-deletebtn" data-bno="${board.bno}" data-href="board/directdeleteboard">삭제하기</button></td>									
 									</tr>
 								</c:forEach>
 							</tbody>
@@ -165,6 +166,7 @@
 										<th>게시물 번호</th>
 										<th>댓글 내용</th>
 										<th>등록 일자</th>
+										<th>삭제하기</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -174,6 +176,7 @@
 											<td>${comment.bno}</td>
 											<td><div class="commentrecord-cmt">${comment.comments}</div></td>
 											<td>${comment.regdate}</td>
+											<td><button class="recordcmt-deletebtn" data-rno="${comment.rno}">삭제하기</button></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -193,6 +196,7 @@
 										<th>이미지 여부</th>
 										<th>게시물 번호</th>
 										<th>등록 일자</th>
+										<th>삭제하기</th>
 									</tr>
 								</thead>
 								<tbody>
@@ -204,7 +208,8 @@
 											<td>${memberfile.image}</td>
 											<td>${memberfile.bno}</td>
 											<td>${memberfile.regDate}</td>
-											<td><button>삭제하기</button></td>
+											<td><button class="recordfile-deletebtn" data-isimage="${memberfile.image}" data-uuid="${memberfile.uuid}" 
+											data-filename="${memberfile.fileName}" data-uploadpath="${memberfile.uploadPath}">삭제하기</button></td>
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -247,6 +252,9 @@ $(document).ready(function(){
 	var toptablist=$('.toppagetab');
 	var cmtabbtn=$('#commoninfo-btn');
 	var etctabbtn=$('#etcinfo-btn');
+	var brdrecordbtn=$('.recordbrd-deletebtn');
+	var cmtrecordbtn=$('.recordcmt-deletebtn');
+	var filerecordbtn=$('.recordfile-deletebtn');
 	
 	tablist.on("click",function(e){
 		var tabid=$(this).attr('id');
@@ -279,6 +287,72 @@ $(document).ready(function(){
 			$(toptablist[i]).removeClass('show');
 		}
 		toptabobj.addClass('show');
+	});
+	
+	brdrecordbtn.on("click",function(e){
+		var brdobj=$(this).data("bno")
+		var csrfToken = $("#_csrf").val();
+		$.ajax({
+			type:'post',
+			url:'/board/directremoveBoard',
+			data:{bno: brdobj},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				console.log(response['result']);
+				alert(brdobj+" 번 게시물이 삭제되었습니다.");
+			},
+			error: function(error){
+				console.error(brdobj+" 번 게시물 삭제에 실패하였습니다.")
+			}
+		});
+	});
+	cmtrecordbtn.on("click",function(e){
+		var cmtobj=$(this).data("rno")
+		var csrfToken = $("#_csrf").val();
+		$.ajax({
+			type:'post',
+			url:'/comment/deletecomment',
+			data:{rno: cmtobj},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				console.log(response['result']);
+				alert(cmtobj+' 번 댓글이 삭제되었습니다.');
+			},
+			error: function(error){
+				console.error(cmtobj+" 번 댓글 삭제에 실패하였습니다.")
+			}
+		});
+	});
+	filerecordbtn.on("click",function(e){
+		var filename=$(this).data("filename");
+		var fileuuid=$(this).data("uuid");
+		var filepath=$(this).data("uploadpath");
+		var fileobjtype=$(this).data('isimage');
+		
+		var fileobjuri=encodeURIComponent(filepath+"/"+fileuuid+"_"+filename);
+		var csrfToken = $("#_csrf").val();
+		$.ajax({
+			type:'post',
+			url:'/deletefile',
+			data:{fileuri:fileobjuri, filetype:fileobjtype},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				console.log(response['result']);
+				alert("파일 기록 삭제가 정상적으로 되었습니다.");
+			},
+			error: function(error){
+				console.error("파일 기록 삭제를 실패했습니다.");
+			}
+		});
 	});
 	
 	homebt.on("click",function(e){

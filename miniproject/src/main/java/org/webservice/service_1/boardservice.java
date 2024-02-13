@@ -34,6 +34,7 @@ public interface boardservice {
 	public List<board> getListbyid(String userid);
 	public List<attachfile> getfilelist(Long bno);
 	public void deletefilelist(Long bno);
+	public void deletefileone(String uuid);
 	
 	//회원별 파일 관련 서비스
 	/* 파일 임시 등록시 pro_member_file에 insert를 해야한다.(파일 컨트롤러 상의 uploadfile 메소드에 포함), 

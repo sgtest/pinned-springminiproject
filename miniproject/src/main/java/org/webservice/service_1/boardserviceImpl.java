@@ -262,4 +262,10 @@ public class boardserviceImpl implements boardservice{
 		return fmapper.getmemberfilebycode(pro_mem_file_code);
 	}
 
+	@Override
+	public void deletefileone(String uuid) {
+		fmapper.deletefile(uuid);
+		
+	}
+
 }
