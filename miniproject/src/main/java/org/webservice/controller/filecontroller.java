@@ -257,6 +257,9 @@ public class filecontroller {
 			}
 			
 			log.info(pro_mfile_code);
+			if(bservice.getMemberfilebycode(pro_mfile_code).getBno()!=null) {
+				bservice.deletefileone(bservice.getMemberfilebycode(pro_mfile_code).getUuid());
+			}
 			if(bservice.deleteMemfile(pro_mfile_code)) {
 				log.info("파일 기록도 삭제됨");
 			}

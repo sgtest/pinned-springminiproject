@@ -165,6 +165,19 @@ public class boardcontroller {
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
+	@PostMapping("/directremoveBoard")
+	@ResponseBody
+	public Map<String,Object> directremoveBoard(Long bno) {
+		Map<String, Object> response=new HashMap<String, Object>();
+		Filedelete(bservice.getfilelist(bno));
+		bservice.deletefilelist(bno);
+		
+		if(bservice.deleteboard(bno)) {
+			response.put("result", "success");
+		}
+		
+		return response;
+	}
 	
 	private void Filedelete(List<attachfile> filelist) {
 		String firstfilelink="D:\\server\\temp\\";
