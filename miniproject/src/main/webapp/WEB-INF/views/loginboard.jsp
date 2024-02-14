@@ -16,6 +16,10 @@
   		border-radius: 5px;
   		cursor: pointer;
 	}
+	input[type="button"]:hover,button:hover {
+  		background-color: #e5e5e5;
+  		color: #000;
+	}
 	.logbtn_set{
 		margin-top:20px;
 	}
@@ -44,9 +48,9 @@
 </form>
 
 <div class="logbtn_set">
-<button>구글계정으로 로그인</button>
-<button>회원가입</button>
-<button>아이디 찾기</button>
+<button id="googleloginbtn" class="memberbtn" data-href="/logingoogle">구글계정으로 로그인</button>
+<button id="memberjoinbtn" class="memberbtn" data-href="/boardjoin">회원가입</button>
+<button id="idsearchbtn" class="memberbtn" data-href="/idsearch">아이디 찾기</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
@@ -62,6 +66,7 @@
         $(document).ready(function(){
         	var login=$('#loginbtn');
         	var backbtn=$('.homebtn');
+        	var bottombtn=$('.memberbtn');
         	login.on("click",function(e){
         	    e.preventDefault();
         	    $("form").submit();
@@ -70,6 +75,10 @@
         	backbtn.on("click",function(e){
         		window.location.href=backbtn.data("href");
         	})
+        	bottombtn.on("click",function(e){
+        		var btn=$(this).data("href");
+        		window.location.href=btn;
+        	});
         });
         </script>
 </body>
