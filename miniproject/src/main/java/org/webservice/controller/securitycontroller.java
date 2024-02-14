@@ -1,8 +1,11 @@
 package org.webservice.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import javax.naming.spi.DirStateFactory.Result;
 
@@ -12,12 +15,14 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
@@ -28,6 +33,7 @@ import org.webservice.mapper.filemapper;
 import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
+
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -46,6 +52,14 @@ public class securitycontroller {
 	private boardservice bservice;
 	@Setter(onMethod_ = @Autowired)
 	private commentservice cmtservice;
+	@Setter(onMethod_=@Autowired)
+	private PasswordEncoder pencoder;
+	
+	//비밀번호 정규식
+	private static final String pass_regex = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
+	//휴대폰 정규식
+	private static final String phone_regex = "^\\d{10,11}$";
+
 @GetMapping("/loginboard")
 public String loginview() {
 	return "loginboard";
@@ -111,9 +125,68 @@ public void myPage(Model model) {
 public void boardjoin() {
 	
 }
+
 @PostMapping("/boardjoinaction")
-public void boardjoinaction() {
+public String boardjoinaction(String id, String passwd, String username, String phone) {
 	
+	List<auth> aulist=new ArrayList<auth>();
+	auth au=new auth();
+	String userid=id;
+	String userpw=passwd;
+	String usname=username;
+	String pne=phone;
+	String enpw=pencoder.encode(passwd);
+	if(mmapper.readmember(userid)!=null) {
+		return  "redirect:/loginboard";
+	}
+	member joinmem=new member();
+	
+	au.setUserid(userid);
+	au.setAuth("common");
+	aulist.add(au);
+	
+	joinmem.setAuthlist(aulist);
+	joinmem.setUserid(userid);
+	joinmem.setUserpw(enpw);
+	joinmem.setUsername(username);
+	joinmem.setPhone(phone);
+	
+	mmapper.insertmember(joinmem);
+	
+	return "redirect:/loginboard";
 }
 
+@PostMapping("/idcheckaction")
+@ResponseBody
+public Map<String, Object> idcheckaction(String id){
+	Map<String, Object> response=new HashMap<String, Object>();
+	
+	if(mmapper.readmember(id)!=null) {
+		response.put("result", "failure");
+	}else {
+		response.put("result", "success");
+	}
+	
+	return response;
+}
+
+@PostMapping("/etcdatacheckaction")
+@ResponseBody
+public Map<String, Object> etcdatacheckaction(String passwd, String username, String phonenumber)
+{
+	Map<String, Object> response=new HashMap<String, Object>();
+	Pattern pwptn=Pattern.compile(pass_regex);
+	Pattern phptn=Pattern.compile(phone_regex);
+	
+	Matcher pwmach=pwptn.matcher(passwd);
+	Matcher phmach=phptn.matcher(phonenumber);
+	
+	if(!pwmach.matches()||!phmach.matches()||username.length()<3) {
+		response.put("result", "failure");
+	}
+	else {
+		response.put("result", "success");
+	}
+	return response;
+}
 }
