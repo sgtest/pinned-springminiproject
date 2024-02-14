@@ -61,9 +61,9 @@
 	
 </div>
 
-<button id="joinbtn">회원가입 완료</button>
-
 </form>
+
+<button id="joinbtn">회원가입 완료</button>
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script>
