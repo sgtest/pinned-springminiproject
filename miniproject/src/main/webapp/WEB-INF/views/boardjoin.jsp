@@ -122,10 +122,9 @@ $(document).ready(function(){
 		else if(inputpw.length===0||inputname.length===0||inputphone.length===0){
 
 			alert("작성 정보들을 다시 확인해주세요");
-			e.preventDefault();	
 			
 		}
-		else{
+		
 			//console.log(inputpw);
 			//console.log(inputname);
 			//console.log(inputphone);
@@ -145,7 +144,10 @@ $(document).ready(function(){
 					console.log(response['result']);
 					if(response['result']==='failure'){
 						alert("작성 정보들을 다시 확인해주세요");
-					}else{
+						e.preventDefault();	
+					}
+					if(response['result']==='success')
+					{
 						alert("회원가입이 완료되었습니다");
 						submitform.submit();
 					}
@@ -156,7 +158,7 @@ $(document).ready(function(){
 				}
 			});
 
-		}
+		
 	});
 
 	
