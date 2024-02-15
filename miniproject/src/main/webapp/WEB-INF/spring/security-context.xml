@@ -14,7 +14,6 @@
 	<property name="defaultTargetUrl" value="/board/listboard"/>
 	</bean>
 	<security:http auto-config="true">
-		
 	<security:intercept-url pattern="/board/listboard" access="permitAll" />	
 	<security:intercept-url pattern="/board/readBoard" access="permitAll" />
 	
@@ -33,6 +32,8 @@
 		<!--  <security:remember-me
 			data-source-ref="dataSource" token-validity-seconds="604800" />
 			-->
+			
+		<!--  <security:oauth2-login login-page="/loginboard" default-success-url="/myPage" user-service-ref=""/>-->
 	</security:http>
 		
 		<security:authentication-manager>
