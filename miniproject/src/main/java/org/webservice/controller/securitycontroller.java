@@ -11,6 +11,7 @@ import javax.naming.spi.DirStateFactory.Result;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -101,6 +102,7 @@ public String logoutaction() {
 	return "redirect:/board/listboard";
 }
 
+@PreAuthorize("authenticated()")
 @GetMapping("/myPage")
 public void myPage(Model model) {
 	//마이페이지,작성 글과 댓글 기록, 업로드 파일 기록, 회원정보
@@ -120,6 +122,8 @@ public void myPage(Model model) {
 	model.addAttribute("filerecordsize", mfilelistList.size());
 	model.addAttribute("filerecord", mfilelistList);
 }
+
+
 
 @GetMapping("/boardjoin")
 public void boardjoin() {
@@ -189,4 +193,16 @@ public Map<String, Object> etcdatacheckaction(String passwd, String username, St
 	}
 	return response;
 }
+
+@GetMapping("/boardout")
+public void boardout() {
+	
+}
+
+@PostMapping("/boardoutaction")
+public String boardoutaction() {
+	
+	return "redirect:/loginboard";
+}
+
 }
