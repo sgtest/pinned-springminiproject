@@ -259,6 +259,7 @@
 
 	<div class="mypagebottom">
 		<div class="mbtnset">
+			<button id="moutbtn">회원 탈퇴</button>
 		</div>
 	</div>
 
@@ -275,6 +276,7 @@ $(document).ready(function(){
 	var tablist=$('.infomypage-tab');
 	var tabcontentlist=$('.infomypage-tabcontent');
 	var homebt=$('#homebtn');
+	var memberoutbtn=$('#moutbtn');
 	var toptablist=$('.toppagetab');
 	var cmtabbtn=$('#commoninfo-btn');
 	var etctabbtn=$('#etcinfo-btn');
@@ -384,7 +386,9 @@ $(document).ready(function(){
 	homebt.on("click",function(e){
 		window.location.href=homebt.data("href")	
 	});
-	
+	memberoutbtn.on("click",function(e){
+		window.location.href='/boardout';
+	});
 });
 </script>
 </body>
