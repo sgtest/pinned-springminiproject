@@ -15,6 +15,7 @@ public interface boardmapper {
 	public int banuserrealease(String userid);
 	public int banselect(String userid);
 	
+	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();
 	public void createboard(boardlist brdlist);
 	public int deleteaouthboard(auth ath);
