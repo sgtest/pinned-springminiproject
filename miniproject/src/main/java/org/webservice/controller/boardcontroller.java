@@ -110,6 +110,13 @@ public class boardcontroller {
 			log.info(multipartFile.getName());
 		}
 	}
+
+	@PreAuthorize("hasAuthority('master')")
+	@GetMapping("removeBoardlist")	
+	public void removeBoardlist(Model model) {
+		List<boardlist> brdlist=bservice.select_boardlistset();
+		model.addAttribute("boardlistset", brdlist);
+	}
 	
 	@PreAuthorize("authenticated()")
 	@PostMapping("createBoardlistaction")
@@ -127,10 +134,17 @@ public class boardcontroller {
 		rttr.addAttribute("result", "success");
 		return "redirect:/board/listboard"+search.getListLink();
 	}
-	@PreAuthorize("authenticated()")
+	
+	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping("createBoardlist")
 	public void createBoardlist(Model model) {
 		
+	}
+
+	@GetMapping("/selectBoardlist")
+	public void getlistboard(Model model) {
+		List<boardlist> brdlist=bservice.select_boardlistset();
+		model.addAttribute("boardlistset", brdlist);
 	}
 	
 	//@PreAuthorize("principal.username == #board.writer")
@@ -177,7 +191,7 @@ public class boardcontroller {
 		}
 		
 		return response;
-	}
+	}	
 	
 	private void Filedelete(List<attachfile> filelist) {
 		String firstfilelink="D:\\server\\temp\\";

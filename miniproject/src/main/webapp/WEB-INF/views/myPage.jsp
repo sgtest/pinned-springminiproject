@@ -61,27 +61,36 @@
     		overflow-y: scroll;
 		}
 		#memberinfocontent{
-		
     		text-align: center;
             width: 80%;
 		}
 		
 		.board-record,.comment-record{
+			table-layout:fixed;
+  			border-spacing: 20px 20px;
+  				text-align: center;
             width: 100%;
 		}
 		.file-record{
+			table-layout:fixed;
+  			border-spacing: 20px 20px;
+  			
+  				text-align: center;
 			width: 100%;
 		}
 		.userinfo{
 		}
 		
-		.boardrecord-title,.commentrecord-cmt {
+		/*.boardrecord-title,.commentrecord-cmt {
 			width: 300px;
 			overflow: hidden;
 			text-overflow: ellipsis;
 			white-space: nowrap;
-		}
+		}*/
 		
+		td{
+			word-wrap:break-word;
+		}
 </style>
 </head>
 <body>

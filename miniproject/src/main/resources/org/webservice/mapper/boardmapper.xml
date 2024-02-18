@@ -39,6 +39,9 @@
   	select count(*) from pro_ban where (userid=#{userid}) and (sysdate between startdate and enddate)
   	</select>
   	
+  	<select id="selectboardlistset" resultType="org.webservice.domain.boardlist">
+	select * from pro_board_list order by boardnum   	
+  	</select>
   	<select id="selectboardlist" resultType="String">
   	select boardname from pro_board_list
   	</select>

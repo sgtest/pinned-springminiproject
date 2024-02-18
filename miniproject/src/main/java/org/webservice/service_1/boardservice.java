@@ -19,6 +19,7 @@ public interface boardservice {
 	public void board_register(String boardname,String reguserid, String boardsub);
 	public boolean board_delete(String boardname);
 	public List<String> select_boardlist();
+	public List<boardlist> select_boardlistset();
 	
 	//관리자 양도
 	public boolean board_aouth(String boardname,String userid);

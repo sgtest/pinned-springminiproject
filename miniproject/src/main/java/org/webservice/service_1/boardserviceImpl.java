@@ -224,7 +224,12 @@ public class boardserviceImpl implements boardservice{
 			}
 		return false;
 	}
-
+	
+	@Override
+	public List<boardlist> select_boardlistset(){
+		List<boardlist> brdset=mapper.selectboardlistset();
+		return brdset;
+	}
 	@Override
 	public List<String> select_boardlist() {
 		List<String> boardlist=mapper.selectboardlist();
