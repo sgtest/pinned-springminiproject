@@ -216,12 +216,13 @@ public class boardserviceImpl implements boardservice{
 		auth ath=new auth();
 		ath.setAuth(boardname);
 		ath.setUserid(mapper.select_boardaouth(boardname));
-		if(mapper.deleteaouthboard(ath)==1)
+		if(mapper.deleteaouthboard(ath)==1) {
 			if(mapper.board_delete(boardname)==1)
 			{	
 				log.info(boardname+" is delete");
-				return mapper.board_delete(boardname)==1;
+				return mapper.deleteboardbyname(boardname)==1;
 			}
+		}
 		return false;
 	}
 	

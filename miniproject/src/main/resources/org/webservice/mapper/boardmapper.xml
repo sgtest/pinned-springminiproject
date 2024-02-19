@@ -101,6 +101,9 @@
   	<delete id="deleteboard">
   	delete from pro_board where bno=#{bno}
   	</delete>
+  	<delete id="deleteboardbyname">
+  	delete from pro_board where boardname=#{boardname}
+  	</delete>
   	<insert id="insertboard">
   	<selectKey keyProperty="bno" order="BEFORE" resultType="long">
   	select seq_pro_board.nextval from dual

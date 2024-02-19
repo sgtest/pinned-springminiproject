@@ -13,47 +13,53 @@
           crossorigin="anonymous">
 	<style>	          
 		button, input[type="button"]{
-  				background-color: #000;
-  				color: #fff;
-  				padding: 10px 20px;
-  				border: 1px solid #fff;
-  				border-radius: 5px;
-  				cursor: pointer;
-			}
+  			background-color: #000;
+  			color: #fff;
+  			padding: 10px 20px;
+  			border: 1px solid #fff;
+  			border-radius: 5px;
+  			cursor: pointer;
+		}
 		input[type="button"]:hover,button:hover {
-  				background-color: #e5e5e5;
- 	 			color: #000;
-			}
+  			background-color: #e5e5e5;
+ 	 		color: #000;
+		}
 		.boardlisttabletop{
-				display: flex;
-    			text-align: center;
-				width:1500px;
-				padding:10px;
-			}
+			display: flex;
+    		text-align: center;
+			width:1500px;
+			padding:10px;
+		}
 		.boardlisttable{
-    			padding: 10px;
-    			text-align: center;
-    			margin: 0 auto;
-				max-height:1000px;
-    			overflow-y: scroll;
-			}
+    		padding: 10px;
+    		text-align: center;
+    		margin: 0 auto;
+			max-height:1000px;
+    		overflow-y: scroll;
+		}
 		#brdtable{
-				table-layout:fixed;
-  				text-align: center;
-  				border-spacing: 20px 20px;
-				width: 100%
-			}
+			table-layout:fixed;
+  			text-align: center;
+  			border-spacing: 20px 20px;
+			width: 100%
+		}
 		.boardlistsubject{
-				width:500px;
-				
-			}
+			width:500px;	
+		}
 		td{
-				word-wrap:break-word;
-			}
-			
+			word-wrap:break-word;
+		}
+		.boardlistremovedmodal{
+    		background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:5px;
+		}	
 	</style>
 </head>
 <body>
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 
 	<div>
 	<button onclick="location.href='listboard'">홈화면으로 돌아가기</button>
@@ -79,7 +85,7 @@
 							<td>${boardlist.regdate}</td>
 							<td>${boardlist.reguserid}</td>
 							<td class="boardlistsubject">${boardlist.boardsubject}</td>
-							<td><button class="removebrdlist" data-boardnum="${boardlist.boardnum}">게시판 삭제하기</button></td>
+							<td><button class="removebrdlist" data-boardName="${boardlist.boardname}">게시판 삭제하기</button></td>
 						</tr>
 					</c:forEach>
 					</tbody>
@@ -88,7 +94,22 @@
 		</div>
 	</div>
 	
-
+	<div class="boardlistremovedmodal" id="brdrmmdl" tabindex="-1" role="dialog" aria-labelledby="commenteditmodal" aria-hidden="true" style="display: none;">
+		<div class="brdrmclass" id="brdrmform" role="document">
+			<div class="brdrminner">
+				<div class="brdrmheader">
+					<button class="brdrmclose">확인창 닫기</button>
+				</div>
+				<div class="brdrmbody">
+					<h4 class="removebrdh">정말로 삭제하시겠습니까?(삭제시 해당 게시판 종류의 게시글 및 댓글, 파일은 삭제됩니다.)</h4>
+				</div>
+				<div class="brdrmfooter">
+					<button class="removebrdlistbtn" data-boardName="">삭제</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
@@ -99,11 +120,53 @@
 <script>
 $(document).ready(function(){
 	var boardlistbtn=$('.removebrdlist');
+	var brdrmmodal=$('.boardlistremovedmodal');
+	var brdrmbtn=$('.removebrdlist');
+	var brdrmacbtn=$('.removebrdlistbtn');
+	var brdrmclosebtn=$('.brdrmclose');
+	
 	boardlistbtn.on("click",function(e){
-		var brdnum=$(this).data("boardnum");
+		var brdname=$(this).data("boardName");
 		
+		brdrmmodal.find(".removebrdlistbtn").data("boardName",${brdname});
+		brdrmmodal.find(".removebrdh").text(brdname+' 게시판을 정말로 삭제하시겠습니까?(삭제시 해당 게시판 종류의 게시글 및 댓글, 파일은 삭제됩니다.)');
+		brdrmmodal.css("display", "block");
+
+	});
+	brdrmclosebtn.on("click",function(e){
+		brdrmmodal.css("display", "none");
+	});
+	
+	brdrmacbtn.on("click",function(e){
+		var brdname=$(this).data("boardName");
+		var csrfToken = $("#_csrf").val();
+
+		$.ajax({
+			type:'post',
+			url:'/board/removeBoardlistaction',
+			data:{brdname: brdname},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				console.log(response['result']);
+				if(response['result']==="success"){
+					alert(brdname+" 게시판이 삭제되었습니다");
+					location.reload(true);
+				}
+				else{
+					alert("게시판 삭제에 실패하였습니다.");
+					location.reload(true);
+				}
+			},
+			error: function(error){
+				console.error("게시판 삭제에 실패하였습니다.");
+				location.reload(true);
+			}
+		});
 		
-	});	
+	});
 });
 
 </script>
