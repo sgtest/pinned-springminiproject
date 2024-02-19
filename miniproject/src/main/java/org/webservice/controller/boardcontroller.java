@@ -118,7 +118,19 @@ public class boardcontroller {
 		model.addAttribute("boardlistset", brdlist);
 	}
 	
-	@PreAuthorize("authenticated()")
+	@PreAuthorize("hasAuthority('master')")
+	@PostMapping("removeBoardlistaction")
+	public Map<String, Object> removeBoardlistaction(String brdname) {
+		Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.board_delete(brdname)) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+		return response;
+	}
+
+	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping("createBoardlistaction")
 	public String createBoardlistaction(boardlist brdli, boardsearch search, RedirectAttributes rttr) {
 		
