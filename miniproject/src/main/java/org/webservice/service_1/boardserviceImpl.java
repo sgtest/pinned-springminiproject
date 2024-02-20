@@ -21,6 +21,7 @@ import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.memberfile;
 import org.webservice.mapper.boardmapper;
+import org.webservice.mapper.commentmapper;
 import org.webservice.mapper.filemapper;
 import org.webservice.mapper.boardmapper;
 
@@ -36,6 +37,9 @@ public class boardserviceImpl implements boardservice{
 	
 	@Setter(onMethod_ = @Autowired)
 	private filemapper fmapper;
+	
+	@Setter(onMethod_ = @Autowired)
+	private commentmapper cmapper;
 	
 	@Override
 	public boolean userban(String userid, String reason, int periods) {
@@ -128,6 +132,7 @@ public class boardserviceImpl implements boardservice{
 			mfile.setBno(bd.getBno());
 			fmapper.updatememfile(mfile);			
 			fmapper.insertfile(file);
+			
 		}
 		log.info(bd.getBoardname()+"_"+bd.getBno()+"_"+bd.getTitle()+"_"+bd.getContent()+"_"+bd.getWriter());
 	}
@@ -196,6 +201,11 @@ public class boardserviceImpl implements boardservice{
 	}
 	
 	@Override
+	public List<board> getListbyboardname(String boardname){
+		return mapper.getlistboardbybrdname(boardname);
+	}
+	
+	@Override
 	public List<attachfile> getfilelist(Long bno) {
 		board bd=mapper.readboard(bno);
 		//log.info(bd.getBoardname()+"_"+bno+"_board is "+fmapper.getlistfile(bno).size()+" file is existed");
@@ -225,21 +235,32 @@ public class boardserviceImpl implements boardservice{
 		}
 		
 		for(int i=0;i<athlist.size();i++) {
-			if(mapper.deleteaouthboard(athlist.get(i))!=1) {
-				result=0;
+		mapper.deleteaouthboard(athlist.get(i));
+		}
+		//관련 파일이나 댓글도 삭제해야 한다.
+		deleteboardbynameall(boardname);
+		log.info(boardname+" is delete");
+		mapper.deleteboardbyname(boardname);
+		return mapper.board_delete(boardname)==1;			
+		
+	}
+	
+	
+	@Override
+	public void deleteboardbynameall(String boardname) {
+		List<board> brdlist=new ArrayList<board>();
+		brdlist=mapper.getlistboardbybrdname(boardname);
+		
+		if(brdlist!=null) {
+			for(board brd:brdlist) {
+				fmapper.deleteallfile(brd.getBno());
+				fmapper.deletememfilebybno(brd.getBno()); 
+				cmapper.deletecommentbybno(brd.getBno());
 			}
-			result=1;
 		}
 		
-		if(result==1) {
-			if(mapper.board_delete(boardname)==1)
-			{	
-				log.info(boardname+" is delete");
-				return mapper.deleteboardbyname(boardname)==1;
-			}
-		}
-		return false;
 	}
+
 	
 	@Override
 	public List<boardlist> select_boardlistset(){

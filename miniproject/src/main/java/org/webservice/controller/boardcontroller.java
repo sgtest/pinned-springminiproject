@@ -122,8 +122,18 @@ public class boardcontroller {
 	@PostMapping("removeBoardlistaction")
 	public Map<String, Object> removeBoardlistaction(String brdname) {
 		Map<String, Object> response=new HashMap<String, Object>();
+		List<board> brdlist=new ArrayList<board>();
+		brdlist=bservice.getListbyboardname(brdname);
+		if(brdlist!=null){
+			for(board b:brdlist) {
+				log.info(b.getBno());
+				log.info(bservice.getfilelist(b.getBno()).get(0).getFileName());
+				Filedelete(bservice.getfilelist(b.getBno()));
+			}
+		}
 	if(bservice.board_delete(brdname)) {
 		response.put("result", "success");
+		//파일 삭제해야
 	}else {
 		response.put("result", "failure");
 	}
