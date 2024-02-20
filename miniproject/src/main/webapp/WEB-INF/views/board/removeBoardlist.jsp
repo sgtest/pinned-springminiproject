@@ -85,7 +85,7 @@
 							<td>${boardlist.regdate}</td>
 							<td>${boardlist.reguserid}</td>
 							<td class="boardlistsubject">${boardlist.boardsubject}</td>
-							<td><button class="removebrdlist" data-boardName="${boardlist.boardname}">게시판 삭제하기</button></td>
+							<td><button class="removebrdlist" data-boardname="${boardlist.boardname}">게시판 삭제하기</button></td>
 						</tr>
 					</c:forEach>
 					</tbody>
@@ -101,10 +101,11 @@
 					<button class="brdrmclose">확인창 닫기</button>
 				</div>
 				<div class="brdrmbody">
-					<h4 class="removebrdh">정말로 삭제하시겠습니까?(삭제시 해당 게시판 종류의 게시글 및 댓글, 파일은 삭제됩니다.)</h4>
+					<h4 class="removebrdh"></h4>
+					<h4>정말로 삭제하시겠습니까?(삭제시 해당 게시판 종류의 게시글 및 댓글, 파일은 삭제됩니다.)</h4>
 				</div>
 				<div class="brdrmfooter">
-					<button class="removebrdlistbtn" data-boardName="">삭제</button>
+					<button class="removebrdlistbtn" data-boardname="">삭제</button>
 				</div>
 			</div>
 		</div>
@@ -126,10 +127,11 @@ $(document).ready(function(){
 	var brdrmclosebtn=$('.brdrmclose');
 	
 	boardlistbtn.on("click",function(e){
-		var brdname=$(this).data("boardName");
-		
-		brdrmmodal.find(".removebrdlistbtn").data("boardName",${brdname});
-		brdrmmodal.find(".removebrdh").text(brdname+' 게시판을 정말로 삭제하시겠습니까?(삭제시 해당 게시판 종류의 게시글 및 댓글, 파일은 삭제됩니다.)');
+		var brdnameObj=$(this);
+		var brdname=brdnameObj.data("boardname");
+		console.log(brdname);
+		brdrmmodal.find(".removebrdlistbtn").data("boardname",brdname);
+		brdrmmodal.find(".removebrdh").text(brdname);
 		brdrmmodal.css("display", "block");
 
 	});
@@ -138,7 +140,7 @@ $(document).ready(function(){
 	});
 	
 	brdrmacbtn.on("click",function(e){
-		var brdname=$(this).data("boardName");
+		var brdname=$(this).data("boardname");
 		var csrfToken = $("#_csrf").val();
 
 		$.ajax({

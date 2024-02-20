@@ -213,10 +213,25 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean board_delete(String boardname) {
 		// TODO Auto-generated method stub
-		auth ath=new auth();
-		ath.setAuth(boardname);
-		ath.setUserid(mapper.select_boardaouth(boardname));
-		if(mapper.deleteaouthboard(ath)==1) {
+		List<auth> athlist=new ArrayList<auth>();
+		List<String> brdathlist=new ArrayList<String>();
+		int result=0;
+		brdathlist=mapper.select_boardaouthbyname(boardname);
+		for(String s:brdathlist) {
+			auth ath=new auth();
+			ath.setAuth(boardname);
+			ath.setUserid(s);
+			athlist.add(ath);
+		}
+		
+		for(int i=0;i<athlist.size();i++) {
+			if(mapper.deleteaouthboard(athlist.get(i))!=1) {
+				result=0;
+			}
+			result=1;
+		}
+		
+		if(result==1) {
 			if(mapper.board_delete(boardname)==1)
 			{	
 				log.info(boardname+" is delete");
