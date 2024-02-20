@@ -48,6 +48,9 @@
   	<select id="select_boardaouth" resultType="String">
   	select REGUSERID from pro_board_list where boardname=#{boardname}
   	</select>
+  	<select id="select_boardaouthbyname" resultType="String">
+  	select userid from pro_member_auth where auth=#{auth}
+  	</select>
   	<insert id="createboard">
   	<selectKey keyProperty="boardnum" order="BEFORE" resultType="Long">
   	select seq_pro_board_list.nextval from dual

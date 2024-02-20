@@ -21,6 +21,7 @@ public interface boardmapper {
 	public int deleteaouthboard(auth ath);
 	public int aouthboard(auth ath);
 	public String select_boardaouth(String boardname);
+	public List<String> select_boardaouthbyname(String auth);
 	public int board_delete(String boardname);
 	
 	public board readboard(Long bno);
