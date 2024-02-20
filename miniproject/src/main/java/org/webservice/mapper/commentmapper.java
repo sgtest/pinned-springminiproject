@@ -10,6 +10,7 @@ public interface commentmapper {
 	public comment readcomment(Long rno);
 	public int insertcomment(comment cmt);
 	public int deletecomment(Long rno);
+	public int deletecommentbybno(Long bno);
 	public int updatecomment(comment cmt);
 	
 	public List<comment> getlistcomment(@Param("search")boardsearch search,@Param("bno") Long bno);

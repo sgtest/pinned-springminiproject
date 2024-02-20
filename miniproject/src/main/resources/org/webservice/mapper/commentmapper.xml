@@ -16,7 +16,9 @@
   	<delete id="deletecomment">
   	delete from pro_comment where rno=#{rno}
   	</delete>
-  	
+  	<delete id="deletecommentbybno">
+  	 delete from pro_comment where bno=#{bno}
+  	</delete>
   	
   	<select id="getlistcomment" resultType="org.webservice.domain.comment">
   	<![CDATA[ 

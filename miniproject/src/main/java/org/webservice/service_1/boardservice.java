@@ -18,9 +18,9 @@ public interface boardservice {
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);
 	public boolean board_delete(String boardname);
+	public void deleteboardbynameall(String boardname);
 	public List<String> select_boardlist();
 	public List<boardlist> select_boardlistset();
-	
 	//관리자 양도
 	public boolean board_aouth(String boardname,String userid);
 	
@@ -33,10 +33,10 @@ public interface boardservice {
 	public int getlisttotalbyid(String userid);
 	public List<board> getList(boardsearch search);
 	public List<board> getListbyid(String userid);
+	public List<board> getListbyboardname(String boardname);
 	public List<attachfile> getfilelist(Long bno);
 	public void deletefilelist(Long bno);
 	public void deletefileone(String uuid);
-	
 	//회원별 파일 관련 서비스
 	/* 파일 임시 등록시 pro_member_file에 insert를 해야한다.(파일 컨트롤러 상의 uploadfile 메소드에 포함), 
 	 * 임시 등록된 파일 삭제시 pro_member_file에서 해당 파일을 delete 해야한다.(파일 컨트롤러 상의 serverdeletefile 메소드에 포함),

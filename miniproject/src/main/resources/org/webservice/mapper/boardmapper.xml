@@ -100,6 +100,9 @@
   	<select id="getcntbyid" resultType="int">
   	select count(*) from pro_board where writer=#{userid}
   	</select>
+  	<select id="getlistboardbybrdname" resultType="org.webservice.domain.board">
+  	select * from pro_board where boardname=#{boardname}
+  	</select>
   	
   	<delete id="deleteboard">
   	delete from pro_board where bno=#{bno}
