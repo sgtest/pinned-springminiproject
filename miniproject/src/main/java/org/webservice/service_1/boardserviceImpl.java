@@ -219,6 +219,10 @@ public class boardserviceImpl implements boardservice{
 		fmapper.deleteallfile(bno);
 	}
 
+	@Override
+	public List<String> select_Boardaouthbyname(String boardname){
+		return mapper.select_boardaouthbyname(boardname);
+	}
 	@Transactional
 	@Override
 	public boolean board_delete(String boardname) {
@@ -245,6 +249,15 @@ public class boardserviceImpl implements boardservice{
 		
 	}
 	
+	
+	
+	@Transactional
+	@Override
+	public void boardlist_update(Long boardnum, String boardsubject) {
+		boardlist brdlist=mapper.getboardlistbynum(boardnum);
+		brdlist.setBoardsubject(boardsubject);
+		mapper.updateboardlist(brdlist);
+	}
 	
 	@Override
 	public void deleteboardbynameall(String boardname) {

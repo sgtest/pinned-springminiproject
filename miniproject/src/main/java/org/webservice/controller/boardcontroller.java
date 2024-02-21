@@ -29,6 +29,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.attachfile;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
@@ -118,6 +119,13 @@ public class boardcontroller {
 		model.addAttribute("boardlistset", brdlist);
 	}
 	
+	/*@PreAuthorize("hasAuthority('master') || principal.username == ")
+	@PostMapping("updateBoardlistaction")
+	public Map<String,Object> updateBoardlistaction(Long brdnum){
+		Map<String, Object> response=new HashMap<String, Object>();
+		
+		return response;
+	}*/
 	@PreAuthorize("hasAuthority('master')")
 	@PostMapping("removeBoardlistaction")
 	public Map<String, Object> removeBoardlistaction(String brdname) {
@@ -166,10 +174,11 @@ public class boardcontroller {
 	@GetMapping("/selectBoardlist")
 	public void getlistboard(Model model) {
 		List<boardlist> brdlist=bservice.select_boardlistset();
+		
 		model.addAttribute("boardlistset", brdlist);
 	}
 	
-	//@PreAuthorize("principal.username == #board.writer")
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updatesaveBoard")
 	public String updatesaveBoard(board brd, boardsearch search,RedirectAttributes rttr) {
 		log.info(brd.getBno()+"  "+brd.getTitle()+"  "+brd.getContent()+"  "+brd.getUdate());
@@ -188,7 +197,7 @@ public class boardcontroller {
 		model.addAttribute("board", brd);
 	}
 	
-	//@PreAuthorize("principal.username == #board.writer")
+	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/removeBoard")
 	public String removeBoard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr) {
 		log.info(bno);
