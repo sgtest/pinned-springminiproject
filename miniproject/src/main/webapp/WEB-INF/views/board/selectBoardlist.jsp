@@ -70,6 +70,8 @@
 						<th>게시판 등록일자</th>
 						<th>게시판 생성아이디</th>
 						<th>게시판에 대한 설명</th>
+						<th>게시판 관리자 목록</th>
+						<th>게시판 수정버튼</th>
 					</tr>
 					<tbody id="boardlisttablebody">
 					<c:forEach var="boardlist" items="${boardlistset}">
@@ -79,6 +81,14 @@
 							<td>${boardlist.regdate}</td>
 							<td>${boardlist.reguserid}</td>
 							<td class="boardlistsubject">${boardlist.boardsubject}</td>
+							<sec:authorize access="isAuthenticated()">
+								<td class="brdlistauth"></td>
+							</sec:authorize>
+							<sec:authorize access="hasAuthority('admin') || hasAuthority('master')">
+								<sec:authorize access="hasAuthority('${boardlist.boardname}') || hasAuthority('master')">
+									<td><button class="brdlistupdatebtn">게시판 설명 수정하기</button></td>
+								</sec:authorize>
+							</sec:authorize>
 						</tr>
 					</c:forEach>
 					</tbody>
@@ -97,9 +107,45 @@
         crossorigin="anonymous"></script>
 <script>
 $(document).ready(function(){
+	var updatebtn=$('.brdlistupdatebtn');
+	updatebtn.on("click",function(e){
+		//ajax 통신을 통해서 게시판 관련정보를 db에서 수정하고 페이지 재로딩해서 반영
+		var brdlistnum=parseInt($(this).closest('tr').find('td:first').text());
+		 
+		console.log(brdlistnum);
+		
+		
+	});
 	
+	$('.boardlistname').each(function(){
+		var boardname=$(this).text();
+		var authvalue=loadauth(boardname);
+		if(authvalue!==null){
+			$(this).next('.brdlistauth').text('게시판 관리자 불러오기 실패');
+		}else{
+			$(this).next('.brdlistauth').text(authvalue);
+		}
+	});
 	
 });
+
+function loadauth(boardname){
+	return authlist=null;
+	$.ajax({
+		type:'get',
+		url:'',
+		data:'',
+		dataType:'json',
+		success:function(response){
+			authlist=response['authlist'];
+			return authlist;	
+		},
+		error:function(){
+			return authlist;
+		}
+	});
+	return authlist;
+}
 
 </script>
 </body>
