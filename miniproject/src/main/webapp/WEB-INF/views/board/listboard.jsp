@@ -156,14 +156,14 @@
         <button type="submit" class="boardsearch search">검색</button>
     </form>
 	</div>
-	
 		<div class="boardmake_insert"><button onclick="location.href='createBoard'">게시판에 글쓰기</button></div><br>
+	<sec:authorize access="isAuthenticated()">
 	<div class="boardmake_list">
     	<div class="boardmake_select"><button onclick="location.href='selectBoardlist'">게시판 리스트 살펴보기</button></div>
     	<div class="boardmake_create"><button onclick="location.href='createBoardlist'">게시판 만들기(가입이후 한달 이후에 가능합니다)</button></div><br>
     	<div class="boardmake_delete"><button onclick="location.href='removeBoardlist'">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</button></div>
 	</div>
-		
+	</sec:authorize>	
 <form id='boardmove' method='get'>
 <!-- 타입하고 키워드 추가 -->
 	<input type='hidden' name='type' value='${page.srh.type}'>

@@ -339,7 +339,12 @@ $(document).ready(function(){
 			},
 			success: function(response){
 				console.log(response['result']);
-				alert(brdobj+" 번 게시물이 삭제되었습니다.");
+				if(response['result']==="failure"){
+					alert("해당 게시물 삭제에 실패하셨습니다");
+				}
+				else{
+					alert(brdobj+" 번 게시물이 삭제되었습니다.");
+				}
 			},
 			error: function(error){
 				console.error(brdobj+" 번 게시물 삭제에 실패하였습니다.")
