@@ -55,6 +55,8 @@
           </style>
 </head>
 <body>
+	<sec:authentication property="principal" var="userinfo"/>
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	
 	<div>
 	<button onclick="location.href='listboard'">홈화면으로 돌아가기</button>
@@ -75,19 +77,20 @@
 					</tr>
 					<tbody id="boardlisttablebody">
 					<c:forEach var="boardlist" items="${boardlistset}">
-						<tr>
+						<tr class="brdlisttable">
 							<td>${boardlist.boardnum}</td>
 							<td class="boardlistname">${boardlist.boardname}</td>
 							<td>${boardlist.regdate}</td>
 							<td>${boardlist.reguserid}</td>
 							<td class="boardlistsubject">${boardlist.boardsubject}</td>
-							<sec:authorize access="isAuthenticated()">
+							<sec:authorize access="(hasAuthority('master') || hasAuthority('${boardlist.boardname}'))">
 								<td class="brdlistauth"></td>
 							</sec:authorize>
-							<sec:authorize access="hasAuthority('admin') || hasAuthority('master')">
-								<sec:authorize access="hasAuthority('${boardlist.boardname}') || hasAuthority('master')">
+							<sec:authorize access="hasAuthority('${boardlist.boardname}') || hasAuthority('master')">
 									<td><button class="brdlistupdatebtn">게시판 설명 수정하기</button></td>
-								</sec:authorize>
+							</sec:authorize>				
+							<sec:authorize access="!hasAuthority('${boardlist.boardname}') && !hasAuthority('master')">
+									<td></td>
 							</sec:authorize>
 						</tr>
 					</c:forEach>
@@ -108,44 +111,44 @@
 <script>
 $(document).ready(function(){
 	var updatebtn=$('.brdlistupdatebtn');
+	var brdlist=$('.brdlisttable');
+	var brdnamelist=brdlist.find('.boardlistname');
+	var principal="${userinfo.username}";
+	
 	updatebtn.on("click",function(e){
 		//ajax 통신을 통해서 게시판 관련정보를 db에서 수정하고 페이지 재로딩해서 반영
 		var brdlistnum=parseInt($(this).closest('tr').find('td:first').text());
-		 
+		var csrfToken = $("#_csrf").val();
+		
 		console.log(brdlistnum);
 		
 		
 	});
 	
 	$('.boardlistname').each(function(){
-		var boardname=$(this).text();
-		var authvalue=loadauth(boardname);
-		if(authvalue!==null){
-			$(this).next('.brdlistauth').text('게시판 관리자 불러오기 실패');
-		}else{
-			$(this).next('.brdlistauth').text(authvalue);
-		}
+		var brdname=$(this).text();	
+		var authvalue;
+        var currentelement = $(this);
+        if(principal!==null){
+		$.ajax({
+			type:'get',
+			url:'getauthlist',
+			data:{boardname: brdname},
+			dataType:'json',
+			success:function(response){
+				authvalue=response['authlist'];
+				currentelement.closest('tr').find('.brdlistauth').text(authvalue);
+			},
+			error:function(){
+				authvalue=null
+			}
+		});
+        }
 	});
 	
+
 });
 
-function loadauth(boardname){
-	return authlist=null;
-	$.ajax({
-		type:'get',
-		url:'',
-		data:'',
-		dataType:'json',
-		success:function(response){
-			authlist=response['authlist'];
-			return authlist;	
-		},
-		error:function(){
-			return authlist;
-		}
-	});
-	return authlist;
-}
 
 </script>
 </body>

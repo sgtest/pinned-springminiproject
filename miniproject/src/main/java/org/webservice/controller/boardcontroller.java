@@ -119,13 +119,34 @@ public class boardcontroller {
 		model.addAttribute("boardlistset", brdlist);
 	}
 	
-	/*@PreAuthorize("hasAuthority('master') || principal.username == ")
+	/*@PreAuthorize("hasAuthority('admin')")
 	@PostMapping("updateBoardlistaction")
 	public Map<String,Object> updateBoardlistaction(Long brdnum){
 		Map<String, Object> response=new HashMap<String, Object>();
 		
 		return response;
 	}*/
+	
+	@PreAuthorize("hasAuthority('admin')||hasAuthority('master')")
+	@GetMapping("getauthlist")
+	@ResponseBody
+	public Map<String, Object> getauthlist(String boardname){
+		Map<String, Object> response=new HashMap<String, Object>();
+		List<String> aulist=bservice.select_Boardaouthbyname(boardname);
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		if(aulist.contains(userid)||userid.compareTo("master")==0) {
+			response.put("authlist", aulist);
+		}
+		else {
+			aulist=null;
+			aulist=new ArrayList<String>();
+			aulist.add("해당 게시판 관리자 아님");
+			response.put("authlist",aulist);
+			return response;
+		}
+		return response;
+	}
 	@PreAuthorize("hasAuthority('master')")
 	@PostMapping("removeBoardlistaction")
 	public Map<String, Object> removeBoardlistaction(String brdname) {
@@ -171,6 +192,7 @@ public class boardcontroller {
 		
 	}
 
+	@PreAuthorize("authenticated()")
 	@GetMapping("/selectBoardlist")
 	public void getlistboard(Model model) {
 		List<boardlist> brdlist=bservice.select_boardlistset();
@@ -214,6 +236,15 @@ public class boardcontroller {
 	@ResponseBody
 	public Map<String,Object> directremoveBoard(Long bno) {
 		Map<String, Object> response=new HashMap<String, Object>();
+		board brd=bservice.readBoard(bno);
+		
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String userid=auth.getName();
+		if(brd.getWriter().compareTo(userid)!=0) {
+			response.put("result", "failure");
+			return response;
+		}
+		
 		Filedelete(bservice.getfilelist(bno));
 		bservice.deletefilelist(bno);
 		
