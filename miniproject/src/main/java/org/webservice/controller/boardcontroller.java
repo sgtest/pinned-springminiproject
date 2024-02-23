@@ -50,7 +50,9 @@ import lombok.extern.log4j.Log4j;
 @AllArgsConstructor
 @Log4j
 public class boardcontroller {
-
+	
+	private static final String[] masteruserid= {"user11","masteruser"};
+	
 	public boardservice bservice;
 	@Autowired
 	public membermapper mmapper;
@@ -127,15 +129,15 @@ public class boardcontroller {
 		return response;
 	}*/
 	
-	@PreAuthorize("hasAuthority('admin')||hasAuthority('master')")
+	@PreAuthorize("hasAuthority('master')||hasAuthority(#boardname)")
 	@GetMapping("getauthlist")
 	@ResponseBody
 	public Map<String, Object> getauthlist(String boardname){
 		Map<String, Object> response=new HashMap<String, Object>();
-		List<String> aulist=bservice.select_Boardaouthbyname(boardname);
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String userid=auth.getName();
-		if(aulist.contains(userid)||userid.compareTo("master")==0) {
+		List<String> aulist=bservice.select_Boardaouthbyname(boardname);
+		if(ismaster(userid) || aulist.contains(userid)) {
 			response.put("authlist", aulist);
 		}
 		else {
@@ -143,9 +145,19 @@ public class boardcontroller {
 			aulist=new ArrayList<String>();
 			aulist.add("해당 게시판 관리자 아님");
 			response.put("authlist",aulist);
-			return response;
 		}
 		return response;
+	}
+	
+	@PreAuthorize("hasAuthority('master')||hasAuthority(#brdname)")
+	@PostMapping("updatebrdlistsubac")
+	@ResponseBody
+	public Map<String, Object> updatebrdlistsubac(String brdname, String brdsub){
+		Map<String, Object> response=new HashMap<String, Object>();
+		boardlist brd=bservice.getboardlistbyname(brdname);
+		bservice.boardlist_update(brd, brdsub);
+		response.put("result","success");
+		return response;		
 	}
 	@PreAuthorize("hasAuthority('master')")
 	@PostMapping("removeBoardlistaction")
@@ -299,4 +311,13 @@ public class boardcontroller {
 		return response;
 	}
 	
+	private boolean ismaster(String userid) {
+		for(String s:masteruserid) {
+			if(s.compareTo(userid)==0) {
+				return true;
+			}
+		}
+		return false;
+	}
+		
 }
