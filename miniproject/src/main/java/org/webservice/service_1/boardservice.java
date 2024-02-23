@@ -3,9 +3,11 @@ package org.webservice.service_1;
 import java.util.List;
 
 import org.webservice.domain.attachfile;
+import org.webservice.domain.auth;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
+import org.webservice.domain.member;
 import org.webservice.domain.memberfile;
 
 public interface boardservice {
@@ -15,14 +17,20 @@ public interface boardservice {
 	public boolean userban(String userid, String reason,int periods);
 	public boolean userbanrelease(String userid);
 	
+	
+	//회원 관련 서비스
+	public member getuser(String userid);
+	public List<auth> getauth(String userid);
+	
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);
-	public void boardlist_update(Long boardnum, String boardsubject);
+	public void boardlist_update(boardlist brd, String boardsubject);
 	public boolean board_delete(String boardname);
 	public void deleteboardbynameall(String boardname);
 	public List<String> select_boardlist();
 	public List<boardlist> select_boardlistset();
 	public List<String> select_Boardaouthbyname(String boardname);
+	public boardlist getboardlistbyname(String boardname);
 	//관리자 양도
 	public boolean board_aouth(String boardname,String userid);
 	

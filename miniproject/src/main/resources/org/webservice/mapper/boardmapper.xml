@@ -54,6 +54,9 @@
   	<select id="getboardlistbynum" resultType="org.webservice.domain.boardlist">
   	select * from pro_board_list where boardnum=#{boardnum}
   	</select>
+  	<select id="getboardlistbyname" resultType="org.webservice.domain.boardlist">
+  	select * from pro_board_list where boardname=#{boardname}
+  	</select>
   	<insert id="createboard">
   	<selectKey keyProperty="boardnum" order="BEFORE" resultType="Long">
   	select seq_pro_board_list.nextval from dual

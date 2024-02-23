@@ -19,10 +19,12 @@ import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
+import org.webservice.domain.member;
 import org.webservice.domain.memberfile;
 import org.webservice.mapper.boardmapper;
 import org.webservice.mapper.commentmapper;
 import org.webservice.mapper.filemapper;
+import org.webservice.mapper.membermapper;
 import org.webservice.mapper.boardmapper;
 
 import lombok.Setter;
@@ -41,6 +43,19 @@ public class boardserviceImpl implements boardservice{
 	@Setter(onMethod_ = @Autowired)
 	private commentmapper cmapper;
 	
+	@Setter(onMethod_ = @Autowired)
+	private membermapper mmapper;
+	
+	@Override
+	public member getuser(String userid) {
+		member user=mmapper.readmember(userid);
+		return user;
+	}
+	@Override
+	public List<auth> getauth(String userid){
+		List<auth> aulist=mmapper.readauth(userid);
+		return aulist;
+	}
 	@Override
 	public boolean userban(String userid, String reason, int periods) {
 		log.info("userid: "+userid+" ban, reason: "+reason+", period: "+periods);
@@ -64,6 +79,11 @@ public class boardserviceImpl implements boardservice{
 	public boolean userbanrelease(String userid) {
 		log.info("userban release: "+userid);
 		return mapper.banuserrealease(userid)==1;
+	}
+
+	@Override
+	public boardlist getboardlistbyname(String boardname) {
+		return mapper.getboardlistbyname(boardname);
 	}
 
 	@Override
@@ -253,8 +273,8 @@ public class boardserviceImpl implements boardservice{
 	
 	@Transactional
 	@Override
-	public void boardlist_update(Long boardnum, String boardsubject) {
-		boardlist brdlist=mapper.getboardlistbynum(boardnum);
+	public void boardlist_update(boardlist brd, String boardsubject) {
+		boardlist brdlist=brd;
 		brdlist.setBoardsubject(boardsubject);
 		mapper.updateboardlist(brdlist);
 	}

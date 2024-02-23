@@ -94,7 +94,7 @@
 		</div>
 	</div>
 	
-	<div class="boardlistremovedmodal" id="brdrmmdl" tabindex="-1" role="dialog" aria-labelledby="commenteditmodal" aria-hidden="true" style="display: none;">
+	<div class="boardlistremovedmodal" id="brdrmmdl" tabindex="-1" role="dialog" aria-labelledby="brdlistremovemodal" aria-hidden="true" style="display: none;">
 		<div class="brdrmclass" id="brdrmform" role="document">
 			<div class="brdrminner">
 				<div class="brdrmheader">

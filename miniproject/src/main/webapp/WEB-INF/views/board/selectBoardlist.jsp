@@ -32,6 +32,7 @@
 				width:1500px;
 				padding:10px;
 			}
+			
 			.boardlisttable{
     			padding: 10px;
     			text-align: center;
@@ -52,6 +53,15 @@
 			td{
 				word-wrap:break-word;
 			}
+			
+			.brdlisteditmodal{
+    			background-color: #f0f0f0;
+    			padding: 10px; 
+    			border: 1px solid #ccc; 
+   				margin-bottom: 10px; 
+   				margin-left:5px;
+			}
+			
           </style>
 </head>
 <body>
@@ -100,6 +110,23 @@
 		</div>
 	</div>
 	
+	<div class="brdlisteditmodal" id="editmodal" tabindex="-1" role="dialog" aria-labelledby="" aria-hidden="true" style="display: none;">
+		<div class="brdliedit" id="brdeditform" role="document">
+			<div class="brdlieditinner">
+				<div class="brdlieditheader">
+					<button class="brdlieditclose">닫기</button>
+					<h4 class="brdlistname"></h4>
+					<h4>해당 게시판의 설명을 수정합니다.</h4>
+				</div>
+				<div class="brdlieditbody">
+					<textarea id="brdlistsub" rows="10" cols="100" style="resize: none;"></textarea>
+				</div>
+				<div class="brdlieditfooter">
+					<button class="brdlsiteditbtn">수정하기</button>
+				</div>
+			</div>
+		</div>
+	</div>	
 	
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
@@ -114,15 +141,58 @@ $(document).ready(function(){
 	var brdlist=$('.brdlisttable');
 	var brdnamelist=brdlist.find('.boardlistname');
 	var principal="${userinfo.username}";
-	
+	var brdeditmodal=$('.brdlisteditmodal');
+	var brdeditclbtn=$('.brdlieditclose');
+	var brdeditbtn=$('.brdlsiteditbtn');
 	updatebtn.on("click",function(e){
 		//ajax 통신을 통해서 게시판 관련정보를 db에서 수정하고 페이지 재로딩해서 반영
 		var brdlistnum=parseInt($(this).closest('tr').find('td:first').text());
+		var brdlistname=$(this).closest('tr').find('.boardlistname').text();
+		var brdlistsub=$(this).closest('tr').find('.boardlistsubject').text();
 		var csrfToken = $("#_csrf").val();
 		
-		console.log(brdlistnum);
+		brdeditmodal.find('.brdlistname').html(brdlistname);
+		brdeditmodal.find('#brdlistsub').val(brdlistsub);
+		
+		brdeditmodal.css("display", "block");
+		console.log(brdlistsub);
 		
 		
+	});
+	brdeditbtn.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var brdname=$('.brdlistname').html();
+		var brdsub=$('#brdlistsub').val();
+		console.log(brdsub);
+		$.ajax({
+
+			type:'post',
+			url:'/board/updatebrdlistsubac',
+			data:{brdname: brdname, brdsub: brdsub},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				console.log(response['result']);
+				if(response['result']==="success"){
+					alert(brdname+" 게시판이 업데이트 되었습니다");
+					location.reload(true);
+				}
+				else{
+					alert("게시판 업데이트에 실패하였습니다.");
+					location.reload(true);
+				}
+			},
+			error: function(error){
+				console.error("게시판 삭제에 실패하였습니다.");
+				location.reload(true);
+			}
+		})
+	});
+	
+	brdeditclbtn.on("click",function(e){
+		brdeditmodal.css("display", "none");
 	});
 	
 	$('.boardlistname').each(function(){

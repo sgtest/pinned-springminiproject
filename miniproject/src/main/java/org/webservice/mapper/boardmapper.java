@@ -18,6 +18,7 @@ public interface boardmapper {
 	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();
 	public boardlist getboardlistbynum(Long boardnum);
+	public boardlist getboardlistbyname(String boardname);
 	public void createboard(boardlist brdlist);
 	public void updateboardlist(boardlist brdlist);
 	public int deleteaouthboard(auth ath);
