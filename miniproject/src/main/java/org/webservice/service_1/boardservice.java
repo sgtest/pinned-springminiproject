@@ -8,6 +8,7 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.member;
+import org.webservice.domain.member_info_etc;
 import org.webservice.domain.memberfile;
 
 public interface boardservice {
@@ -59,4 +60,10 @@ public interface boardservice {
 	public memberfile getMemberfilebycode(String pro_mem_file_code);
 	public List<memberfile> getMemberfilebyuserid(String userid);
 	public List<memberfile> getMemberfilebybno(Long bno);
+	
+	//유저의 기타정보들을 관리하는 서비스
+	public void updatememberetc(member_info_etc etc);
+	public boolean deletememberetc(String userid);
+	public void insertmemberetc(member_info_etc etc);
+	public member_info_etc getmemberetc(String userid);
 }

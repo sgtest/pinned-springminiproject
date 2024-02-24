@@ -20,6 +20,7 @@ import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.member;
+import org.webservice.domain.member_info_etc;
 import org.webservice.domain.memberfile;
 import org.webservice.mapper.boardmapper;
 import org.webservice.mapper.commentmapper;
@@ -341,6 +342,29 @@ public class boardserviceImpl implements boardservice{
 	public void deletefileone(String uuid) {
 		fmapper.deletefile(uuid);
 		
+	}
+	
+	@Override
+	public void updatememberetc(member_info_etc etc) {
+		mmapper.updatememberetc(etc);
+	}
+	@Override
+	public boolean deletememberetc(String userid) {
+		boolean result=false;
+		if(mmapper.deletememberetc(userid)>0) {
+			result=true;
+		}
+		
+		return result;
+	}
+	@Override
+	public void insertmemberetc(member_info_etc etc) {
+		mmapper.insertmemberetc(etc);
+		
+	}
+	@Override
+	public member_info_etc getmemberetc(String userid) {
+		return mmapper.readmemberetc(userid);
 	}
 
 }

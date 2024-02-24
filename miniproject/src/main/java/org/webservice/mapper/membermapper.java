@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.webservice.domain.auth;
 import org.webservice.domain.member;
+import org.webservice.domain.member_info_etc;
 
 public interface membermapper {
 	public member readmember(String userid);
@@ -14,4 +15,10 @@ public interface membermapper {
 	public int insertauth(auth au);
 	public List<auth> readauth(String userid);
 	public List<member> memberlist();
+	
+	//유저들의 기타정보와 관련된 sql 문
+	public int insertmemberetc(member_info_etc etc);
+	public int deletememberetc(String userid);
+	public int updatememberetc(member_info_etc etc);
+	public member_info_etc readmemberetc(String userid);
 }
