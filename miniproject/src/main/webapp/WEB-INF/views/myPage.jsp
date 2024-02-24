@@ -87,7 +87,13 @@
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}*/
-		
+		.etcmodal_register,.etcmodal_update,.etcmodal_delete{
+    		background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:5px;
+		}
 		td{
 			word-wrap:break-word;
 		}
@@ -257,8 +263,34 @@
 			</li>
 			
 			<li class="toppagetab" id="mypageetc">
-				<div>
-					<p>기본 정보를 제외한 기타 정보들</p>
+				<div class="mypage_etc">
+					<div class='infoetcdiv'>
+							<div class='infoetcin'>
+								<h4>유저의 이메일</h4>
+								<p class='usermail'>${memberinfoetc.mail}</p>
+							</div>
+							<div class='infoetcin'>
+								<h4>유저의 생년월일</h4>
+								<p class='user_birthday'>${memberinfoetc.birth_date}</p>
+							</div>			
+                            <div class='infoetcin'>								
+                            	<h4>유저의 자기소개</h4>
+                            	<p class='user_aboutme'>${memberinfoetc.about_me}</p>
+                            </div>
+							<div class='infoetcin'>
+								<h4>유저의 기타정보 등록일자</h4>
+								<p class='userregdate'>${memberinfoetc.regdate}</p>
+							</div>
+							<div class='infoetcin'>
+								<h4>유저의 기타정보 수정일자</h4>
+								<p class='userudate'>${memberinfoetc.udate}</p>
+							</div>
+							<div class='infoetcset'>
+								<button class='etcedit'>수정하기</button>
+								<button class='etcreset'>초기화하기</button>
+								<button class='etcregister'>기타정보 등록하기</button>
+                       		</div>
+					</div>					
 				</div>
 			</li>
 			
@@ -266,6 +298,52 @@
 			
 		</div>
 
+<!-- 기타정보 등록 모달창 -->
+	<div class="etcmodal_register" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+		<div class="etcmodal_register_dialog" role="document">
+			<div class="etcmodal_register_content">
+				<div class="etcmodal_register_header">
+					<button class="etcmodal_register_close">닫기</button>
+				</div>
+				<div class="etcmodal_register_body">
+					<form action="" method="post">
+					
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+<!-- 기타정보 수정 모달창 -->	
+	<div class="etcmodal_update" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+		<div class="etcmodal_update_dialog" role="document">
+			<div class="etcmodal_update_content">
+				<div class="etcmodal_update_header">
+					<button class="etcmodal_update_close">닫기</button>
+				</div>
+				<div class="etcmodal_update_body">
+					<form action="" method="post">
+					
+					</form>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<!-- 기타정보 삭제 모달창 -->	
+	<div class="etcmodal_delete" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+		<div class="etcmodal_delete_dialog" role="document">
+			<div class="etcmodal_delete_content">
+				<div class="etcmodal_delete_header">
+					<button class="etcmodal_delete_close">닫기</button>
+					<p>정말로 정보를 초기화 하시겠습니까?</p>
+				</div>
+				<div class="etcmodal_delete_header">
+					<button class="etcresetbtn">기타 정보 초기화</button>
+				</div>
+			</div>
+		</div>
+	</div>
 	<div class="mypagebottom">
 		<div class="mbtnset">
 			<button id="moutbtn">회원 탈퇴</button>
@@ -292,6 +370,7 @@ $(document).ready(function(){
 	var brdrecordbtn=$('.recordbrd-deletebtn');
 	var cmtrecordbtn=$('.recordcmt-deletebtn');
 	var filerecordbtn=$('.recordfile-deletebtn');
+	
 	
 	tablist.on("click",function(e){
 		var tabid=$(this).attr('id');
@@ -396,6 +475,43 @@ $(document).ready(function(){
 			}
 		});
 	});
+
+	
+	var etcregimodal=$('.etcmodal_register');
+	var etceditmodal=$('.etcmodal_update');
+	var etcdelemodal=$('.etcmodal_delete');
+	var etcregistermodalbtn=$('.etcregister');
+	var etceditmodalbtn=$('.etcedit');
+	var etcdeletemodalbtn=$('.etcreset');
+	var etcreclose=$('.etcmodal_register_close');
+	var etcedclose=$('.etcmodal_update_close');
+	var etcdeclose=$('.etcmodal_delete_close');
+	
+	etcregistermodalbtn.on("click",function(e){		
+		etcregimodal.css("display","block");
+		etceditmodal.css("display","none");
+		etcdelemodal.css("display","none");
+	});
+	etceditmodalbtn.on("click",function(e){
+		etcregimodal.css("display","none");
+		etceditmodal.css("display","block");		
+		etcdelemodal.css("display","none");
+	});
+	etcdeletemodalbtn.on("click",function(e){
+		etcregimodal.css("display","none");
+		etceditmodal.css("display","none");
+		etcdelemodal.css("display","block");
+	});
+	etcreclose.on("click",function(e){
+		etcregimodal.css("display","none");
+	});
+	etcedclose.on("click",function(e){
+		etceditmodal.css("display","none");
+	});
+	etcdeclose.on("click",function(e){
+		etcdelemodal.css("display","none");
+	});
+	
 	
 	homebt.on("click",function(e){
 		window.location.href=homebt.data("href")	

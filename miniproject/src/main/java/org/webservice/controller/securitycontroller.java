@@ -29,6 +29,7 @@ import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
 import org.webservice.domain.member;
+import org.webservice.domain.member_info_etc;
 import org.webservice.domain.memberfile;
 import org.webservice.mapper.filemapper;
 import org.webservice.mapper.membermapper;
@@ -113,7 +114,9 @@ public void myPage(Model model) {
 	List<board> mbrdlist=bservice.getListbyid(userid);
 	List<comment> mcmtlist=cmtservice.getcmtlistbyid(userid);
 	List<memberfile> mfilelistList=bservice.getMemberfilebyuserid(userid);
+	member_info_etc minfoetc=bservice.getmemberetc(userid);
 	
+	model.addAttribute("memberinfoetc", minfoetc);
 	model.addAttribute("memberinfo", minfo);
 	model.addAttribute("boardrecordsize", mbrdlist.size());
 	model.addAttribute("boardrecord", mbrdlist);
@@ -123,7 +126,15 @@ public void myPage(Model model) {
 	model.addAttribute("filerecord", mfilelistList);
 }
 
-
+@PreAuthorize("authenticated()")
+@GetMapping("/myPageetc")
+@ResponseBody
+public Map<String,Object> myPageetc(String userid){
+	Map<String, Object> response=new HashMap<String, Object>();
+	member_info_etc minfo_etc=bservice.getmemberetc(userid);
+	response.put("etc", minfo_etc);
+	return response;
+}
 
 @GetMapping("/boardjoin")
 public void boardjoin() {

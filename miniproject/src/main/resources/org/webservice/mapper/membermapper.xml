@@ -39,4 +39,21 @@
   	</delete>
   	
   	
+  	<select id="readmemberetc" resultType="org.webservice.domain.member_info_etc">
+  	select * from pro_member_etc where userid=#{userid}
+  	</select>
+  	
+  	<insert id="insertmemberetc">
+  	<selectKey keyProperty="member_etc" order="BEFORE" resultType="Long">
+  	select seq_pro_member_etc.nextval from dual
+  	</selectKey>
+  	insert into pro_member_etc values(#{member_etc},#{userid},#{mail},#{birth_date},#{about_me},sysdate,sysdate)
+  	</insert>
+  	
+  	<update id="updatememberetc">
+  	update pro_member_etc set mail=#{mail}, birth_date=#{birth_date}, about_me=#{about_me}, udate=sysdate where userid=#{userid}
+  	</update>
+  	<delete id="deletememberetc">
+  	delete from pro_member_etc where userid=#{userid}
+  	</delete>
   </mapper>
