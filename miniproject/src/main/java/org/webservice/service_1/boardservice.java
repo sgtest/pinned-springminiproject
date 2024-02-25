@@ -62,8 +62,8 @@ public interface boardservice {
 	public List<memberfile> getMemberfilebybno(Long bno);
 	
 	//유저의 기타정보들을 관리하는 서비스
-	public void updatememberetc(member_info_etc etc);
+	public boolean updatememberetc(member_info_etc etc);
 	public boolean deletememberetc(String userid);
-	public void insertmemberetc(member_info_etc etc);
+	public boolean insertmemberetc(member_info_etc etc);
 	public member_info_etc getmemberetc(String userid);
 }

@@ -25,6 +25,13 @@
   			background-color: #e5e5e5;
   			color: #000;
 		}
+		
+		textarea{
+			margin: 0;
+			text-align: justify;
+			font-size: 15px;
+			resize: none;
+		}
 		.totalmypage{
 			
     		text-align: center;
@@ -101,6 +108,7 @@
 </head>
 <body>
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<sec:authentication property="principal" var="principal"/>
 
 	<div class="mypagetotal">
 
@@ -306,8 +314,24 @@
 					<button class="etcmodal_register_close">닫기</button>
 				</div>
 				<div class="etcmodal_register_body">
-					<form action="" method="post">
-					
+					<form action="/etcinsert" method="post">
+						<div>
+							<h4>회원의 아이디</h4>
+							<input type="text" id="userid" name="userid" value="${principal.username}" readonly>
+						</div>
+						<div>
+							<h4>회원의 이메일</h4>
+							<textarea id="inputmail" name="mail" row="1" cols="100"></textarea>
+						</div>
+						<div>
+							<h4>회원의 생년월일</h4>
+							<textarea id="inputbirthdate" name="birth_date" row="1" cols="100"></textarea>
+						</div>
+						<div>
+							<h4>회원의 자기소개</h4>
+							<textarea id="inputaboutme" name="about_me" row="100" cols="100"></textarea>
+						</div>
+						<button class="etcsubmitbtn">등록하기</button>
 					</form>
 				</div>
 			</div>
@@ -322,9 +346,24 @@
 					<button class="etcmodal_update_close">닫기</button>
 				</div>
 				<div class="etcmodal_update_body">
-					<form action="" method="post">
 					
-					</form>
+						<div>
+							<h4>회원의 아이디</h4>
+							<input type="text" id="updateuserid" name="userid" value="${principal.username}" readonly>
+						</div>
+						<div>
+							<h4>회원의 이메일</h4>
+							<textarea id="updateinputmail" name="mail" row="1" cols="100">${memberinfoetc.mail}</textarea>
+						</div>
+						<div>
+							<h4>회원의 생년월일</h4>
+							<textarea id="updateinputbirthdate" name="birth_date" row="1" cols="100">${memberinfoetc.birth_date}</textarea>
+						</div>
+						<div>
+							<h4>회원의 자기소개</h4>
+							<textarea id="updateinputaboutme" name="about_me" row="100" cols="100" >${memberinfoetc.about_me}</textarea>
+						</div>
+					<button class="etcupdatebtn">수정하기</button>
 				</div>
 			</div>
 		</div>
@@ -510,6 +549,10 @@ $(document).ready(function(){
 	});
 	etcdeclose.on("click",function(e){
 		etcdelemodal.css("display","none");
+	});
+	var etcupdatebtn=$('.etcupdatebtn');
+	etcupdatebtn.on("click",function(e){
+		//여기서 ajax 통신 이용해서 기타정보 수정을 하고, 페이지 재로딩	
 	});
 	
 	
