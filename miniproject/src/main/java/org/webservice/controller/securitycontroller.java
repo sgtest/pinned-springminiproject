@@ -23,6 +23,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.auth;
 import org.webservice.domain.board;
 import org.webservice.domain.boardpage;
@@ -133,6 +134,60 @@ public Map<String,Object> myPageetc(String userid){
 	Map<String, Object> response=new HashMap<String, Object>();
 	member_info_etc minfo_etc=bservice.getmemberetc(userid);
 	response.put("etc", minfo_etc);
+	return response;
+}
+
+@PreAuthorize("authenticated()")
+@PostMapping("/etcinsert")
+public String etcinsert(member_info_etc infoetc, RedirectAttributes rttr){
+	String userid=infoetc.getUserid();
+	if(bservice.insertmemberetc(infoetc)) {
+		rttr.addAttribute("result", "success");
+		return "redirect:/myPage";
+	}else {
+		rttr.addAttribute("result", "failure");
+		return "redirect:/myPage";
+	}
+}
+@PreAuthorize("authenticated()")
+@PostMapping("/etcupdate")
+@ResponseBody
+public Map<String,Object> etcupdate(String userid, String birthday, String mail, String aboutme){
+	Map<String, Object> response=new HashMap<String, Object>();
+	member_info_etc infoetc=bservice.getmemberetc(userid);
+	infoetc.setBirth_date(birthday);
+	infoetc.setMail(mail);
+	infoetc.setAbout_me(aboutme);
+	if(bservice.updatememberetc(infoetc)) {
+		response.put("result", "success");
+	}
+	else {
+		response.put("result", "failure");
+	}
+	return response;
+}
+
+@PreAuthorize("authenticated()")
+@PostMapping("/etcdelete")
+@ResponseBody
+public Map<String,Object> etcdelete(String userid){
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.deletememberetc(userid)) {
+		response.put("result", "success");
+	}
+	else {
+		response.put("result", "failure");
+	}
+	return response;
+}
+@PreAuthorize("authenticated()")
+@GetMapping("/etcread")
+@ResponseBody
+public Map<String,Object> etcread(String userid){
+	Map<String, Object> response=new HashMap<String, Object>();
+	member_info_etc etc=bservice.getmemberetc(userid);
+	response.put("etc_info", etc);
+	
 	return response;
 }
 

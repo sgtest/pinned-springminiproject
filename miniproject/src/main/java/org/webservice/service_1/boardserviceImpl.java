@@ -7,6 +7,8 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
@@ -46,6 +48,10 @@ public class boardserviceImpl implements boardservice{
 	
 	@Setter(onMethod_ = @Autowired)
 	private membermapper mmapper;
+	
+	private static final String mailregix="\\w+@\\w+\\.\\w+(\\.\\w+)?";
+	private static final String birthdayregix="^\\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])$";
+	
 	
 	@Override
 	public member getuser(String userid) {
@@ -345,8 +351,11 @@ public class boardserviceImpl implements boardservice{
 	}
 	
 	@Override
-	public void updatememberetc(member_info_etc etc) {
-		mmapper.updatememberetc(etc);
+	public boolean updatememberetc(member_info_etc etc) {
+		if(!etcvalidation(etc)) {
+			return false;
+		}
+		return mmapper.updatememberetc(etc)>0;
 	}
 	@Override
 	public boolean deletememberetc(String userid) {
@@ -358,13 +367,33 @@ public class boardserviceImpl implements boardservice{
 		return result;
 	}
 	@Override
-	public void insertmemberetc(member_info_etc etc) {
-		mmapper.insertmemberetc(etc);
+	public boolean insertmemberetc(member_info_etc etc) {
+		//이미 기존에 등록된 값이 있는지 확인해야
+		if(mmapper.readmemberetc(etc.getUserid())!=null) {
+			return false;
+		}
+		else if(!etcvalidation(etc)) {
+			return false;
+		}
+		
+		return mmapper.insertmemberetc(etc)>0;
 		
 	}
 	@Override
 	public member_info_etc getmemberetc(String userid) {
 		return mmapper.readmemberetc(userid);
 	}
-
+	
+	public boolean etcvalidation(member_info_etc etc) {
+		Pattern emptn=Pattern.compile(mailregix);
+		Pattern birptn=Pattern.compile(birthdayregix);
+		Matcher emmach=emptn.matcher(etc.getMail());
+		Matcher birmach=birptn.matcher(etc.getBirth_date());
+		if(!emmach.matches()||!birmach.matches()) {
+			return false;
+		}
+		else {
+			return true;
+		}
+	}
 }
