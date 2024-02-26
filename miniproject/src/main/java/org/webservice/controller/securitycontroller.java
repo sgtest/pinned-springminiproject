@@ -141,7 +141,13 @@ public Map<String,Object> myPageetc(String userid){
 @PostMapping("/etcinsert")
 public String etcinsert(member_info_etc infoetc, RedirectAttributes rttr){
 	String userid=infoetc.getUserid();
-	if(bservice.insertmemberetc(infoetc)) {
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	String exuserid=auth.getName();
+	if(exuserid.compareTo(userid)!=0) {
+		rttr.addAttribute("result", "violate");
+		return "redirect:/myPage";
+	}
+	else if(bservice.insertmemberetc(infoetc)) {
 		rttr.addAttribute("result", "success");
 		return "redirect:/myPage";
 	}else {
@@ -154,11 +160,19 @@ public String etcinsert(member_info_etc infoetc, RedirectAttributes rttr){
 @ResponseBody
 public Map<String,Object> etcupdate(String userid, String birthday, String mail, String aboutme){
 	Map<String, Object> response=new HashMap<String, Object>();
+
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	String exuserid=auth.getName();
+	
 	member_info_etc infoetc=bservice.getmemberetc(userid);
 	infoetc.setBirth_date(birthday);
 	infoetc.setMail(mail);
 	infoetc.setAbout_me(aboutme);
-	if(bservice.updatememberetc(infoetc)) {
+	
+	if(exuserid.compareTo(userid)!=0) {
+		response.put("result","violate");
+	}
+	else if(bservice.updatememberetc(infoetc)) {
 		response.put("result", "success");
 	}
 	else {
@@ -172,7 +186,13 @@ public Map<String,Object> etcupdate(String userid, String birthday, String mail,
 @ResponseBody
 public Map<String,Object> etcdelete(String userid){
 	Map<String, Object> response=new HashMap<String, Object>();
-	if(bservice.deletememberetc(userid)) {
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	String exuserid=auth.getName();
+	
+	if(exuserid.compareTo(userid)!=0) {
+		response.put("result","violate");
+	}
+	else if(bservice.deletememberetc(userid)) {
 		response.put("result", "success");
 	}
 	else {
@@ -269,6 +289,11 @@ public void boardout() {
 public String boardoutaction() {
 	
 	return "redirect:/loginboard";
+}
+
+@GetMapping("/idsearch")
+public void idsearch() {
+	
 }
 
 }
