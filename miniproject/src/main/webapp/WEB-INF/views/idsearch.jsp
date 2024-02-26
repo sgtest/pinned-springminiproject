@@ -19,11 +19,45 @@
 	<div class="idserchform">
 		<div class="searchinput">
 			<div>
+				<h2>아이디 찾기</h2>
+			</div>
+			<div>
+				<h4>사용하는 이메일을 입력해주세요.</h4>
+				<input class="idemail" type="text">
 			</div>
 			
+			<div>
+				<button class="idsearchbtn">아이디 확인</button>
+			</div>
 		</div>
 		<div class="searchresult">
 			<div>
+			
+			</div>
+		</div>
+	</div>
+	
+	<div class="passsearchform">
+		<div class="searchinput">
+			<div>
+				<h2>비밀번호 찾기</h2>
+			</div>
+			<div>
+				<h4>사용하는 아이디를 입력해주세요</h4>
+				<input class="passid" type="text">
+				<h4>사용하는 이메일을 입력해주세요</h4>
+				<input class="passemail" type="text">
+				<h4>사용하는 전화번호를 입력해주세요</h4>
+				<input class="passphone" type="text">
+			</div>
+			
+			<div>
+				<button class="passsearchbtn">비밀번호 확인</button>
+			</div>
+		</div>
+		<div class="searchresult">
+			<div>
+			
 			</div>
 		</div>
 	</div>
