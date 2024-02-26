@@ -316,6 +316,9 @@
 				<div class="etcmodal_register_body">
 					<form action="/etcinsert" method="post">
 						<div>
+							<h2>기존에 등록된 기타정보가 있다면 등록이 되지 않습니다.</h2>
+						</div>
+						<div>
 							<h4>회원의 아이디</h4>
 							<input type="text" id="userid" name="userid" value="${principal.username}" readonly>
 						</div>
@@ -461,7 +464,7 @@ $(document).ready(function(){
 					alert("해당 게시물 삭제에 실패하셨습니다");
 				}
 				else{
-					alert(brdobj+" 번 게시물이 삭제되었습니다.");
+					alert(brdobj+" 번 게시물이 삭제되었습니다., 새로고침시 ui에 반영됩니다.");
 				}
 			},
 			error: function(error){
@@ -482,7 +485,7 @@ $(document).ready(function(){
 			},
 			success: function(response){
 				console.log(response['result']);
-				alert(cmtobj+' 번 댓글이 삭제되었습니다.');
+				alert(cmtobj+' 번 댓글이 삭제되었습니다., 새로고침시 ui에 반영됩니다.');
 			},
 			error: function(error){
 				console.error(cmtobj+" 번 댓글 삭제에 실패하였습니다.")
@@ -507,7 +510,7 @@ $(document).ready(function(){
 			},
 			success: function(response){
 				console.log(response['result']);
-				alert("파일 기록 삭제가 정상적으로 되었습니다.");
+				alert("파일 기록 삭제가 정상적으로 되었습니다., 새로고침시 ui에 반영됩니다.");
 			},
 			error: function(error){
 				console.error("파일 기록 삭제를 실패했습니다.");
@@ -550,9 +553,79 @@ $(document).ready(function(){
 	etcdeclose.on("click",function(e){
 		etcdelemodal.css("display","none");
 	});
+	
 	var etcupdatebtn=$('.etcupdatebtn');
 	etcupdatebtn.on("click",function(e){
 		//여기서 ajax 통신 이용해서 기타정보 수정을 하고, 페이지 재로딩	
+		var csrfToken = $("#_csrf").val();
+		var useretcid=$('#updateuserid').val();
+		var useretcmail=$('#updateinputmail').val();
+		var useretcaboutme=$('#updateinputaboutme').val();
+		var useretcbirthdate=$('#updateinputbirthdate').val();
+		
+		var oldetcmail='${memberinfoetc.mail}';
+		var oldetcaboutme='${memberinfoetc.about_me}';
+		var oldetcbirth='${memberinfoetc.birth_date}';
+		if(oldetcmail===useretcmail && oldetcaboutme===useretcaboutme && oldetcbirth===useretcbirthdate){
+			alert("새로운 정보를 등록해주세요");
+			return;
+		}
+		$.ajax({
+			type:'post',
+			url:'/etcupdate',
+			data:{userid:useretcid, birthday:useretcbirthdate, mail:useretcmail, aboutme:useretcaboutme},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='success'){
+					alert("기타정보를 수정하였습니다.");
+					location.reload(true);
+				}
+				else if(response['result']==='violate'){
+					alert("부적절한 접근입니다.");
+				}
+				else{
+					alert("일부 정보의 형식이 맞지 않습니다. 다시 시도해 주세요");
+				}
+			},
+			error: function(error){
+				
+				console.error("기타정보 수정을 실패했습니다.");
+			}
+		});
+		
+	});
+	var etcreset=$('.etcresetbtn');
+	etcreset.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var useretcid='${principal.username}';
+		$.ajax({
+			type:'post',
+			url:'/etcdelete',
+			data:{userid:useretcid},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='success'){
+					alert("기타정보를 삭제하였습니다.");
+					location.reload(true);
+				}
+				else if(response['result']==='violate'){
+					alert("부적절한 접근입니다.");
+				}
+				else{
+					alert("기타정보 삭제에 실패했습니다.");
+				}
+			},
+			error: function(error){
+				
+				console.error("기타정보 삭제에 실패했습니다.");
+			}
+		});
 	});
 	
 	
