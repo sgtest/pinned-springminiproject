@@ -40,6 +40,11 @@
 			<div>
 				<h2>아이디 찾기</h2>
 			</div>
+			
+			<div>
+				<h4>사용하는 전화번호를 입력해주세요</h4>
+				<input class="idphone" type="text">
+			</div>
 			<div>
 				<h4>사용하는 이메일을 입력해주세요.</h4>
 				<input class="idemail" type="text">
