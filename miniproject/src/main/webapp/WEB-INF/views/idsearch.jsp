@@ -13,9 +13,28 @@
           crossorigin="anonymous">
 <style>
 	
+	button, input[type="button"]{
+  		background-color: #000;
+  		color: #fff;
+  		padding: 10px 20px;
+  		border: 1px solid #fff;
+  		border-radius: 5px;
+  		cursor: pointer;
+	}
+
+	input[type="button"]:hover,button:hover {
+  		background-color: #e5e5e5;
+  		color: #000;
+	}
+	.idserchform,.passsearchform{
+		margin-top: 100px;
+  		background-color: rgba(160, 160, 160, 1);
+	}
 </style>
 </head>
 <body>
+<button id="backlogin" data-href="/loginboard">로그인 화면으로 돌아가기</button>
+
 	<div class="idserchform">
 		<div class="searchinput">
 			<div>
@@ -31,7 +50,7 @@
 			</div>
 		</div>
 		<div class="searchresult">
-			<div>
+			<div class="youridresult">
 			
 			</div>
 		</div>
@@ -56,7 +75,7 @@
 			</div>
 		</div>
 		<div class="searchresult">
-			<div>
+			<div class="yourpassresult">
 			
 			</div>
 		</div>
@@ -70,7 +89,16 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
 <script>
-
+$(document).ready(function(){
+	var loginbtn=$('#backlogin');
+	loginbtn.on("click",function(e){
+		var login=loginbtn.data("href");
+		window.location.href=login;
+	});
+	
+	
+	
+});
 </script>
 </body>
 </html>
