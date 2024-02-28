@@ -34,6 +34,8 @@ public class mailconfig {
     private int timeout;
     @Value("${spring.mail.properties.mail.smtp.writetimeout}")
     private int wtimeout;
+    @Value("${spring.mail.properties.mail.transport.protocol}")
+    private String protocol;
     
     @Bean
     public JavaMailSender javaMailSender() {
@@ -45,8 +47,8 @@ public class mailconfig {
         properties.put("mail.smtp.connectiontimeout", cntimeout);
         properties.put("mail.smtp.timeout", timeout);
         properties.put("mail.smtp.writetimeout", wtimeout);
-
-        
+        properties.put("mail.transport.protocol", protocol);
+        properties.setProperty("mail.smtp.ssl.protocols", "TLSv1.2");
         mailSender.setHost(host);
         mailSender.setPort(port);
         mailSender.setUsername(username);

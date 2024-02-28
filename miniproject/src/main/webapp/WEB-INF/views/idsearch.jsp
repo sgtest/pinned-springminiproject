@@ -30,9 +30,17 @@
 		margin-top: 100px;
   		background-color: rgba(160, 160, 160, 1);
 	}
+	.authac{
+    	background-color: #f0f0f0;
+    	padding: 10px; 
+    	border: 1px solid #ccc; 
+   		margin-bottom: 10px; 
+   		margin-left:5px;
+	}
 </style>
 </head>
 <body>
+<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 <button id="backlogin" data-href="/loginboard">로그인 화면으로 돌아가기</button>
 
 	<div class="idserchform">
@@ -52,6 +60,15 @@
 			
 			<div>
 				<button class="idsearchbtn">아이디 확인</button>
+			</div>
+		</div>
+		<div class="authac" id="authid"tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+			<div class="authac_dialog" role="document">
+				<div class="authac_body">
+					<h4>인증번호를 입력하세요.(7자리)</h4>
+					<input class="authnum" type="text">
+					<button class="authbtn" id="idac">확인하기</button>
+				</div>
 			</div>
 		</div>
 		<div class="searchresult">
@@ -79,6 +96,15 @@
 				<button class="passsearchbtn">비밀번호 확인</button>
 			</div>
 		</div>
+		<div class="authac" id="authpass" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+			<div class="authac_dialog" role="document">
+				<div class="authac_body">
+					<h4>인증번호를 입력하세요.(7자리)</h4>
+					<input class="authnum" type="text">
+					<button class="authbtn" id="psac">확인하기</button>
+				</div>
+			</div>
+		</div>
 		<div class="searchresult">
 			<div class="yourpassresult">
 			
@@ -96,12 +122,67 @@
 <script>
 $(document).ready(function(){
 	var loginbtn=$('#backlogin');
+	var authidmodal=$('#authid');
+	var authpassmodal=$('#authpass');
+	
 	loginbtn.on("click",function(e){
 		var login=loginbtn.data("href");
 		window.location.href=login;
 	});
 	
-	
+	var idsearchbtn=$('.idsearchbtn');
+	var passsearchbtn=$('.passsearchbtn');
+	idsearchbtn.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var inemail=$(".idemail").val();
+		$.ajax({
+			type:'post',
+			url:'/searchauth',
+			data:{email: inemail},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='success'){
+					alert("메일을 전송하였습니다.");
+					authidmodal.css("display","block");
+				}
+				else{
+					alert("메일의 주소가 잘못되었거나, 회원이 아닙니다.");
+				}
+			},
+			error: function(error){	
+				console.error("메일 전송을 실패했습니다.");
+			}
+		});
+	});
+	passsearchbtn.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var email=$(".passemail").val();
+		$.ajax({
+			type:'post',
+			url:'/searchauth',
+			data:{email: inemail},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='success'){
+					alert("메일을 전송하였습니다.");
+					authpassmodal.css("display","block");
+				}
+				else{
+					alert("메일의 주소가 잘못되었거나, 회원이 아닙니다.");
+				}
+			},
+			error: function(error){				
+				console.error("메일 전송을 실패했습니다.");
+			}
+		});
+		
+	});
 	
 });
 </script>
