@@ -36,7 +36,7 @@ import org.webservice.mapper.filemapper;
 import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
-
+import org.webservice.service_1.etcservice;
 
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
@@ -55,6 +55,8 @@ public class securitycontroller {
 	private boardservice bservice;
 	@Setter(onMethod_ = @Autowired)
 	private commentservice cmtservice;
+	@Setter(onMethod_ = @Autowired)
+	private etcservice eservice;
 	@Setter(onMethod_=@Autowired)
 	private PasswordEncoder pencoder;
 	
@@ -296,6 +298,26 @@ public void idsearch() {
 	
 }
 
+//인증 이메일을 보내는 컨트롤러
+@PostMapping("/searchauth")
+@ResponseBody
+public Map<String, Object> searchauth(String email){
+	Map<String, Object> response=new HashMap<String, Object>();
+	int validnum=eservice.createcertification();
+	eservice.createjms(email, validnum);
+	response.put("result", "success");
+	return response;
+}
 
-
+@PostMapping("/varifyauth")
+@ResponseBody
+public Map<String, Object> varifyauth(int number){
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(eservice.varify(number)) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	return response;
+}
 }
