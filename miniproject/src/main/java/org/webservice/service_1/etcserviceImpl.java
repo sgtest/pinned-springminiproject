@@ -1,5 +1,6 @@
 package org.webservice.service_1;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -14,6 +15,7 @@ import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 
@@ -23,14 +25,8 @@ public class etcserviceImpl implements etcservice{
 	@Autowired
 	private JavaMailSender mailSender;
 	private static int varifynum;
-	private static final String sender="springwebservice3131@gmail.com";
-	/*
-    
-	boolean auth = true;
-    boolean starttls = true;
-    boolean sslTrust = true;
-    boolean ssl = false;
-    */
+	private static final String sender="senderid";
+	
 	@Override
 	public int createcertification() {
 		int valienum= (int) (Math.random()*(9000000))+1000000;
@@ -38,23 +34,27 @@ public class etcserviceImpl implements etcservice{
 	}
 	
 	@Override
-	public MimeMessage createmessage(String email, String title, String text) {
+	public void createmessage(String email, String title, String text) {
+		mailSender=javasnd();
 		MimeMessage msg=mailSender.createMimeMessage();
 		try {
-			msg.setFrom(new InternetAddress(sender));
-			msg.setRecipients(MimeMessage.RecipientType.TO, email);
-			msg.setSubject(title);
-			msg.setText(text, "UTF-8", "html");
+			MimeMessageHelper helper=new MimeMessageHelper(msg,true,"utf-8");
+			helper.setFrom(sender);
+			helper.setTo(email);
+			helper.setSubject(title);
+			helper.setText(text,true);
+			System.out.println(msg.getSubject());
+			mailSender.send(msg);
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
-		return msg;
 	}
-	/*
+	
 	public JavaMailSender javasnd() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
-
-        mailSender.setHost("smtp.gmail.com");
+        Properties properties=new Properties();
+        
+        /*mailSender.setHost("smtp.gmail.com");
         mailSender.setPort(587);
         mailSender.setUsername(sender);
         mailSender.setPassword("pyqe czva ejxj qgbf");
@@ -63,15 +63,28 @@ public class etcserviceImpl implements etcservice{
         props.setProperty("mail.transport.protocol", "smtp");
  
         props.setProperty("mail.smtp.auth", String.valueOf(auth));
-        if (starttls)
-            props.setProperty("mail.smtp.starttls.enable", "true");
-        if (sslTrust)
-            props.setProperty("mail.smtp.ssl.trust", "*");
-        if (ssl)
-            props.setProperty("mail.smtp.ssl.enable", "true");
+        props.setProperty("mail.smtp.starttls.enable", "true");
+        props.setProperty("mail.smtp.ssl.trust", "*");
+        props.setProperty("mail.smtp.ssl.enable", "false");
         return mailSender;
+        */
+        mailSender.setHost("smtp.naver.com");
+        mailSender.setPort(465);
+        mailSender.setUsername("naverid");
+        mailSender.setPassword("naverpassword");
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.debug", "true");
+        properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        return mailSender;
+        
 	}
-	*/
+	 
+	
+	
 	@Override
 	public void createjms(String email, int number) {
         /*JavaMailSender sendertest = javasnd();*/
@@ -83,8 +96,7 @@ public class etcserviceImpl implements etcservice{
 			 +"<div><h4>관리자 이메일: springwebservice3131@gmail.com </h4></div>"
 			 +"</div>";
 		
-		MimeMessage msg=createmessage(email,title,text);
-		mailSender.send(msg);
+		createmessage(email,title,text);
 	}
 	
 	@Override

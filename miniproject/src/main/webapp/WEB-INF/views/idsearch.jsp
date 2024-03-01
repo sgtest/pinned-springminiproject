@@ -135,6 +135,7 @@ $(document).ready(function(){
 	idsearchbtn.on("click",function(e){
 		var csrfToken = $("#_csrf").val();
 		var inemail=$(".idemail").val();
+		console.log(inemail);
 		$.ajax({
 			type:'post',
 			url:'/searchauth',
