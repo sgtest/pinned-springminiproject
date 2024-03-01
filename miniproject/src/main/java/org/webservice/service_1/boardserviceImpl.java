@@ -63,6 +63,11 @@ public class boardserviceImpl implements boardservice{
 		List<auth> aulist=mmapper.readauth(userid);
 		return aulist;
 	}
+	
+	@Override
+	public List<member> getmlist(){
+		return mmapper.memberlist();
+	}
 	@Override
 	public boolean userban(String userid, String reason, int periods) {
 		log.info("userid: "+userid+" ban, reason: "+reason+", period: "+periods);

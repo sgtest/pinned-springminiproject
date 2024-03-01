@@ -34,11 +34,22 @@
      		display: flex;
      		justify-content: space-between;
      	}
-        .boardlist {
+        .boardlist {        	
+    		background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:5px;
             margin-top: 20px;
         }
-		.boardmake_create,.boardmake_delete,.boardmake_list{
-			 margin-top: 30px;
+        .boardmake_list,.loginuser_info{
+    		background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:5px;
+        }
+		.boardmake_create,.boardmake_delete,.boardmake_list,.member_setting{
 			 float: left;
 		}
 		.boardmake_insert{
@@ -74,15 +85,18 @@
 	
 <div>
 	<sec:authorize access="!isAuthenticated()">
-	<button class="hrefbtn" id="boardlogin" data-href="/loginboard">로그인</button>
+		<button class="hrefbtn" id="boardlogin" data-href="/loginboard">로그인</button>
 	</sec:authorize>
 	
 	<sec:authorize access="isAuthenticated()">
 	<div class="loginuser_info">
-	<h4 class="userId">${userinfo.username}</h4>
-	<h4 class="username"></h4>
-	<button class="boardmypage" data-href="/myPage">마이 페이지</button>
-	<button class="boardlogout" data-href="/logoutaction">로그아웃</button>
+		<sec:authorize access="hasAuthority('master')">
+			<h3>관리자 입니다</h3>
+		</sec:authorize>
+		<h4 class="userId">${userinfo.username}</h4>
+		<h4 class="username"></h4>
+		<button class="boardmypage" data-href="/myPage">마이 페이지</button>
+		<button class="boardlogout" data-href="/logoutaction">로그아웃</button>
 	</div>
 	</sec:authorize>
 </div>
@@ -161,7 +175,10 @@
 	<div class="boardmake_list">
     	<div class="boardmake_select"><button onclick="location.href='selectBoardlist'">게시판 리스트 살펴보기</button></div>
     	<div class="boardmake_create"><button onclick="location.href='createBoardlist'">게시판 만들기(가입이후 한달 이후에 가능합니다)</button></div><br>
-    	<div class="boardmake_delete"><button onclick="location.href='removeBoardlist'">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</button></div>
+    	<div class="boardmake_delete"><button onclick="location.href='removeBoardlist'">게시판 삭제하기(게시판에 대한 권한이 있는 사람만 가능)</button></div><br>
+		<sec:authorize access="hasAuthority('master')">
+			<div class="member_setting" onclick="location.href='/authmanage'"><button>관리자 페이지 들어가기</button></div>
+		</sec:authorize>
 	</div>
 	</sec:authorize>	
 <form id='boardmove' method='get'>
