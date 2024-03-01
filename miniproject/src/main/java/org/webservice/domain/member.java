@@ -10,7 +10,7 @@ public class member{
 	private String userpw;
 	private String username;
 	private String phone;
-	private Date regDate;
+	private Date regdate;
 	private Date udate;
 	private boolean enabled;
 	

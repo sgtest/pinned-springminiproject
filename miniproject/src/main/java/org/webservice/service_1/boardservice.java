@@ -16,12 +16,12 @@ public interface boardservice {
 	
 	//차단 및 차단 해제
 	public boolean userban(String userid, String reason,int periods);
-	public boolean userbanrelease(String userid);
-	
+	public boolean userbanrelease(String userid);	
 	
 	//회원 관련 서비스
 	public member getuser(String userid);
 	public List<auth> getauth(String userid);
+	public List<member> getmlist();
 	
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);

@@ -221,7 +221,6 @@ public void boardjoin() {
 @PostMapping("/boardjoinaction")
 public String boardjoinaction(String id, String passwd, String username, String phone) {
 	
-	List<auth> aulist=new ArrayList<auth>();
 	auth au=new auth();
 	String userid=id;
 	String userpw=passwd;
@@ -235,15 +234,14 @@ public String boardjoinaction(String id, String passwd, String username, String 
 	
 	au.setUserid(userid);
 	au.setAuth("common");
-	aulist.add(au);
 	
-	joinmem.setAuthlist(aulist);
 	joinmem.setUserid(userid);
 	joinmem.setUserpw(enpw);
 	joinmem.setUsername(username);
 	joinmem.setPhone(phone);
 	
 	mmapper.insertmember(joinmem);
+	mmapper.insertauth(au);
 	
 	return "redirect:/loginboard";
 }
@@ -297,6 +295,21 @@ public String boardoutaction() {
 public void idsearch() {
 	
 }
+
+
+@PreAuthorize("hasAuthority('master')")
+@GetMapping("/authmanage")
+public void authmanage(Model model) {
+	List<member> mlist=bservice.getmlist();
+	
+	for(int i=0;i<mlist.size();i++) {
+		mlist.get(i).setAuthlist(bservice.getauth(mlist.get(i).getUserid()));
+		mlist.get(i).setUserpw(null);
+	}
+	model.addAttribute("userlist", mlist);
+}
+
+
 
 //인증 이메일을 보내는 컨트롤러
 @PostMapping("/searchauth")
