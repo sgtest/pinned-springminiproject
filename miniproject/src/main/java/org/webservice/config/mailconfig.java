@@ -11,9 +11,9 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
-@PropertySource("classpath:application.properties")
+//@PropertySource("classpath:application.properties")
 public class mailconfig {
-
+	/*
     @Value("${spring.mail.host}")
     private String host;
     @Value("${spring.mail.port}")
@@ -36,11 +36,13 @@ public class mailconfig {
     private int wtimeout;
     @Value("${spring.mail.properties.mail.transport.protocol}")
     private String protocol;
-    
+    */
+	
     @Bean
     public JavaMailSender javaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         Properties properties=new Properties();
+        /*
         properties.put("mail.smtp.auth", auth);
         properties.put("mail.smtp.starttls.enable", enable);
         properties.put("mail.smtp.starttls.required", required);
@@ -54,6 +56,20 @@ public class mailconfig {
         mailSender.setUsername(username);
         mailSender.setPassword(password);
         mailSender.setDefaultEncoding("UTF-8");
+        mailSender.setJavaMailProperties(properties);
+        */
+        mailSender.setHost("smtp.naver.com");
+        mailSender.setPort(465);
+        mailSender.setUsername("naverid");
+        mailSender.setPassword("naverpassword");
+        properties.put("mail.transport.protocol", "smtp");
+        properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.starttls.enable", "true");
+        properties.put("mail.debug", "true");
+        properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+
         mailSender.setJavaMailProperties(properties);
         return mailSender;
         

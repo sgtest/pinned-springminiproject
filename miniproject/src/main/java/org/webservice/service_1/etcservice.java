@@ -7,6 +7,6 @@ import org.springframework.mail.javamail.JavaMailSender;
 public interface etcservice {
 	public int createcertification();
 	public void createjms(String email, int number);
-	public MimeMessage createmessage(String email, String title, String text);
+	public void createmessage(String email, String title, String text);
 	public boolean varify(int number);
 }
