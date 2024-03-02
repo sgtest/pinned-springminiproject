@@ -9,6 +9,9 @@
 <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>관리자 페이지</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
+          integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
+          crossorigin="anonymous">
 	<style>
 		button, input[type="button"]{
   			background-color: #000;
@@ -23,6 +26,7 @@
  	 		color: #000;
 		}
 	.memberlist{
+			margin-top:30px;
     		background-color: #f0f0f0;
     		padding: 10px; 
     		border: 1px solid #ccc; 
@@ -32,6 +36,8 @@
             width: 70%;
 	}
 	.memberlist_content{
+			max-height:1000px;
+    		overflow-y: scroll;
             text-align: center;
 	}
 	.memberlist_table{
@@ -45,7 +51,8 @@
 	</style>
 </head>
 <body>
-	<button onclick="location.href='/board/listboard'">게시판에 글쓰기</button>
+	<button onclick="location.href='/board/listboard'">게시판에 글쓰기</button><br>
+	
 	<div class="memberlist">
 		<div class="memberlist_content" align="center">
 			<table boarder="1" class="memberlist_table">
@@ -78,8 +85,8 @@
 									</c:forEach>
 								</div>
 							</td>
-							<td><button>권한수정</button></td>
-							<td><button>차단 및 차단해제</button></td>
+							<td><button class="authbtn" data-userid="${member.userid}">권한수정</button></td>
+							<td><button class="banbtn" data-userid="${member.userid}">차단 및 차단해제</button></td>
 						</tr>
 					</c:forEach>
 				</tbody>
@@ -87,6 +94,37 @@
 		</div>
 	</div>
 
+
+<div class="modal fade" id="authmodal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="authmodalcontent">
+			<div class="authmodalheader">
+			</div>
+			<div class="authmodalbody">
+			</div>
+			<div class="authmodalfooter">
+			<div class="authbtnset">
+			</div>
+			</div>
+		</div>
+	</div>
+</div>		
+
+
+<div class="modal fade" id="banmodal" tabindex="-1" role="dialog" aria-hidden="true">
+	<div class="modal-dialog modal-dialog-centered" role="document">
+		<div class="banmodalcontent">
+			<div class="banmodalheader">
+			</div>
+			<div class="banmodalbody">
+			</div>
+			<div class="banmodalfooter">
+			<div class="banbtnset">
+			</div>
+			</div>
+		</div>
+	</div>
+</div>		
 
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
@@ -96,7 +134,18 @@
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
 <script>
-
+$(document).ready(function(){
+	var aubtn=$('.authbtn');
+	var banbtn=$('.banbtn');
+	
+	aubtn.on("click",function(e){
+		
+	});
+	banbtn.on("click",function(e){
+		
+	});
+	
+});
 </script>
 </body>
 </html>
