@@ -156,7 +156,7 @@
 							</div>
 							
 							<div class="userinfo">
-								<h5>사용자의 가입날짜</h5><h3>${memberinfo.regDate}</h3><br>						
+								<h5>사용자의 가입날짜</h5><h3>${memberinfo.regdate}</h3><br>						
 							</div>
 							
 							<div class="userinfo">
