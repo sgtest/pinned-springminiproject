@@ -12,8 +12,11 @@ import org.webservice.domain.boardsearch;
 
 public interface boardmapper {
 	public int banusers(banuser user);
+	public boolean banusersadd(String userid);
 	public int banuserrealease(String userid);
+	public boolean bansuerrealeaseadd(String userid);
 	public int banselect(String userid);
+	public List<banuser> getbanlist();
 	
 	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();

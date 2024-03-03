@@ -7,6 +7,7 @@ import lombok.Data;
 public class banuser {
 	private String userid;
 	private String banreason;
+	private int period;
 	private String startdate;
 	private String enddate;
 	

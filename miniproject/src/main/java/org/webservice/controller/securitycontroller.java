@@ -296,7 +296,7 @@ public void idsearch() {
 	
 }
 
-
+//권한 및 유저 차단 여부 관리 하는 컨트롤러
 @PreAuthorize("hasAuthority('master')")
 @GetMapping("/authmanage")
 public void authmanage(Model model) {
@@ -308,7 +308,61 @@ public void authmanage(Model model) {
 	}
 	model.addAttribute("userlist", mlist);
 }
-
+@PreAuthorize("hasAuthority('master')")
+@PostMapping("/authaction")
+@ResponseBody
+public Map<String,Object> authaction(String userid, String auth){
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.board_aouth_insert(userid, auth)) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	return response;
+}
+@PreAuthorize("hasAuthority('master')")
+@PostMapping("/authdeaction")
+@ResponseBody
+public Map<String,Object> authdeaction(String userid, String auth){
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.board_aouth_delete(userid, auth)) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	return response;
+}
+@PreAuthorize("hasAuthority('master')")
+@PostMapping("/bandeaction")
+@ResponseBody
+public Map<String,Object> bandeaction(String userid){
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.userbanrelease(userid)) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	
+	return response;
+}
+@PreAuthorize("hasAuthority('master')")
+@PostMapping("/banaction")
+@ResponseBody
+public Map<String,Object> banaction(String userid, String banreason, int bantime){
+	//차단을 초기화하고 새로 집어 넣는다.
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.userbanrelease(userid)) {
+		if(bservice.userban(userid, banreason, bantime)) {
+			response.put("result", "success");
+		}else {
+			response.put("result", "failure");
+		}
+	}else {
+		response.put("result", "failure");
+	}
+	
+	return response;
+}
 
 
 //인증 이메일을 보내는 컨트롤러

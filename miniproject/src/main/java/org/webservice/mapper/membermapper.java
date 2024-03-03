@@ -13,6 +13,7 @@ public interface membermapper {
 	public int updatemember(member member);
 	public int deletemember(member member);
 	public int insertauth(auth au);
+	public int deleteauth(auth au);
 	public List<auth> readauth(String userid);
 	public List<member> memberlist();
 	

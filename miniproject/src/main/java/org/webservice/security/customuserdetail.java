@@ -9,7 +9,7 @@ import org.webservice.domain.member;
 public class customuserdetail extends User{
 
 	public customuserdetail(member mem, Collection<? extends GrantedAuthority> authorities) {
-		super(mem.getUserid(), mem.getUserpw(), true, true, true, true, authorities);
+		super(mem.getUserid(), mem.getUserpw(), mem.isEnabled(), true, true, true, authorities);
 	}
 
 }

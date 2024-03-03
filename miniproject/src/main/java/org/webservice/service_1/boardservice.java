@@ -15,13 +15,15 @@ public interface boardservice {
 	
 	
 	//차단 및 차단 해제
-	public boolean userban(String userid, String reason,int periods);
+	public boolean userban(String userid, String reason, int periods);
 	public boolean userbanrelease(String userid);	
+	
 	
 	//회원 관련 서비스
 	public member getuser(String userid);
 	public List<auth> getauth(String userid);
 	public List<member> getmlist();
+	
 	
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);
@@ -32,8 +34,11 @@ public interface boardservice {
 	public List<boardlist> select_boardlistset();
 	public List<String> select_Boardaouthbyname(String boardname);
 	public boardlist getboardlistbyname(String boardname);
-	//관리자 양도
+	
+	//권한 관련 서비스
 	public boolean board_aouth(String boardname,String userid);
+	public boolean board_aouth_insert(String userid, String auth);
+	public boolean board_aouth_delete(String userid, String auth);
 	
 	//게시판의 게시글 관련 서비스
 	public board readBoard(Long bno);
