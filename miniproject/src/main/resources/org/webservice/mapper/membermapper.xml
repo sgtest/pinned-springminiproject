@@ -27,6 +27,9 @@
   	<insert id="insertauth">
   	insert into pro_member_auth values(#{userid},#{auth})
   	</insert>
+  	<delete id="deleteauth">
+  	delete from pro_member_auth where userid=#{userid} and auth=#{auth}
+  	</delete>
   	<insert id="insertmember">
   	insert into pro_member values(#{userid},#{userpw},#{username},sysdate,sysdate,1,#{phone})
   	</insert>

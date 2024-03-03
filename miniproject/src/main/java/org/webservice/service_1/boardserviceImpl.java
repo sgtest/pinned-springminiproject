@@ -72,25 +72,32 @@ public class boardserviceImpl implements boardservice{
 	public boolean userban(String userid, String reason, int periods) {
 		log.info("userid: "+userid+" ban, reason: "+reason+", period: "+periods);
 		
-		LocalDate currentDate = LocalDate.now();
-		LocalDate endDate=currentDate.plusDays(periods);
-		
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yy/MM/dd");
-		String startformattedDate=currentDate.format(formatter);
-		String endformattedDate=endDate.format(formatter);
-		
 		banuser ban=new banuser();
 		ban.setUserid(userid);
 		ban.setBanreason(reason);
-		ban.setStartdate(startformattedDate);
-		ban.setEnddate(endformattedDate);
+		ban.setPeriod(periods);
 		
-		return mapper.banusers(ban)==1;
+		try {
+			mapper.banusers(ban);
+			mapper.banusersadd(userid);
+			return true;
+		}catch (Exception e) {
+			System.out.print("sql 맵퍼 오류");
+			return false;
+		}
 	}
 	
 	public boolean userbanrelease(String userid) {
 		log.info("userban release: "+userid);
-		return mapper.banuserrealease(userid)==1;
+		try {
+			 member user=getuser(userid);
+			 mapper.banuserrealease(userid);
+			 mapper.bansuerrealeaseadd(userid);
+			 return true;
+		}catch (Exception e) {
+			System.out.print("sql 맵퍼 오류");
+			return false;
+		}
 	}
 
 	@Override
@@ -133,7 +140,43 @@ public class boardserviceImpl implements boardservice{
 		}
 		return false;
 	}
-
+	@Override
+	public boolean board_aouth_insert(String userid, String auth) {
+		auth ath=new auth();
+		if(userid==null) {
+			return false;
+		}
+		ath.setUserid(userid);
+		ath.setAuth(auth);
+		
+		try {
+			mmapper.insertauth(ath);
+		}catch (Exception e) {
+			System.out.println("sql 맵퍼 오류");
+			return false;
+		}
+		
+		return true;
+	}
+	@Override
+	public boolean board_aouth_delete(String userid, String auth) {
+		auth ath=new auth();
+		if(userid==null) {
+			return false;
+		}
+		ath.setUserid(userid);
+		ath.setAuth(auth);
+		
+		try {
+			mmapper.deleteauth(ath);
+		}catch (Exception e) {
+			System.out.println("sql 맵퍼 오류");
+			return false;
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public board readBoard(Long bno) {
 		

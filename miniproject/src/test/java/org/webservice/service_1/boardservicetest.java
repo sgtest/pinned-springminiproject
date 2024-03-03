@@ -205,4 +205,14 @@ public class boardservicetest {
 		search.setPageNum(2);
 		listboard=bmapper.getlistsearchboard(search);
 	}
+	
+	@Test
+	@DisplayName("3월 3일 버전 차단테스트")
+	public void testban() {
+		banuser ban=new banuser();
+		ban.setBanreason("test");
+		ban.setPeriod(7);
+		ban.setUserid("user11");
+		bmapper.banusers(ban);
+	}
 }

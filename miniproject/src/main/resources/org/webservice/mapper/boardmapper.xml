@@ -29,14 +29,26 @@
   	
   	
   	<insert id="banusers">
+  	<selectKey keyProperty="bannum" order="BEFORE" resultType="long">
+  	select seq_pro_ban.nextval from dual
+  	</selectKey>
 	INSERT into pro_ban 
-	values(seq_pro_ban.nextval, #{userid},#{banreason},sysdate,#{enddate})
+	values(bannum, #{userid},#{banreason},sysdate,sysdate+#{period})
   	</insert>
   	<delete id="banuserrealease">
   	delete from pro_ban where userid=#{userid}
   	</delete>
+  	<update id="banusersadd">
+  	update pro_member set enabled=0 where userid=#{userid}
+  	</update>
+  	<update id="bansuerrealeaseadd">
+  	update pro_member set enabled=1 where userid=#{userid}
+  	</update>
   	<select id="banselect" resultType="int">
   	select count(*) from pro_ban where (userid=#{userid}) and (sysdate between startdate and enddate)
+  	</select>
+  	<select id="getbanlist" resultType="org.webservice.domain.banuser">
+  	select * from pro_ban
   	</select>
   	
   	<select id="selectboardlistset" resultType="org.webservice.domain.boardlist">
