@@ -43,6 +43,7 @@ public class servercheck {
 			
 		}
 
+		System.out.println("차단 체크 메소드가 정상 실행되었습니다.");
 		log.info("정기 차단 해제");
 	}
 }
