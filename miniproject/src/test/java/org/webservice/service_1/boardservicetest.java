@@ -145,8 +145,8 @@ public class boardservicetest {
 		
 		ban.setUserid("user00");
 		ban.setBanreason("this is test");
-		ban.setStartdate(startformattedDate);
-		ban.setEnddate(endformattedDate);
+		//ban.setStartdate(startformattedDate);
+		//ban.setEnddate(endformattedDate);
 		bmapper.banusers(ban);
 	}
 	

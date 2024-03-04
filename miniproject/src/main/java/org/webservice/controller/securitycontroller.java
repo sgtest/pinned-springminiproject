@@ -25,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.auth;
+import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
@@ -330,6 +331,16 @@ public Map<String,Object> authdeaction(String userid, String auth){
 	}else {
 		response.put("result", "failure");
 	}
+	return response;
+}
+
+@PreAuthorize("hasAuthority('master')")
+@GetMapping("/getban")
+@ResponseBody
+public Map<String,Object> getban(String userid){
+	Map<String, Object> response=new HashMap<String, Object>();
+	banuser buser=bservice.getban(userid);
+	response.put("banuserobj", buser);
 	return response;
 }
 @PreAuthorize("hasAuthority('master')")

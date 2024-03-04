@@ -33,7 +33,7 @@
   	select seq_pro_ban.nextval from dual
   	</selectKey>
 	INSERT into pro_ban 
-	values(bannum, #{userid},#{banreason},sysdate,sysdate+#{period})
+	values(#{bannum}, #{userid},#{banreason},sysdate,sysdate+#{period} )
   	</insert>
   	<delete id="banuserrealease">
   	delete from pro_ban where userid=#{userid}
@@ -49,6 +49,9 @@
   	</select>
   	<select id="getbanlist" resultType="org.webservice.domain.banuser">
   	select * from pro_ban
+  	</select>
+  	<select id="getbanuser" resultType="org.webservice.domain.banuser">
+  	select * from pro_ban where userid=#{userid}
   	</select>
   	
   	<select id="selectboardlistset" resultType="org.webservice.domain.boardlist">
