@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
 import org.webservice.domain.boardsearch;
@@ -17,7 +18,7 @@ public interface boardservice {
 	//차단 및 차단 해제
 	public boolean userban(String userid, String reason, int periods);
 	public boolean userbanrelease(String userid);	
-	
+	public banuser getban(String uerid);
 	
 	//회원 관련 서비스
 	public member getuser(String userid);

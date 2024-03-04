@@ -251,7 +251,7 @@ $(document).ready(function(){
 	
 	var submitform=$("form[role='form']");
 	
-	
+	//게시물 작성완료 버튼 누를시 파일 요소 추가해서 저장
 	$("button[type='submit']").on("click", function(e){
 
 	    e.preventDefault();

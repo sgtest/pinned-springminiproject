@@ -17,6 +17,7 @@ public interface boardmapper {
 	public boolean bansuerrealeaseadd(String userid);
 	public int banselect(String userid);
 	public List<banuser> getbanlist();
+	public banuser getbanuser(String userid);
 	
 	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();

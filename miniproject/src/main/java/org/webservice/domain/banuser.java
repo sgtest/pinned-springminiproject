@@ -5,10 +5,11 @@ import java.util.Date;
 import lombok.Data;
 @Data
 public class banuser {
+	private Long bannum;
 	private String userid;
 	private String banreason;
 	private int period;
-	private String startdate;
-	private String enddate;
+	private Date startdate;
+	private Date enddate;
 	
 }

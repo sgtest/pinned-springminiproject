@@ -101,6 +101,10 @@ public class boardserviceImpl implements boardservice{
 	}
 
 	@Override
+	public banuser getban(String uerid) {
+		return mapper.getbanuser(uerid);
+	}
+	@Override
 	public boardlist getboardlistbyname(String boardname) {
 		return mapper.getboardlistbyname(boardname);
 	}
