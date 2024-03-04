@@ -48,6 +48,27 @@
   			border-radius: 5px;
 			margin-top: 50px;
 	}
+	#authmodal,#banmodal{
+		width: 500px;
+		height: 800px;
+    	left: 50%;
+    	top: 50%;
+    	transform: translate(-50%,-50%);
+    	position: fixed;
+    	display: none;
+    	margin: 0;
+  		justify-content: center;
+  		align-items: center;
+  		background-color: rgba(160, 160, 160, 1);
+    	overflow-y: scroll;
+	}
+	.bansituation,.bansubmitbody{
+		margin-top: 60px;
+		margin-bottom: 60px;
+	}
+	.authlist{
+		margin-top: 60px;
+	}
 	</style>
 </head>
 <body>
@@ -82,6 +103,7 @@
 								<div class="authlist" data-userid="${member.userid}">
 									<c:forEach var="auth" items="${member.authlist}">
 										<p>${auth.auth}</p>
+										<input class="authinput" type="hidden" value="${auth.auth}">
 									</c:forEach>
 								</div>
 							</td>
@@ -99,11 +121,26 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="authmodalcontent">
 			<div class="authmodalheader">
+			<button id="authmodalclose">close</button>
+				<h2>권한 설정 창</h2>
 			</div>
 			<div class="authmodalbody">
+				<h3>사용자 아이디</h3>
+				<div class="authmodaluserid">
+					
+				</div>
+				<ul class="authlistview">
+				</ul>
+				<h4>권한 추가</h4>
+				<div>
+				
+				<input type="text" class="inputauth">
+				</div>
 			</div>
 			<div class="authmodalfooter">
+			
 			<div class="authbtnset">
+				<button class="authsubmit">적용하기</button>
 			</div>
 			</div>
 		</div>
@@ -115,11 +152,40 @@
 	<div class="modal-dialog modal-dialog-centered" role="document">
 		<div class="banmodalcontent">
 			<div class="banmodalheader">
+			<button id="banmodalclose">close</button>
+				<h3>차단 설정 창</h3>
 			</div>
 			<div class="banmodalbody">
+				<h3>사용자 아이디</h3>
+				<div class="banmodaluserid">
+					
+				</div>
+				<div class="bansituation">
+					<h4>차단 상태</h4>
+					<h4>차단 사유</h4>
+					<h4>차단 적용 일자</h4>
+					<h4>차단 해제 일자</h4>
+				</div>
+				<div class="bansubmitbody">
+					<div class="bantime">
+						<h4>차단 기간</h4>
+						<input type="text" class="inputbantime">
+					</div>
+					<div class="banreason">
+						<h4>차단 사유</h4>
+						<input type="text" class="inputbanreason">
+					</div>
+				</div>
 			</div>
 			<div class="banmodalfooter">
+				
 			<div class="banbtnset">
+				<div class="bancanclediv">
+					<button class="bancancle">차단해제 하기</button>
+				</div>
+				<div class="bansubmitdiv">
+					<button class="bansubmit">차단하기</button>
+				</div>
 			</div>
 			</div>
 		</div>
@@ -137,14 +203,88 @@
 $(document).ready(function(){
 	var aubtn=$('.authbtn');
 	var banbtn=$('.banbtn');
+	var authclose=$('#authmodalclose');
+	var banclose=$('#banmodalclose');
+	var authui=$('.authlistview');
+	var authmodal=$('#authmodal');
+	var authmodaluserid=$('.authmodaluserid');
+	var banmodal=$('#banmodal');
+	var banmodaluserid=$('.banmodaluserid');
+	var authsubmitbtn=$('.authsubmit');
 	
 	aubtn.on("click",function(e){
+		var userinfo=$(this).closest('tr');
+		var userid=userinfo.find('td:first').text();
+	    var authlist=userinfo.find('.authlist p').map(function() {
+            return $(this).text().trim();
+        }).get();
 		
+		var str="";
+		var idstr=""
+		authui.empty();
+		authmodaluserid.empty();
+		
+		idstr=idstr+"<h3>"+userid+"</h3>"
+        $.each(authlist, function(index, value) {
+            str += "<div class='authelement'>";
+            str += "<p>" + value + "</p>";
+            str += "<button class='authelementdelete' data-userid='"+userid+"'>권한 삭제</button>";
+            str += "</div>";
+        });
+		authmodaluserid.append(idstr);
+		authui.append(str);
+		authmodal.css("display","block");
 	});
 	banbtn.on("click",function(e){
+		var userinfo=$(this).closest('tr');
+		var userid=userinfo.find('td:first').text();
+		var idstr=""
+
+		banmodaluserid.empty();
+		idstr=idstr+"<h3>"+userid+"</h3>"
+		banmodaluserid.append(idstr);
 		
+		//ajax 실행으로 차단 현황을 가져온다.
+		banmodal.css("display","block");
+	});
+	authclose.on("click",function(e){
+		authmodal.css("display","none");
+	});
+	banclose.on("click",function(e){
+		banmodal.css("display","none");
 	});
 	
+	var bansubtn=$('.bansubmitdiv');
+	var bandebtn=$('.bancanclediv');
+	authui.on("click","button",function(e){
+		var authvalue=$(this).closest('.authelement').find('p').text();
+		var authid=$(this).data('userid');
+		console.log(authid);
+		console.log(authvalue);
+		//ajax로 권한 삭제 메소드 수행
+	});
+	var authbtndiv=$('.authbtnset');
+	authbtndiv.on("click","button","button",function(e){
+		var authValue=$('.inputauth').val();
+		var userid=$('.authmodaluserid').find('h3').text();
+		console.log(authValue);
+		console.log(userid);
+		//ajax로 권한 추가 메소드 수행
+	});
+	bansubtn.on("click","button",function(e){
+		var bantime=$('.inputbantime').val();
+		var banreason=$('.inputbanreason').val();
+		var userid=$('.banmodaluserid').find('h3').text();
+		console.log(bantime);
+		console.log(banreason);
+		console.log(userid);
+		//ajax로 차단 메소드 수행
+	});
+	bandebtn.on("click","button",function(e){
+		var userid=$('.banmodaluserid').find('h3').text();
+		console.log(userid);
+		//ajax로 차단 해제 메소드 수행
+	});
 });
 </script>
 </body>
