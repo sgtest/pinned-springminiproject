@@ -101,7 +101,21 @@ public Map<String, Object> getuserinfoname(String userid){
 public void loginerror() {
 	
 }
-
+@GetMapping("/checkban")
+@ResponseBody
+public Map<String,Object> logindeny(String userid, String userpass) {
+	Map<String, Object> response=new HashMap<String, Object>();
+	if(bservice.exmemberinfo(userid, userpass)) {
+		banuser buser=bservice.getban(userid);
+		response.put("bancontent", buser);
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	
+	
+	return response;
+}
 @PostMapping("/logoutaction")
 public String logoutaction() {
 	return "redirect:/board/listboard";

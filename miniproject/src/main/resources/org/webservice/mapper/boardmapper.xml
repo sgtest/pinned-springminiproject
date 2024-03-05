@@ -27,7 +27,6 @@
   		</trim>
   	</sql>
   	
-  	
   	<insert id="banusers">
   	<selectKey keyProperty="bannum" order="BEFORE" resultType="long">
   	select seq_pro_ban.nextval from dual
@@ -88,6 +87,9 @@
   	<insert id="aouthboard">
    	insert into pro_member_auth values(#{userid},#{auth})
   	</insert>
+  	<select id="getauthbyid" resultType="org.webservice.domain.auth">
+  	select * from pro_member_auth where userid=#{userid}
+  	</select>
   	<delete id="board_delete">
   	delete from pro_board_list where boardname=#{boardname}
   	</delete>

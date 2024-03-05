@@ -19,6 +19,7 @@ public interface boardmapper {
 	public List<banuser> getbanlist();
 	public banuser getbanuser(String userid);
 	
+	public List<auth> getauthbyid(String userid);
 	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();
 	public boardlist getboardlistbynum(Long boardnum);

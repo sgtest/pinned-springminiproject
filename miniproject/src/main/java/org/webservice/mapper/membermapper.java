@@ -16,6 +16,7 @@ public interface membermapper {
 	public int deleteauth(auth au);
 	public List<auth> readauth(String userid);
 	public List<member> memberlist();
+	public member checkmember(member mem);
 	
 	//유저들의 기타정보와 관련된 sql 문
 	public int insertmemberetc(member_info_etc etc);

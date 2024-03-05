@@ -248,7 +248,6 @@
     		var csrfToken = $("#_csrf").val();
     		
         	if(useri === null){
-        		alert('비로그인 상태입니다.');
         	}else{
         		var useristr=useri.textContent;
         		console.log(useristr);
