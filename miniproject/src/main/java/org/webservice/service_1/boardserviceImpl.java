@@ -13,6 +13,7 @@ import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webservice.domain.attachfile;
@@ -49,6 +50,9 @@ public class boardserviceImpl implements boardservice{
 	@Setter(onMethod_ = @Autowired)
 	private membermapper mmapper;
 	
+	@Setter(onMethod_=@Autowired)
+	private PasswordEncoder pencoder;
+	
 	private static final String mailregix="\\w+@\\w+\\.\\w+(\\.\\w+)?";
 	private static final String birthdayregix="^\\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])$";
 	
@@ -69,8 +73,31 @@ public class boardserviceImpl implements boardservice{
 		return mmapper.memberlist();
 	}
 	@Override
+	public boolean exmemberinfo(String userid, String userpw) {
+		member m=mmapper.readmember(userid);
+		if(m!=null) {
+			if(pencoder.matches(userpw, m.getUserpw())) {
+				return true;
+			}else {
+				return false;
+			}
+		}else {
+			return false;
+		}
+		
+	}
+	@Override
 	public boolean userban(String userid, String reason, int periods) {
 		log.info("userid: "+userid+" ban, reason: "+reason+", period: "+periods);
+
+		List<auth> useraulist=mapper.getauthbyid(userid);
+		Authentication exauth=SecurityContextHolder.getContext().getAuthentication();
+		String exuserid=exauth.getName();
+		for(auth a:useraulist) {
+			if(a.getAuth().compareTo("master")==0&&exuserid.compareTo(a.getUserid())!=0) {
+				return false;
+			}
+		}
 		
 		banuser ban=new banuser();
 		ban.setUserid(userid);
@@ -147,8 +174,17 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean board_aouth_insert(String userid, String auth) {
 		auth ath=new auth();
+		List<auth> useraulist=mapper.getauthbyid(userid);
+		Authentication exauth=SecurityContextHolder.getContext().getAuthentication();
+		String exuserid=exauth.getName();
+		
 		if(userid==null) {
 			return false;
+		}
+		for(auth a:useraulist) {
+			if(a.getAuth().compareTo("master")==0&&exuserid.compareTo(a.getUserid())!=0) {
+				return false;
+			}
 		}
 		ath.setUserid(userid);
 		ath.setAuth(auth);
@@ -165,8 +201,17 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public boolean board_aouth_delete(String userid, String auth) {
 		auth ath=new auth();
+		List<auth> useraulist=mapper.getauthbyid(userid);
+		Authentication exauth=SecurityContextHolder.getContext().getAuthentication();
+		String exuserid=exauth.getName();
+		
 		if(userid==null) {
 			return false;
+		}
+		for(auth a:useraulist) {
+			if(a.getAuth().compareTo("master")==0&&exuserid.compareTo(a.getUserid())!=0) {
+				return false;
+			}
 		}
 		ath.setUserid(userid);
 		ath.setAuth(auth);

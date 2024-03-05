@@ -108,8 +108,12 @@
 									</c:forEach>
 								</div>
 							</td>
-							<td><button class="authbtn" data-userid="${member.userid}">권한수정</button></td>
-							<td><button class="banbtn" data-userid="${member.userid}">차단 및 차단해제</button></td>
+							<td>
+								<button class="authbtn" data-userid="${member.userid}">권한수정</button>
+							</td>
+							<td>
+								<button class="banbtn" data-userid="${member.userid}">차단 및 차단해제</button>
+							</td>
 						</tr>
 					</c:forEach>
 				</tbody>

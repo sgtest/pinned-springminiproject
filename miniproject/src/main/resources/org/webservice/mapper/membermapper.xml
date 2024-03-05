@@ -39,7 +39,9 @@
   	<delete id="deletemember">
   	delete from pro_member where userid=#{userid}
   	</delete>
-  	
+  	<select id="checkmember" resultType="org.webservice.domain.member">
+  	select * from pro_member where userid=#{userid} and userpw=#{userpw}
+  	</select>
   	
   	<select id="readmemberetc" resultType="org.webservice.domain.member_info_etc">
   	select * from pro_member_etc where userid=#{userid}

@@ -28,8 +28,7 @@
         <security:csrf disabled="true" />
         
 		<security:form-login username-parameter="id" password-parameter="passwd" login-page="/loginboard" login-processing-url="/loginaction" 
-		authentication-failure-url="/loginerror" authentication-success-handler-ref="loginsuccesshandler"/>
-		<security:access-denied-handler error-page=""/>
+		authentication-failure-url="/loginerror" authentication-success-handler-ref="loginsuccesshandler" />
 		<security:logout logout-url="/logoutaction" invalidate-session="true"/>
 	
 		<!--  <security:remember-me

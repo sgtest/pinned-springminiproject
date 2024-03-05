@@ -31,9 +31,9 @@ public class servercheck {
 		List<banuser> banlist=bmapper.getbanlist();
 		
 		for(banuser user: banlist) {
-			String streddate=user.getEnddate().toString();
+			Date streddate=user.getEnddate();
 			try {
-				Date eddate=datefmt.parse(streddate);
+				Date eddate=streddate;
 				if(currentdate.after(eddate)) {
 					bservice.userbanrelease(user.getUserid());
 				}
