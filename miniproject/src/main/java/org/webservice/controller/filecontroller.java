@@ -50,7 +50,7 @@ public class filecontroller {
 	@Autowired
 	private boardservice bservice;
 	
-	// 결국 attachlist로 값을 반환해야할듯
+	//파일을 서버에 업로드한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping(value="/uploadFile",produces = MediaType.APPLICATION_JSON_UTF8_VALUE)
 	@ResponseBody
@@ -150,6 +150,7 @@ public class filecontroller {
 		return response;
 	}
 	
+	//파일의 형태를 검사한다.
 	public boolean checkFile(File achfile) {
 		String filefullname = achfile.getName();
 		int filesize=(int)achfile.length();
@@ -168,6 +169,8 @@ public class filecontroller {
 		
 		return checksecurity;
 	}
+	
+	//파일이 이미지인지 검사한다.
 	public boolean checkImg(File achfile) {
 		String filefullname = achfile.getName();
 		boolean isImg = false;
@@ -184,6 +187,8 @@ public class filecontroller {
 		return isImg;
 	}
 	
+	
+	//이미지 클릭시 원 이미지로 보여준다.
 	@GetMapping("/display")
 	@ResponseBody
 	public ResponseEntity<Resource> display(String fileuri) {
@@ -206,6 +211,7 @@ public class filecontroller {
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
 	}
 	
+	//파일 다운로드를 수행한다.
 	@GetMapping(value="/download",produces=MediaType.APPLICATION_OCTET_STREAM_VALUE)
 	@ResponseBody
 	public ResponseEntity<Resource> download(String fileuri) throws IOException {
@@ -227,6 +233,7 @@ public class filecontroller {
 		return new ResponseEntity<Resource>(resource,header,HttpStatus.OK);
 	}
 	
+	//파일 삭제를 수행한다.
 	//입력값으로 resultbody에 올라와있는 값을 이용해서 생성한 filelist를 받아서 해당경로의 파일들을 전부 삭제
 	@PreAuthorize("authenticated()")
 	@PostMapping("/deletefile")

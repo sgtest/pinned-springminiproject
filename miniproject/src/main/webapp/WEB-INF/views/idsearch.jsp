@@ -135,11 +135,12 @@ $(document).ready(function(){
 	idsearchbtn.on("click",function(e){
 		var csrfToken = $("#_csrf").val();
 		var inemail=$(".idemail").val();
+		var inphone=$(".idphone").val();
 		console.log(inemail);
 		$.ajax({
 			type:'post',
 			url:'/searchauth',
-			data:{email: inemail},
+			data:{email: inemail,phone:inphone},
 			dataType:'json',
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -149,8 +150,11 @@ $(document).ready(function(){
 					alert("메일을 전송하였습니다.");
 					authidmodal.css("display","block");
 				}
+				else if(response['result']==='subsuccess'){
+					alert("메일 전송이 정상적으로 되지 않았지만, 입력된 데이터 토대로 확인한 결과, 현재 존재하는 아이디는 "+response['userid']+" 입니다.");
+				}
 				else{
-					alert("메일의 주소가 잘못되었거나, 회원이 아닙니다.");
+					alert("메일의 주소나 휴대폰 번호가 잘못되었거나, 회원이 아닙니다.");
 				}
 			},
 			error: function(error){	
@@ -173,6 +177,9 @@ $(document).ready(function(){
 				if(response['result']==='success'){
 					alert("메일을 전송하였습니다.");
 					authpassmodal.css("display","block");
+				}
+				else if(response['result']==='subsuccess'){
+					
 				}
 				else{
 					alert("메일의 주소가 잘못되었거나, 회원이 아닙니다.");

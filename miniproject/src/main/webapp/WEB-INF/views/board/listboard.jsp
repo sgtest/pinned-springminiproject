@@ -82,7 +82,6 @@
 	<sec:authentication property="principal" var="userinfo"/>
 <div class="listboardtop">
 	<button class="hrefbtn" id="reloadlistboard" data-href="listboard">종합 게시판</button>
-	
 <div>
 	<sec:authorize access="!isAuthenticated()">
 		<button class="hrefbtn" id="boardlogin" data-href="/loginboard">로그인</button>
@@ -111,7 +110,7 @@
 				<th>#게시물 번호</th>
 				<th>게시판 이름</th>				
 				<th>게시물 제목</th>
-				<th>작성자의 이름(아이디)</th>
+				<th>작성자의 아이디(이름)</th>
 				<th>등록 날짜</th>
 				<th>수정 날짜</th>
 				<th>댓글 숫자</th>
@@ -170,7 +169,10 @@
         <button type="submit" class="boardsearch search">검색</button>
     </form>
 	</div>
-		<div class="boardmake_insert"><button onclick="location.href='createBoard'">게시판에 글쓰기</button></div><br>
+		<div class="boardmake_insert">
+		<button onclick="location.href='createBoard'">게시판에 글쓰기</button>
+		<button class="usernamebtn">사용자 이름보기</button>
+		</div><br>
 	<sec:authorize access="isAuthenticated()">
 	<div class="boardmake_list">
     	<div class="boardmake_select"><button onclick="location.href='selectBoardlist'">게시판 리스트 살펴보기</button></div>
@@ -199,6 +201,7 @@
 <script>
     $(document).ready(function(){
         let boardmove = $("#boardmove");
+        var brdusrnamebtn=$('.usernamebtn');
         $(".page-item a").on("click", function(e){
         	e.preventDefault();
         	console.log("page click");
@@ -206,7 +209,8 @@
         	boardmove.attr("action","listboard");
         	boardmove.submit();
         });
-        loaduserinfo();
+        
+        loaduserinfo();	
         var topboardbtn=$('#reloadlistboard');
         var toploginbtn=$('#boardlogin');
         var logoutbtn=$('.boardlogout');
@@ -271,11 +275,13 @@
         		});
         	}
         }
-        
-        $(".boardusername").each(function() {
-            var bno = $(this).closest("tr").find("td:first").text();
-            var writerid = $(this).text();
-            loadwriternamelist(bno, writerid);
+
+        brdusrnamebtn.on("click",function(e){
+            $(".boardusername").each(function() {
+                var bno = $(this).closest("tr").find("td:first").text();
+                var writerid = $(this).text();
+                loadwriternamelist(bno, writerid);
+            }); 
         });
     });
     

@@ -6,39 +6,50 @@ import java.util.Properties;
 
 import javax.mail.Address;
 import javax.mail.MessagingException;
+import javax.mail.Session;
+import javax.mail.internet.AddressException;
 import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 
 import org.eclipse.angus.mail.util.logging.MailHandler;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.mail.MailException;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
+import org.springframework.web.servlet.view.document.AbstractXlsView;
+
+import jakarta.mail.internet.MimeUtility;
+import lombok.RequiredArgsConstructor;
 
 
 @Service
+@RequiredArgsConstructor
 public class etcserviceImpl implements etcservice{
 	
-	@Autowired
 	private JavaMailSender mailSender;
 	private static int varifynum;
-	private static final String sender="senderid";
+	private final String sender="springservice1111@naver.com";
 	
 	@Override
 	public int createcertification() {
 		int valienum= (int) (Math.random()*(9000000))+1000000;
 		return valienum;
 	}
-	
+
 	@Override
 	public void createmessage(String email, String title, String text) {
 		mailSender=javasnd();
+		//ApplicationContext context=new ClassPathXmlApplicationContext("classpath:servlet-context.xml");
+		//mailSender=(JavaMailSenderImpl)context.getBean("mailSender");
 		MimeMessage msg=mailSender.createMimeMessage();
 		try {
-			MimeMessageHelper helper=new MimeMessageHelper(msg,true,"utf-8");
+			MimeMessageHelper helper=new MimeMessageHelper(msg,"UTF-8");
 			helper.setFrom(sender);
 			helper.setTo(email);
 			helper.setSubject(title);
@@ -70,24 +81,24 @@ public class etcserviceImpl implements etcservice{
         */
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
-        mailSender.setUsername("naverid");
-        mailSender.setPassword("naverpassword");
-        properties.put("mail.transport.protocol", "smtp");
+        mailSender.setUsername("springservice1111@naver.com");
+        mailSender.setPassword("test1234");
+        //properties.put("mail.transport.protocol", "smtp");
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        //properties.put("mail.smtp.socketFactory.class", "javax.net.ssl.SSLSocketFactory");
+        properties.put("mail.smtp.ssl.enable", "true"); // SSL 활성화
         properties.put("mail.smtp.starttls.enable", "true");
-        properties.put("mail.debug", "true");
         properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
-        properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        //properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
+        mailSender.setJavaMailProperties(properties);
         return mailSender;
         
 	}
-	 
 	
 	
 	@Override
 	public void createjms(String email, int number) {
-        /*JavaMailSender sendertest = javasnd();*/
+        //JavaMailSender sendertest = javasnd();
 		this.varifynum=number;
 		String title="웹서비스 인증 메일입니다.";
 		String text;
@@ -96,6 +107,7 @@ public class etcserviceImpl implements etcservice{
 			 +"<div><h4>관리자 이메일: springwebservice3131@gmail.com </h4></div>"
 			 +"</div>";
 		
+		//text="test입니다";
 		createmessage(email,title,text);
 	}
 	
