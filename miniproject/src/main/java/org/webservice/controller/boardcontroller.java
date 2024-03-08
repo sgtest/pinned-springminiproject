@@ -56,6 +56,8 @@ public class boardcontroller {
 	public boardservice bservice;
 	@Autowired
 	public membermapper mmapper;
+	
+	//게시물 READ를 수행한다.
 	@GetMapping("/readBoard")
 	public void readBoard(@RequestParam("bno") Long bno,@ModelAttribute("search") boardsearch search, Model model) {
 		
@@ -67,6 +69,7 @@ public class boardcontroller {
 		model.addAttribute("search",search);
 	}
 	
+	//게시물 목록 화면
 	@GetMapping("/listboard")
 	public void listboard(boardsearch search, Model model) {
 		
@@ -85,6 +88,7 @@ public class boardcontroller {
 		
 	}
 	
+	//게시물 INSERT를 한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping("/saveBoard")
 	public String saveBoard(board brd, boardsearch search, RedirectAttributes rttr) {
@@ -96,7 +100,9 @@ public class boardcontroller {
 		bservice.insertboard(brd);
 		rttr.addFlashAttribute("result","success");
 		return "redirect:/board/listboard"+search.getListLink();
-	}	
+	}
+	
+	//게시물 INSERT 화면
 	@PreAuthorize("authenticated()")
 	@GetMapping("/createBoard")
 	public void createBoard(boardsearch search, Model model) {
@@ -105,6 +111,7 @@ public class boardcontroller {
 		model.addAttribute("searchcondition", "type: "+search.getType()+", keyword: "+search.getKeyword());
 	}
 	
+	//업로드 확인용
 	@PostMapping("/uploadTest")
 	public void uploadTest(MultipartFile[] uploadFile, Model model) {
 		for(MultipartFile multipartFile:uploadFile) {
@@ -113,7 +120,8 @@ public class boardcontroller {
 			log.info(multipartFile.getName());
 		}
 	}
-
+	
+	//게시판 제거 화면
 	@PreAuthorize("hasAuthority('master')")
 	@GetMapping("removeBoardlist")	
 	public void removeBoardlist(Model model) {
@@ -129,6 +137,7 @@ public class boardcontroller {
 		return response;
 	}*/
 	
+	//게시판 관리자 리스트를 가져온다.
 	@PreAuthorize("hasAuthority('master')||hasAuthority(#boardname)")
 	@GetMapping("getauthlist")
 	@ResponseBody
@@ -149,6 +158,7 @@ public class boardcontroller {
 		return response;
 	}
 	
+	//게시판 설명을 업데이트 한다.
 	@PreAuthorize("hasAuthority('master')||hasAuthority(#brdname)")
 	@PostMapping("updatebrdlistsubac")
 	@ResponseBody
@@ -159,6 +169,8 @@ public class boardcontroller {
 		response.put("result","success");
 		return response;		
 	}
+	
+	//게시판 삭제를 수행한다.(삭제시 관련 파일, 댓글, 게시물들을 함께 삭제한다.)
 	@PreAuthorize("hasAuthority('master')")
 	@PostMapping("removeBoardlistaction")
 	public Map<String, Object> removeBoardlistaction(String brdname) {
@@ -180,7 +192,8 @@ public class boardcontroller {
 	}
 		return response;
 	}
-
+	
+	//게시판을 생성한다.
 	@PreAuthorize("hasAuthority('admin')")
 	@PostMapping("createBoardlistaction")
 	public String createBoardlistaction(boardlist brdli, boardsearch search, RedirectAttributes rttr) {
@@ -198,12 +211,14 @@ public class boardcontroller {
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
+	//게시판 생성 화면
 	@PreAuthorize("hasAuthority('admin')")
 	@GetMapping("createBoardlist")
 	public void createBoardlist(Model model) {
 		
 	}
-
+	
+	//게시판 목록 화면
 	@PreAuthorize("authenticated()")
 	@GetMapping("/selectBoardlist")
 	public void getlistboard(Model model) {
@@ -212,6 +227,7 @@ public class boardcontroller {
 		model.addAttribute("boardlistset", brdlist);
 	}
 	
+	//게시물 UPDATE를 수행한다.
 	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/updatesaveBoard")
 	public String updatesaveBoard(board brd, boardsearch search,RedirectAttributes rttr) {
@@ -222,6 +238,7 @@ public class boardcontroller {
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
+	//게시물 UPDATE 화면
 	//@PreAuthorize("principal.username == #board.writer")
 	@GetMapping("/updateBoard")
 	public void updateBoard(Long bno, boardsearch search, Model model){
@@ -231,6 +248,7 @@ public class boardcontroller {
 		model.addAttribute("board", brd);
 	}
 	
+	//게시물 DELETE를 수행한다.
 	@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/removeBoard")
 	public String removeBoard(@RequestParam final Long bno, boardsearch search, RedirectAttributes rttr) {
@@ -244,6 +262,7 @@ public class boardcontroller {
 		return "redirect:/board/listboard"+search.getListLink();
 	}
 	
+	//마이 페이지 화면에서 직접 게시물을 삭제한다.
 	@PostMapping("/directremoveBoard")
 	@ResponseBody
 	public Map<String,Object> directremoveBoard(Long bno) {
@@ -265,8 +284,9 @@ public class boardcontroller {
 		}
 		
 		return response;
-	}	
+	}
 	
+	//파일 삭제를 수행한다.
 	private void Filedelete(List<attachfile> filelist) {
 		String firstfilelink="D:\\server\\temp\\";
 		Path fpath,sumfpath;
@@ -294,6 +314,7 @@ public class boardcontroller {
 		}
 	}
 	
+	//게시물 내에 등록된 파일정보를 가져온다.
 	@GetMapping("/fileload")
 	@ResponseBody
 	public Map<String,Object> fileload(Long bno){
@@ -311,6 +332,7 @@ public class boardcontroller {
 		return response;
 	}
 	
+	//마스터 권한 유저인지 확인한다
 	private boolean ismaster(String userid) {
 		for(String s:masteruserid) {
 			if(s.compareTo(userid)==0) {

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,7 +36,8 @@ public class commentcontroller {
 	
 	commentservice cservice;
 	
-	//@PreAuthorize("authenticated()")
+	//댓글 INSERT를 수행한다.
+	@PreAuthorize("authenticated()")
 	@PostMapping("/insertcomment")	
 	public String insertcomment(comment cmt, RedirectAttributes rttr) {
 		cservice.registercomment(cmt);
@@ -43,7 +45,7 @@ public class commentcontroller {
 		return "redirect:/board/readBoard?bno="+cmt.getBno();
 	}
 
-	
+	//댓글 DELETE를 수행한다.
 	//@PreAuthorize("principal.username == #board.writer")
 	@PostMapping("/deletecomment")
 	@ResponseBody
@@ -58,6 +60,7 @@ public class commentcontroller {
 		
 	}
 	
+	//댓글 READ를 수행한다.
 	@GetMapping("/readComment")
 	@ResponseBody
 	public Map<String,Object> readcomment(@RequestParam Long rno){
@@ -68,6 +71,7 @@ public class commentcontroller {
 		return resultMap;
 	}
 	
+	//댓글 UPDATE를 수행한다.
 	@PostMapping("/updatecomment")
 	public String updatecomment(comment cmt, RedirectAttributes rttr) {
 		if(cservice.updatecomment(cmt)==1) {
@@ -76,6 +80,7 @@ public class commentcontroller {
 		return "redirect:/board/readBoard?bno="+cmt.getBno();
 	}
 	
+	//댓글 list를 읽어온다.
 	@GetMapping("/readcommentlist")
 	@ResponseBody
 	public Map<String,Object> readcommentlist(@RequestParam Long bno, @RequestParam int pagenum) {

@@ -66,15 +66,19 @@ public class securitycontroller {
 	//휴대폰 정규식
 	private static final String phone_regex = "^\\d{10,11}$";
 
+//로그인 화면
 @GetMapping("/loginboard")
 public String loginview() {
 	return "loginboard";
 }
+
+//로그인 실행
 @PostMapping("/loginaction")
 public String loginaction() {
 	return "redirect:/board/listboard";
 }
 
+//유저의 정보를 가져온다
 @PostMapping("/getuserinfo")
 @ResponseBody
 public Map<String, Object> getuserinfo(String userid){
@@ -85,6 +89,8 @@ public Map<String, Object> getuserinfo(String userid){
 	return result;
 }
 
+
+//유저의 아이디를 받아서 유저의 이름을 가져온다
 @PostMapping("/getuserinfoname")
 @ResponseBody
 public Map<String, Object> getuserinfoname(String userid){
@@ -97,10 +103,13 @@ public Map<String, Object> getuserinfoname(String userid){
 	return result;
 }
 
+//로그인 오류화면
 @GetMapping("/loginerror")
 public void loginerror() {
 	
 }
+
+//아이디 차단여부를 확인한다.
 @GetMapping("/checkban")
 @ResponseBody
 public Map<String,Object> logindeny(String userid, String userpass) {
@@ -116,11 +125,14 @@ public Map<String,Object> logindeny(String userid, String userpass) {
 	
 	return response;
 }
+
+//로그인을 수행한다.
 @PostMapping("/logoutaction")
 public String logoutaction() {
 	return "redirect:/board/listboard";
 }
 
+//마이페이지 화면
 @PreAuthorize("authenticated()")
 @GetMapping("/myPage")
 public void myPage(Model model) {
@@ -144,6 +156,7 @@ public void myPage(Model model) {
 	model.addAttribute("filerecord", mfilelistList);
 }
 
+//회원의 기타정보를 가져온다.
 @PreAuthorize("authenticated()")
 @GetMapping("/myPageetc")
 @ResponseBody
@@ -154,6 +167,7 @@ public Map<String,Object> myPageetc(String userid){
 	return response;
 }
 
+//회원의 기타정보를 입력한다.
 @PreAuthorize("authenticated()")
 @PostMapping("/etcinsert")
 public String etcinsert(member_info_etc infoetc, RedirectAttributes rttr){
@@ -172,6 +186,8 @@ public String etcinsert(member_info_etc infoetc, RedirectAttributes rttr){
 		return "redirect:/myPage";
 	}
 }
+
+//회원의 기타정보를 업데이트한다
 @PreAuthorize("authenticated()")
 @PostMapping("/etcupdate")
 @ResponseBody
@@ -198,6 +214,7 @@ public Map<String,Object> etcupdate(String userid, String birthday, String mail,
 	return response;
 }
 
+//회원의 기타정보를 삭제한다.
 @PreAuthorize("authenticated()")
 @PostMapping("/etcdelete")
 @ResponseBody
@@ -217,6 +234,8 @@ public Map<String,Object> etcdelete(String userid){
 	}
 	return response;
 }
+
+//회원의 기타정보를 가져온다.
 @PreAuthorize("authenticated()")
 @GetMapping("/etcread")
 @ResponseBody
@@ -228,11 +247,13 @@ public Map<String,Object> etcread(String userid){
 	return response;
 }
 
+//회원가입 화면
 @GetMapping("/boardjoin")
 public void boardjoin() {
 	
 }
 
+//받은 정보로 회원가입을 수행한다.
 @PostMapping("/boardjoinaction")
 public String boardjoinaction(String id, String passwd, String username, String phone) {
 	
@@ -261,6 +282,7 @@ public String boardjoinaction(String id, String passwd, String username, String 
 	return "redirect:/loginboard";
 }
 
+//아이디가 존재하는지 체크한다
 @PostMapping("/idcheckaction")
 @ResponseBody
 public Map<String, Object> idcheckaction(String id){
@@ -275,6 +297,7 @@ public Map<String, Object> idcheckaction(String id){
 	return response;
 }
 
+//아이디가 입력 조건에 맞는지 체크한다
 @PostMapping("/etcdatacheckaction")
 @ResponseBody
 public Map<String, Object> etcdatacheckaction(String passwd, String username, String phonenumber)
@@ -295,23 +318,26 @@ public Map<String, Object> etcdatacheckaction(String passwd, String username, St
 	return response;
 }
 
+//회원 탈퇴 화면
 @GetMapping("/boardout")
 public void boardout() {
 	
 }
 
+//회원 탈퇴를 수행한다.
 @PostMapping("/boardoutaction")
 public String boardoutaction() {
 	
 	return "redirect:/loginboard";
 }
 
+///아이디를 찾는 화면
 @GetMapping("/idsearch")
 public void idsearch() {
 	
 }
 
-//권한 및 유저 차단 여부 관리 하는 컨트롤러
+//권한 및 회원 차단 여부 관리 화면
 @PreAuthorize("hasAuthority('master')")
 @GetMapping("/authmanage")
 public void authmanage(Model model) {
@@ -323,6 +349,8 @@ public void authmanage(Model model) {
 	}
 	model.addAttribute("userlist", mlist);
 }
+
+//특정 권한을 특정 회원에게 부여한다.
 @PreAuthorize("hasAuthority('master')")
 @PostMapping("/authaction")
 @ResponseBody
@@ -335,6 +363,8 @@ public Map<String,Object> authaction(String userid, String auth){
 	}
 	return response;
 }
+
+//특정 회원로부터 특정 권한을 삭제한다.
 @PreAuthorize("hasAuthority('master')")
 @PostMapping("/authdeaction")
 @ResponseBody
@@ -348,6 +378,7 @@ public Map<String,Object> authdeaction(String userid, String auth){
 	return response;
 }
 
+//특정 회원의 차단정보를 가져온다.
 @PreAuthorize("hasAuthority('master')")
 @GetMapping("/getban")
 @ResponseBody
@@ -357,6 +388,8 @@ public Map<String,Object> getban(String userid){
 	response.put("banuserobj", buser);
 	return response;
 }
+
+//특정 회원의 차단을 해제한다.
 @PreAuthorize("hasAuthority('master')")
 @PostMapping("/bandeaction")
 @ResponseBody
@@ -370,6 +403,8 @@ public Map<String,Object> bandeaction(String userid){
 	
 	return response;
 }
+
+//특정 회원을 차단한다.
 @PreAuthorize("hasAuthority('master')")
 @PostMapping("/banaction")
 @ResponseBody
@@ -390,17 +425,30 @@ public Map<String,Object> banaction(String userid, String banreason, int bantime
 }
 
 
-//인증 이메일을 보내는 컨트롤러
+//아이디를 찾는 메소드
 @PostMapping("/searchauth")
 @ResponseBody
-public Map<String, Object> searchauth(String email){
+public Map<String, Object> searchauth(String email, String phone){
 	Map<String, Object> response=new HashMap<String, Object>();
 	int validnum=eservice.createcertification();
-	eservice.createjms(email, validnum);
-	response.put("result", "success");
+	try {
+		eservice.createjms(email, validnum);
+		response.put("result", "success");
+	}catch (Exception e) {
+		//만약 메일 인증이 제대로 동작을 안하면 db내 저장된 정보를 이용해서 아이디 확인
+		String subid=bservice.getuserid(email, phone);
+		if(subid!=null) {
+			response.put("userid",subid);
+		}else {
+			response.put("userid", "noid");
+		}
+
+		response.put("result", "subsuccess");
+	}
 	return response;
 }
 
+//숫자 입력을 이용해서 인증을 수행한다.
 @PostMapping("/varifyauth")
 @ResponseBody
 public Map<String, Object> varifyauth(int number){

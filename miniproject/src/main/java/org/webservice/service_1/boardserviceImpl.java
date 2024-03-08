@@ -56,6 +56,22 @@ public class boardserviceImpl implements boardservice{
 	private static final String mailregix="\\w+@\\w+\\.\\w+(\\.\\w+)?";
 	private static final String birthdayregix="^\\d{4}(0[1-9]|1[0-2])(0[1-9]|[12]\\d|3[01])$";
 	
+	@Override
+	public String getuserid(String email, String phone) {
+		try {
+		String etcid=mmapper.getmemberid(email);
+		String mid=mmapper.getmemberidbyphone(phone);
+		if(etcid.compareTo(mid)==0) {
+			return etcid;
+		}
+		else {
+			return null;
+		}
+		}
+		catch (Exception e) {
+			return null;
+		}
+	}
 	
 	@Override
 	public member getuser(String userid) {

@@ -23,4 +23,6 @@ public interface membermapper {
 	public int deletememberetc(String userid);
 	public int updatememberetc(member_info_etc etc);
 	public member_info_etc readmemberetc(String userid);
+	public String getmemberid(String mail);
+	public String getmemberidbyphone(String phone);
 }

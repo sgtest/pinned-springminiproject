@@ -60,4 +60,10 @@
   	<delete id="deletememberetc">
   	delete from pro_member_etc where userid=#{userid}
   	</delete>
+  	<select id="getmemberid" resultType="String">
+  	select userid from pro_member_etc where mail=#{mail}
+  	</select>
+  	<select id="getmemberidbyphone" resultType="String">
+  	select userid from pro_member where phone=#{phone}
+  	</select>
   </mapper>
