@@ -20,7 +20,9 @@
   	<select id="memberlist" resultType="org.webservice.domain.member">
   	select * from pro_member order by regdate desc
   	</select>
-  	
+  	<delete id="deleteauthbyid">
+  	delete from pro_member_auth where userid=#{userid}
+  	</delete>
   	<select id="readauth" resultMap="authmap">
   	select * from pro_member_auth where userid=#{userid}
   	</select>

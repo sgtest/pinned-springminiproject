@@ -14,6 +14,7 @@ public interface membermapper {
 	public int deletemember(member member);
 	public int insertauth(auth au);
 	public int deleteauth(auth au);
+	public void deleteauthbyid(String userid);
 	public List<auth> readauth(String userid);
 	public List<member> memberlist();
 	public member checkmember(member mem);

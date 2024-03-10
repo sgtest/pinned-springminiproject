@@ -26,6 +26,8 @@ public interface boardservice {
 	public List<member> getmlist();
 	public boolean exmemberinfo(String userid, String userpw);
 	public String getuserid(String email, String phone);
+	public void boardoutuser(String userid, String pass, boolean data);
+	public boolean deletefile(List<memberfile> mfilelist);
 	
 	//게시판 생성 및 삭제
 	public void board_register(String boardname,String reguserid, String boardsub);
