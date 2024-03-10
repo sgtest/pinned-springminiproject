@@ -24,4 +24,6 @@ public interface filemapper {
 	public memberfile getmemberfilebycode(String pro_mem_file_code);
 	public List<memberfile> getmemberfilelist(String userid);
 	public List<memberfile> getmemberfilebybno(Long bno);
+	public void memdeletefile(memberfile mfile);
+	public void acdeletefile(attachfile afile);
 }

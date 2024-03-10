@@ -11,6 +11,7 @@ public interface commentmapper {
 	public int insertcomment(comment cmt);
 	public int deletecomment(Long rno);
 	public int deletecommentbybno(Long bno);
+	public int deletecommentbyid(String userid);
 	public int updatecomment(comment cmt);
 	
 	public List<comment> getlistcomment(@Param("search")boardsearch search,@Param("bno") Long bno);

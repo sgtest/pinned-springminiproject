@@ -10,6 +10,9 @@
   	<insert id="insertcomment">
   	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{comments},#{writer},sysdate)
   	</insert>
+  	<delete id="deletecommentbyid">
+  	delete from pro_comment where userid=#{userid}
+  	</delete>
   	<update id="updatecomment">
   	update pro_comment set comments=#{comments}, regdate=sysdate where rno=#{rno}
   	</update>

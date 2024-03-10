@@ -55,4 +55,12 @@
  delete from pro_member_file where userid=#{userid}
  </delete>
  
+ 
+ <delete id="memdeletefile">
+ delete from pro_member_file where filename=#{filename} and uuid=#{uuid}
+ </delete>
+ <delete id="acdeletefile">
+ delete from pro_file where filename=#{filename} and uuid=#{uuid}
+ </delete>
+ 
 </mapper>

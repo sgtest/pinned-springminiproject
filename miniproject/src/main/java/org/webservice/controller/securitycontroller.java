@@ -325,10 +325,23 @@ public void boardout() {
 }
 
 //회원 탈퇴를 수행한다.
+@PreAuthorize("authenticated()")
 @PostMapping("/boardoutaction")
-public String boardoutaction() {
-	
-	return "redirect:/loginboard";
+@ResponseBody
+public Map<String, Object> boardoutaction(String id, String pass, boolean datareset) {
+
+	Map<String, Object> response=new HashMap<String, Object>();
+	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+	String exuserid=auth.getName();
+	try {
+		if(exuserid.compareTo(id)==0) {
+			bservice.boardoutuser(id, pass, datareset);
+		}
+		response.put("result", "success");
+	}catch (Exception e) {
+		response.put("result","failure");
+	}
+	return response;
 }
 
 ///아이디를 찾는 화면

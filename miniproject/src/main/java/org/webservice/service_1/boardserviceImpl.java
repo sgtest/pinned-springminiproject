@@ -1,5 +1,9 @@
 package org.webservice.service_1;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
@@ -172,7 +176,64 @@ public class boardserviceImpl implements boardservice{
 		mapper.aouthboard(ath);
 		
 	}
-
+	@Override
+	public void boardoutuser(String userid, String pass, boolean data) {
+		member m=mmapper.readmember(userid);
+		if(pencoder.matches(m.getUserpw(), pass)) {
+			if(data) {
+				//기타 정보 삭제
+				mmapper.deletememberetc(userid);
+				
+				List<memberfile> mlist=fmapper.getmemberfilelist(userid);
+				
+				if(deletefile(mlist)) {
+					fmapper.deletememfileall(userid);
+					cmapper.deletecommentbyid(userid);
+					mapper.deleteboardbyid(userid);
+					mmapper.deleteauthbyid(userid);
+					mmapper.deletemember(m);
+				}
+				
+			}
+			else {
+				mmapper.deleteauthbyid(userid);
+				mmapper.deletemember(m);
+			}
+		}
+		
+	}
+	//파일 삭제와 sql문 수행
+	@Override
+	public boolean deletefile(List<memberfile> mfilelist) {
+		String firstfilelink="D:\\server\\temp\\";
+		Path fpath,spath;
+		if(mfilelist==null||mfilelist.size()==0) {
+			return true;
+		}
+		for(memberfile mf:mfilelist) {
+			attachfile ac=new attachfile();
+			ac.setFileName(mf.getFileName());
+			ac.setUuid(mf.getUuid());
+			ac.setUploadPath(mf.getUploadPath());
+			try {
+				fpath=Paths.get(firstfilelink+mf.getUploadPath()+"\\"+mf.getUuid()+"_"+mf.getFileName());
+				if(!mf.isImage()) {
+					Files.deleteIfExists(fpath);
+					fmapper.acdeletefile(ac);
+				}else {
+					spath=Paths.get(firstfilelink+mf.getUploadPath()+"\\"+"th_"+mf.getUuid()+"_"+mf.getFileName());
+					Files.deleteIfExists(fpath);
+					Files.deleteIfExists(spath);
+					fmapper.acdeletefile(ac);
+				}
+				
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			//실제 파일 삭제
+		}
+		return true;
+	}
 	@Override
 	public boolean board_aouth(String boardname, String userid) {
 		String olduserid=mapper.select_boardaouth(boardname);

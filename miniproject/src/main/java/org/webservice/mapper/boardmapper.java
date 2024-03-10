@@ -35,6 +35,7 @@ public interface boardmapper {
 	public board readboard(Long bno);
 	public int deleteboard(Long bno);
 	public int deleteboardbyname(String boardname);
+	public int deleteboardbyid(String userid);
 	public int updateboard(board bd);
 	public void insertboard(board bd);
 	public List<board> getlistboard();
