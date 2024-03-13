@@ -586,7 +586,7 @@
          		 },
          		 error: function(error){
          			console.error("유저정보 가져오기 실패"); 
-       			 brdrealnameobj.find('p').text("nothing");
+       			 	brdrealnameobj.find('p').text("nothing");
          		 }
          			 
     			

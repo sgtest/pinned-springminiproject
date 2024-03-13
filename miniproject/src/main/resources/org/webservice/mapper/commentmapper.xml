@@ -11,7 +11,7 @@
   	insert into pro_comment values(#{bno},seq_pro_comment.nextval,#{comments},#{writer},sysdate)
   	</insert>
   	<delete id="deletecommentbyid">
-  	delete from pro_comment where userid=#{userid}
+  	delete from pro_comment where writer=#{writer}
   	</delete>
   	<update id="updatecomment">
   	update pro_comment set comments=#{comments}, regdate=sysdate where rno=#{rno}
@@ -41,9 +41,9 @@
   	select count(rno) from pro_comment where bno=#{bno}
   	</select>
   	<select id="getlistcommentbyid" resultType="org.webservice.domain.comment">
-  	select * from pro_comment where writer=#{userid} order by regdate desc
+  	select * from pro_comment where writer=#{writer} order by regdate desc
   	</select>
   	<select id="getcountcommentbyid" resultType="int">  	
-  	select count(*) from pro_comment where writer=#{userid}
+  	select count(*) from pro_comment where writer=#{writer}
   	</select>
   </mapper>

@@ -74,7 +74,7 @@ $(document).ready(function(){
 		window.location.href=backbtn.data("href");
 	});
 	brdout.on("click",function(e){
-		var inchck=chckbox.checked;
+		var inchck=chckbox.prop('checked');
 		var inid=$('.deleteuserid').val();
 		var inpass=$('.deleteuserpass').val();
 		console.log(inchck);
@@ -90,7 +90,8 @@ $(document).ready(function(){
 			success:function(response){
 				alert('아이디 탈퇴 처리가 되었습니다.');
 				console.log(response['result']);
-				//window.location.href="/board/listboard";
+				
+				window.location.href="/logoutaction";
 			},
 			error:function(){
 				alert('아이디 탈퇴에 실패했습니다.')

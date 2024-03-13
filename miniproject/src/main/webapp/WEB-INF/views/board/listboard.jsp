@@ -288,6 +288,7 @@
 
     function loadwriternamelist(bno, writerid){
     	var csrfToken = $("#_csrf").val();
+    	console.log(writerid);
 		$.ajax({
 			type:'post',
 			url:'/getuserinfoname',
@@ -302,8 +303,13 @@
      		 },
      		 error: function(error){
      			console.error("유저정보 가져오기 실패"); 
-                $("#writer_" + bno).text(writerid);
-     		 }         		   			
+     			if(writerid!==null){
+                	$("#writer_" + bno).text(writerid);
+     			}
+     			else if(writerid === null){
+                	$("#writer_" + bno).text('존재하지 않는 아이디');
+     			}
+     		 }
 		});
     }
     

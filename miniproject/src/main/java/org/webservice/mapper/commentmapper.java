@@ -11,11 +11,11 @@ public interface commentmapper {
 	public int insertcomment(comment cmt);
 	public int deletecomment(Long rno);
 	public int deletecommentbybno(Long bno);
-	public int deletecommentbyid(String userid);
+	public int deletecommentbyid(String writer);
 	public int updatecomment(comment cmt);
 	
 	public List<comment> getlistcomment(@Param("search")boardsearch search,@Param("bno") Long bno);
-	public List<comment> getlistcommentbyid(String userid);
-	public int getcountcommentbyid(String userid);
+	public List<comment> getlistcommentbyid(String writer);
+	public int getcountcommentbyid(String writer);
 	public int getcountcomment(Long bno);
 }

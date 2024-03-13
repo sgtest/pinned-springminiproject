@@ -179,7 +179,7 @@ public class boardserviceImpl implements boardservice{
 	@Override
 	public void boardoutuser(String userid, String pass, boolean data) {
 		member m=mmapper.readmember(userid);
-		if(pencoder.matches(m.getUserpw(), pass)) {
+		if(pencoder.matches(pass, m.getUserpw())) {
 			if(data) {
 				//기타 정보 삭제
 				mmapper.deletememberetc(userid);
@@ -211,20 +211,17 @@ public class boardserviceImpl implements boardservice{
 			return true;
 		}
 		for(memberfile mf:mfilelist) {
-			attachfile ac=new attachfile();
-			ac.setFileName(mf.getFileName());
-			ac.setUuid(mf.getUuid());
-			ac.setUploadPath(mf.getUploadPath());
 			try {
 				fpath=Paths.get(firstfilelink+mf.getUploadPath()+"\\"+mf.getUuid()+"_"+mf.getFileName());
 				if(!mf.isImage()) {
 					Files.deleteIfExists(fpath);
-					fmapper.acdeletefile(ac);
+					//아래 맵퍼에서 오류 발생
+					fmapper.deletefile(mf.getUuid());
 				}else {
 					spath=Paths.get(firstfilelink+mf.getUploadPath()+"\\"+"th_"+mf.getUuid()+"_"+mf.getFileName());
 					Files.deleteIfExists(fpath);
 					Files.deleteIfExists(spath);
-					fmapper.acdeletefile(ac);
+					fmapper.deletefile(mf.getUuid());
 				}
 				
 			} catch (IOException e) {
@@ -232,6 +229,7 @@ public class boardserviceImpl implements boardservice{
 			}
 			//실제 파일 삭제
 		}
+		
 		return true;
 	}
 	@Override
