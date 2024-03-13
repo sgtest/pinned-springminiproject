@@ -25,5 +25,4 @@ public interface filemapper {
 	public List<memberfile> getmemberfilelist(String userid);
 	public List<memberfile> getmemberfilebybno(Long bno);
 	public void memdeletefile(memberfile mfile);
-	public void acdeletefile(attachfile afile);
 }

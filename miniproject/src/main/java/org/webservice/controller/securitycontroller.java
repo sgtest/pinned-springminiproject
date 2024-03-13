@@ -95,11 +95,15 @@ public Map<String, Object> getuserinfo(String userid){
 @ResponseBody
 public Map<String, Object> getuserinfoname(String userid){
 	//log.info(userid);
-	member minfo=mmapper.readmember(userid);
-	String realname=minfo.getUsername();
 	Map<String,Object> result=new HashMap<String, Object>();
+	if(userid!=null) {
+		member minfo=mmapper.readmember(userid);
+		String realname=minfo.getUsername();
 	
-	result.put("userrealname", realname);
+		result.put("userrealname", realname);
+	}else {
+		result.put("userrealname","존재하지 않는 아이디입니다.");
+	}
 	return result;
 }
 

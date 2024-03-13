@@ -74,16 +74,12 @@ public class boardcontroller {
 	public void listboard(boardsearch search, Model model) {
 		
 		List<board> boardList=bservice.getList(search);
-		List<String> username=new ArrayList<String>();
 		for(int i=0;i<boardList.size();i++) {
-			String userid=boardList.get(i).getWriter();
-			String realname=mmapper.readmembername(userid);
-			username.add(realname);
+			String userid=boardList.get(i).getWriter();	
 		}
 		boardpage page=new boardpage(search, bservice.getlisttotal(search));
 		
 		model.addAttribute("boardList", boardList);
-		model.addAttribute("realnamelist", username);
 		model.addAttribute("page", page);
 		
 	}

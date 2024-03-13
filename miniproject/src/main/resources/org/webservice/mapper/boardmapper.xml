@@ -66,7 +66,7 @@
   	select userid from pro_member_auth where auth=#{auth}
   	</select>
   	<delete id="deleteboardbyid">
-  	delete from pro_board where userid=#{userid}
+  	delete from pro_board where writer=#{userid}
   	</delete>
   	<select id="getboardlistbynum" resultType="org.webservice.domain.boardlist">
   	select * from pro_board_list where boardnum=#{boardnum}
