@@ -50,7 +50,7 @@
 <div class="logbtn_set">
 <button id="googleloginbtn" class="memberbtn" data-href="/logingoogle">구글계정으로 로그인</button>
 <button id="memberjoinbtn" class="memberbtn" data-href="/boardjoin">회원가입</button>
-<button id="idsearchbtn" class="memberbtn" data-href="/idsearch">아이디 찾기</button>
+<button id="idsearchbtn" class="memberbtn" data-href="/idsearch">아이디/비밀번호 찾기</button>
 </div>
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"

@@ -99,9 +99,13 @@
 		<div class="authac" id="authpass" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 			<div class="authac_dialog" role="document">
 				<div class="authac_body">
-					<h4>인증번호를 입력하세요.(7자리)</h4>
-					<input class="authnum" type="text">
-					<button class="authbtn" id="psac">확인하기</button>
+					<h4>아이디를 다시 입력하세요</h4>
+					<input class="idreinput" type="text">
+					<h4>새로운 비밀번호를 입력하세요.(최소 8자 이상, 적어도 하나 이상의 특수문자 및 숫자 포함)</h4>
+					<input class="passinput" type="text">
+					<h4>새로운 비밀번호를 다시 입력하세요.(다시 입력)</h4>
+					<input class="passreinput" type="text"><br>
+					<button class="authbtn" id="psac">비밀번호 재등록하기</button>
 				</div>
 			</div>
 		</div>
@@ -124,7 +128,7 @@ $(document).ready(function(){
 	var loginbtn=$('#backlogin');
 	var authidmodal=$('#authid');
 	var authpassmodal=$('#authpass');
-	
+	var passreset=$('#psac');
 	loginbtn.on("click",function(e){
 		var login=loginbtn.data("href");
 		window.location.href=login;
@@ -164,29 +168,61 @@ $(document).ready(function(){
 	});
 	passsearchbtn.on("click",function(e){
 		var csrfToken = $("#_csrf").val();
-		var email=$(".passemail").val();
+		var paemail=$(".passemail").val();
+		var paid=$(".passid").val();
+		var paphone=$(".passphone").val();
 		$.ajax({
 			type:'post',
-			url:'/searchauth',
-			data:{email: inemail},
+			url:'/searchpass',
+			data:{userid:paid, email:paemail, phone:paphone},
 			dataType:'json',
 			beforeSend: function(xhr) {
 				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 			},
 			success: function(response){
 				if(response['result']==='success'){
-					alert("메일을 전송하였습니다.");
 					authpassmodal.css("display","block");
 				}
-				else if(response['result']==='subsuccess'){
-					
-				}
-				else{
-					alert("메일의 주소가 잘못되었거나, 회원이 아닙니다.");
+				else if(response['result']==='failure'){
+					alert('입력된 값이 부적절 합니다.')
 				}
 			},
 			error: function(error){				
-				console.error("메일 전송을 실패했습니다.");
+				console.error("입력된 정보가 맞지 않습니다.");
+			}
+		});
+		
+	});
+	//비밀번호 변경 기능은 완료 되었으나 별도의 인증이 필요 할수도
+	passreset.on("click",function(e){
+		var csrfToken = $("#_csrf").val();	
+		var pass=$(".passinput").val();
+		var repass=$(".passreinput").val();
+		var reid=$(".idreinput").val();
+		$.ajax({
+			type:'post',
+			url:'/resetpassword',
+			data:{userid:reid, newpass:pass, renewpass:repass},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='notpass'){
+					alert('패스워드가 부적절한 형식입니다.');
+				}
+				else if(response['result']==='notmatch'){
+					alert('패스워드가 서로 일치하지 않습니다.');
+				}
+				else if(response['result']==='failure'){
+					alert('서버 오류로 비밀번호 변경에 실패하였습니다.')
+				}else if(response['result']==='success'){
+					alert('비밀번호가 정상적으로 변경되었습니다.');
+					window.location.href="/loginboard";
+				}
+			},
+			error: function(error){				
+				console.error("비밀번호 변경에 실패하였습니다.");
 			}
 		});
 		
