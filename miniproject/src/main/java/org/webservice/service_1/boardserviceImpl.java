@@ -232,6 +232,21 @@ public class boardserviceImpl implements boardservice{
 		
 		return true;
 	}
+	//회원의 비밀번호 업데이트
+	@Override
+	public boolean updateuserpass(String userid, String pass) {
+		try {
+			member m=mmapper.readmember(userid);
+			String pen=pencoder.encode(pass);
+			m.setUserpw(pen);
+			mmapper.updatemember(m);
+			return true;
+		}catch (Exception e) {
+			System.out.print(e.getMessage());
+			return false;
+		}
+	}
+	
 	@Override
 	public boolean board_aouth(String boardname, String userid) {
 		String olduserid=mapper.select_boardaouth(boardname);

@@ -464,6 +464,44 @@ public Map<String, Object> searchauth(String email, String phone){
 	}
 	return response;
 }
+//비밀번호를 찾는 메소드
+@PostMapping("/searchpass")
+@ResponseBody
+public Map<String,Object> searchpass(String userid, String email, String phone){
+	Map<String, Object> response=new HashMap<String, Object>();
+	
+	String subid=bservice.getuserid(email, phone);
+	if(subid.compareTo(userid)==0) {
+		response.put("result", "success");
+	}else {
+		response.put("result", "failure");
+	}
+	
+	return response;
+}
+
+
+//비밀번호 재설정 메소드
+@PostMapping("/resetpassword")
+@ResponseBody
+public Map<String,Object> resetpassword(String userid, String newpass, String renewpass){
+	Map<String, Object> response=new HashMap<String, Object>();
+	Pattern pwptn=Pattern.compile(pass_regex);
+	Matcher mch=pwptn.matcher(newpass);
+	
+	if(!mch.matches()) {
+		response.put("result", "notpass");
+	}else if(newpass.compareTo(renewpass)!=0) {
+		response.put("result", "notmatch");
+	}else {
+		if(bservice.updateuserpass(userid, newpass)) {
+			response.put("result", "success");
+		}else {
+			response.put("result", "failure");
+		}
+	}
+	return response;
+}
 
 //숫자 입력을 이용해서 인증을 수행한다.
 @PostMapping("/varifyauth")
