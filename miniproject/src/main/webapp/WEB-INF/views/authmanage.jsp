@@ -25,6 +25,9 @@
   			background-color: #e5e5e5;
  	 		color: #000;
 		}
+	.authbody{
+		display: flex;
+	}
 	.memberlist{
 			margin-top:30px;
     		background-color: #f0f0f0;
@@ -34,6 +37,16 @@
    			margin-left:20px;
             margin-top: 20px;
             width: 70%;
+	}
+	.authlistbody{
+			margin-top:30px;
+    		background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:20px;
+            margin-top: 20px;
+            width: 500px;
 	}
 	.memberlist_content{
 			max-height:1000px;
@@ -74,7 +87,7 @@
 <body>
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<button onclick="location.href='/board/listboard'">게시판에 글쓰기</button><br>
-	
+<div class="authbody">
 	<div class="memberlist">
 		<div class="memberlist_content" align="center">
 			<table boarder="1" class="memberlist_table">
@@ -120,7 +133,16 @@
 			</table>
 		</div>
 	</div>
-
+	
+	<div class="authlistbody">
+		<div class="authlistobject">
+			<p>존재하는 권한 목록</p>
+			<table boarder="1" class="">
+			</table>
+		</div>
+	</div>
+	
+</div>
 
 <div class="modal fade" id="authmodal" tabindex="-1" role="dialog" aria-hidden="true">
 	<div class="modal-dialog modal-dialog-centered" role="document">
