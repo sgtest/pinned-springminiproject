@@ -38,6 +38,7 @@ import org.webservice.domain.memberfile;
 import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
+import org.webservice.service_1.mailservice;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -54,6 +55,7 @@ public class boardcontroller {
 	private static final String[] masteruserid= {"user11","masteruser"};
 	
 	public boardservice bservice;
+	public mailservice mservice;
 	@Autowired
 	public membermapper mmapper;
 	
@@ -81,7 +83,7 @@ public class boardcontroller {
 		
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("page", page);
-		
+		//mservice.sendservice("dbstjrgy123@gmail.com");
 	}
 	
 	//게시물 INSERT를 한다.

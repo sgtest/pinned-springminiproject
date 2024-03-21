@@ -38,9 +38,9 @@
 
 <h4>비밀번호</h4>
 <div class="logingroup">
-<input type="text" id="passwd" name="passwd" required><br>
+<input type="password" id="passwd" name="passwd" required><br>
 
-<input type="checkbox" name="remember-me">id remember<br>
+<!-- <input type="checkbox" name="remember-me">id remember<br> -->
 
 </div>
 
@@ -48,7 +48,7 @@
 </form>
 
 <div class="logbtn_set">
-<button id="googleloginbtn" class="memberbtn" data-href="/logingoogle">구글계정으로 로그인</button>
+<!--<button id="googleloginbtn" class="memberbtn" data-href="/logingoogle">구글계정으로 로그인</button>-->
 <button id="memberjoinbtn" class="memberbtn" data-href="/boardjoin">회원가입</button>
 <button id="idsearchbtn" class="memberbtn" data-href="/idsearch">아이디/비밀번호 찾기</button>
 </div>

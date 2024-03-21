@@ -19,7 +19,7 @@
 	<input class="checkbanid" type="text">
 	
 	<h5>패스워드</h5>
-	<input class="checkbanpass" type="text">
+	<input class="checkbanpass" type="password">
 	
 	<button class="checkbanbtn">아이디 체크</button>
 </div>
