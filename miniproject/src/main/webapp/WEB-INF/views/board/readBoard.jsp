@@ -137,12 +137,16 @@
 <sec:authorize access="${board.writer ne principal.username}"></sec:authorize>
 </sec:authorize>
 <sec:authorize access="isAuthenticated()">
-<sec:authorize access="${board.writer eq principal.username} or hasAuthority('master')">
 <div class="boardform">
+
+	<sec:authorize access="${board.writer eq principal.username} or hasAuthority('master')">
 	<button id="boardupdatebtn" type="button" data-href="updateBoard?bno=${board.bno}">게시물 수정하기</button>
+	</sec:authorize>
+	<sec:authorize  access="${board.writer eq principal.username} or hasAuthority('master') or hasAuthority('${board.boardname}')">
 	<button id="boarddeletebtn" type="button" data-href="listboard">게시물 삭제하기</button>
+	</sec:authorize>
+	
 </div>
-</sec:authorize>
 </sec:authorize>
 
 <div class="readcontent_top">
@@ -511,9 +515,9 @@
         		str = str + '<p>' + comment.comments + '</p>';
         	if(loggedInUser !== '')
         	{
-        		if(comment.writer === loggedInUser || 'masteruser' === loggedInUser)
+    			str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +', \''+comment.writer+'\')">';
+        		if(comment.writer === loggedInUser)
         		{      		
-        			str = str + '<input type="button" value="댓글 삭제하기" onclick="removeComment('+ comment.rno +')">';
         			str = str + '<input type="button" value="댓글 수정하기" onclick="readCmt('+ comment.rno +', '+ comment.bno+')">';
         		}
         	}
@@ -618,13 +622,13 @@
     		
     	}
     	
-    	function removeComment(rno){
+    	function removeComment(rno, writer){
     		var csrfToken = $("#_csrf").val();
-    		
+    		var isuser=writer;
     		$.ajax({
     			type: 'post',
     			url: '/comment/deletecomment',
-    			data: {rno: rno},
+    			data: {rno: rno, userid: isuser},
     			dataType:'JSON',
     	        beforeSend: function(xhr) {
     	            xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
@@ -672,8 +676,6 @@
         	}
     	
         function goBack(){
-        	//var search=${search};
-        	//window.location.href="listboard?type="+search.type+"&keyword="+search.keyword+"pageNum="+search.pageNum+"amount="+search.amount;
         	window.history.back();
         }
         </script>

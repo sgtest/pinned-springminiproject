@@ -8,6 +8,8 @@ import org.apache.ibatis.javassist.expr.NewArray;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -35,6 +37,17 @@ public class commentcontroller {
 	boardservice bservice;
 	
 	commentservice cservice;
+
+	private static final String[] masteruserid= {"test123","user11","masteruser"};
+
+	private boolean ismaster(String userid) {
+		for(String s:masteruserid) {
+			if(s.compareTo(userid)==0) {
+				return true;
+			}
+		}
+		return false;
+	}
 	
 	//댓글 INSERT를 수행한다.
 	@PreAuthorize("authenticated()")
@@ -46,15 +59,24 @@ public class commentcontroller {
 	}
 
 	//댓글 DELETE를 수행한다.
-	//@PreAuthorize("principal.username == #board.writer")
+	@PreAuthorize("authenticated()||principal.username == #userid")
 	@PostMapping("/deletecomment")
 	@ResponseBody
-	public Map<String,String> deletecomment(@RequestParam Long rno) {
+	public Map<String,String> deletecomment(@RequestParam Long rno, String userid) {
 	    Map<String, String> response = new HashMap<>();
-		if(cservice.deletecomment(rno)==1) {
-			response.put("result", "success");
-		}else {
-			response.put("result", "failure");
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String exuserid=auth.getName();
+		
+		//rno 이용해서 댓글 가져오고 해당 댓글 정보로 삭제 여부 판단
+		comment cmt=cservice.getcomment(rno);
+		if(ismaster(exuserid)|| cmt.getWriter().compareTo(exuserid)==0){
+			if(exuserid.compareTo(userid)==0) {
+				if(cservice.deletecomment(rno)==1) {
+					response.put("result", "success");
+				}else {
+					response.put("result", "failure");
+				}
+			}
 		}
 		return response;
 		
@@ -72,6 +94,7 @@ public class commentcontroller {
 	}
 	
 	//댓글 UPDATE를 수행한다.
+	@PreAuthorize("principal.username == #cmt.writer")
 	@PostMapping("/updatecomment")
 	public String updatecomment(comment cmt, RedirectAttributes rttr) {
 		if(cservice.updatecomment(cmt)==1) {
