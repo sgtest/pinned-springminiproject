@@ -52,7 +52,7 @@ import lombok.extern.log4j.Log4j;
 @Log4j
 public class boardcontroller {
 	
-	private static final String[] masteruserid= {"user11","masteruser"};
+	private static final String[] masteruserid= {"test123","user11","masteruser"};
 	
 	public boardservice bservice;
 	public mailservice mservice;
