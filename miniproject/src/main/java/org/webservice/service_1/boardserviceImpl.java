@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.auth_description;
 import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
@@ -314,6 +315,10 @@ public class boardserviceImpl implements boardservice{
 		}
 		
 		return true;
+	}
+	@Override
+	public List<auth_description> auth_descrip(){
+		return mapper.getauthdescription();
 	}
 	
 	@Override

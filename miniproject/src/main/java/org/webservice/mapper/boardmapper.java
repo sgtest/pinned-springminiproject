@@ -5,6 +5,7 @@ import java.util.List;
 import org.apache.ibatis.annotations.Param;
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.auth_description;
 import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
@@ -19,6 +20,7 @@ public interface boardmapper {
 	public List<banuser> getbanlist();
 	public banuser getbanuser(String userid);
 	
+	public List<auth_description> getauthdescription();
 	public List<auth> getauthbyid(String userid);
 	public List<boardlist> selectboardlistset();
 	public List<String> selectboardlist();

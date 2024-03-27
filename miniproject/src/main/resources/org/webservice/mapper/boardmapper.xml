@@ -52,6 +52,10 @@
   	<select id="getbanuser" resultType="org.webservice.domain.banuser">
   	select * from pro_ban where userid=#{userid}
   	</select>
+  	<select id="getauthdescription" resultType="org.webservice.domain.auth_description">
+  	select * from pro_authlist
+  	</select>
+  	
   	
   	<select id="selectboardlistset" resultType="org.webservice.domain.boardlist">
 	select * from pro_board_list order by boardnum   	

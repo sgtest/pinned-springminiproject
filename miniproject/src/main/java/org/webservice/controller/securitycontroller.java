@@ -25,8 +25,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 import org.webservice.domain.auth;
+import org.webservice.domain.auth_description;
 import org.webservice.domain.banuser;
 import org.webservice.domain.board;
+import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
@@ -359,11 +361,14 @@ public void idsearch() {
 @GetMapping("/authmanage")
 public void authmanage(Model model) {
 	List<member> mlist=bservice.getmlist();
-	
+	List<auth_description> audeslist=bservice.auth_descrip();
+	List<boardlist> brdlist=bservice.select_boardlistset();
 	for(int i=0;i<mlist.size();i++) {
 		mlist.get(i).setAuthlist(bservice.getauth(mlist.get(i).getUserid()));
 		mlist.get(i).setUserpw(null);
 	}
+	model.addAttribute("brdlist", brdlist);
+	model.addAttribute("authdescrip", audeslist);
 	model.addAttribute("userlist", mlist);
 }
 
