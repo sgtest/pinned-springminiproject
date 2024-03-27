@@ -46,7 +46,7 @@
    			margin-bottom: 10px; 
    			margin-left:20px;
             margin-top: 20px;
-            width: 500px;
+            width: 800px;
 	}
 	.memberlist_content{
 			max-height:1000px;
@@ -55,8 +55,28 @@
 	}
 	.memberlist_table{
             width: 100%;
+   			border-collapse: separate;
+   			border-spacing: 10px 10px;
+	}
+	.authlisttable,.brdlisttable{
+   			border-collapse: separate;
+   			border-spacing: 30px 30px;
 	}
 	.table_element{
+  			border: 1px solid #fff;
+  			border-radius: 5px;
+			margin-top: 50px;
+	}
+	.authlistobject{
+			max-height:1000px;
+    		overflow-y: scroll;
+            text-align: center;
+	}
+	.boardlistobject{
+    		overflow-y: scroll;
+            text-align: center;
+	}
+	.audestableobj,.brdtableobj{
   			border: 1px solid #fff;
   			border-radius: 5px;
 			margin-top: 50px;
@@ -135,11 +155,48 @@
 	</div>
 	
 	<div class="authlistbody">
+	<div class="authdesdiv">
 		<div class="authlistobject">
 			<p>존재하는 권한 목록</p>
-			<table boarder="1" class="">
+			<table boarder="1" class="authlisttable">
+				<thead>
+					<tr>
+						<th>권한 이름</th>
+						<th>권한 설명</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="auth_description" items="${authdescrip}">
+						<tr class="audestableobj">
+							<td>${auth_description.auth}</td>
+							<td>${auth_description.auth_subject}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
 			</table>
 		</div>
+	</div>
+	<div class="boarddesdiv">
+		<div class="boardlistobject">
+			<p>존재하는 테이블 목록</p>
+			<table boarder="1" class="brdlisttable">
+				<thead>
+					<tr>
+						<th>게시판 이름</th>
+						<th>게시판 설명</th>
+					</tr>
+				</thead>
+				<tbody>
+					<c:forEach var="boardlist" items="${brdlist}">
+						<tr class="brdtableobj">
+							<td>${boardlist.boardname}</td>
+							<td>${boardlist.boardsubject}</td>
+						</tr>
+					</c:forEach>
+				</tbody>
+			</table>
+		</div>
+	</div>
 	</div>
 	
 </div>

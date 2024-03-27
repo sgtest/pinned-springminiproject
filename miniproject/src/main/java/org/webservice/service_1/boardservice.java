@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.webservice.domain.attachfile;
 import org.webservice.domain.auth;
+import org.webservice.domain.auth_description;
 import org.webservice.domain.banuser;
 import org.webservice.domain.board;
 import org.webservice.domain.boardlist;
@@ -64,7 +65,7 @@ public interface boardservice {
 	public boolean board_aouth(String boardname,String userid);
 	public boolean board_aouth_insert(String userid, String auth);
 	public boolean board_aouth_delete(String userid, String auth);
-	
+	public List<auth_description> auth_descrip();
 	//게시판의 게시글 관련 서비스
 	/*
 	 * 
