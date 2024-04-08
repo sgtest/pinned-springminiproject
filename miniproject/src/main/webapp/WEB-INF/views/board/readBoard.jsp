@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
+        crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>        
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
+        crossorigin="anonymous"></script>
 	<style>
 	.board_content{
     	border: 2px solid #000;
@@ -292,16 +300,6 @@
 		</div>
 	</div>
 </div>
-
-<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
-        crossorigin="anonymous"></script>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>        
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
-        crossorigin="anonymous"></script>
-        
 <script>
         $(document).ready(function(){
         	//최초로 게시글 읽기 실행시 댓글 1페이지 화면을 보여준다.
@@ -414,8 +412,8 @@
         	
         });
         
-		
-		
+        
+        
 		function loadattachfileview(filelist){
 			console.log('첨부파일이 총 '+filelist.length+'개 있습니다');
 			var imgcountform=$('.imgfilenumber');
@@ -466,7 +464,7 @@
 		function opendwindow(src){
 			window.open(src);
 		}
-    	function loadComments(pageNumValue){
+        function loadComments(pageNumValue){
         	var bnoValue = '<c:out value="${board.bno}"/>';
     		$.ajax({
     			type: 'get',

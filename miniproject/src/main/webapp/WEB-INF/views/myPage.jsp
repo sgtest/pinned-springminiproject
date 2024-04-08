@@ -121,7 +121,6 @@
 			<div class="mypagebody-btnset">
 			<button id="commoninfo-btn">기본정보 보기</button>
 			<button id="etcinfo-btn">기타정보 보기</button>
-			<button>회원정보 수정하기</button>
 			</div>
 			<ul class="totalmypage">
 			<li class="toppagetab show" id="mypagecommon">
