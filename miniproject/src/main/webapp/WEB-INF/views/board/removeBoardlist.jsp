@@ -11,6 +11,14 @@
   	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
+        crossorigin="anonymous"></script>
+	<script type="text/javascript" src="/resources/js/removeBoardlistjsfile.js"></script>      
 	<style>	          
 		button, input[type="button"]{
   			background-color: #000;
@@ -111,66 +119,5 @@
 		</div>
 	</div>
 	
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
-        crossorigin="anonymous"></script>
-<script>
-$(document).ready(function(){
-	var boardlistbtn=$('.removebrdlist');
-	var brdrmmodal=$('.boardlistremovedmodal');
-	var brdrmbtn=$('.removebrdlist');
-	var brdrmacbtn=$('.removebrdlistbtn');
-	var brdrmclosebtn=$('.brdrmclose');
-	
-	boardlistbtn.on("click",function(e){
-		var brdnameObj=$(this);
-		var brdname=brdnameObj.data("boardname");
-		console.log(brdname);
-		brdrmmodal.find(".removebrdlistbtn").data("boardname",brdname);
-		brdrmmodal.find(".removebrdh").text(brdname);
-		brdrmmodal.css("display", "block");
-
-	});
-	brdrmclosebtn.on("click",function(e){
-		brdrmmodal.css("display", "none");
-	});
-	
-	brdrmacbtn.on("click",function(e){
-		var brdname=$(this).data("boardname");
-		var csrfToken = $("#_csrf").val();
-
-		$.ajax({
-			type:'post',
-			url:'/board/removeBoardlistaction',
-			data:{brdname: brdname},
-			dataType:'json',
-			beforeSend: function(xhr) {
-				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
-			},
-			success: function(response){
-				console.log(response['result']);
-				if(response['result']==="success"){
-					alert(brdname+" 게시판이 삭제되었습니다");
-					location.reload(true);
-				}
-				else{
-					alert("게시판 삭제에 실패하였습니다.");
-					location.reload(true);
-				}
-			},
-			error: function(error){
-				console.error("게시판 삭제에 실패하였습니다.");
-				location.reload(true);
-			}
-		});
-		
-	});
-});
-
-</script>
 </body>
 </html>

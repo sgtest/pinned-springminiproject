@@ -12,6 +12,14 @@
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css"
           integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
           crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
+        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
+        crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
+        crossorigin="anonymous"></script>
+        <script type="text/javascript" src="/resources/js/boardoutjsfile.js"></script>
         <style>
 		button, input[type="button"]{
   			background-color: #000;
@@ -58,47 +66,5 @@
 		<input id="chckdelete" type="checkbox">
 	</div>
 </div>
-<script src="https://code.jquery.com/jquery-3.7.1.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
-        integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
-        crossorigin="anonymous"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
-        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
-        crossorigin="anonymous"></script>
-<script>
-$(document).ready(function(){
-	var backbtn=$('#backbtn');
-	var brdout=$('.boardoutbtn');
-	var chckbox=$('#chckdelete');
-	backbtn.on("click",function(e){
-		window.location.href=backbtn.data("href");
-	});
-	brdout.on("click",function(e){
-		var inchck=chckbox.prop('checked');
-		var inid=$('.deleteuserid').val();
-		var inpass=$('.deleteuserpass').val();
-		console.log(inchck);
-		console.log(inid);
-		console.log(inpass);
-
-		//ajax를 이용해서 회원 탈퇴를 수행
-		$.ajax({
-			type:'post',
-			url:'/boardoutaction',
-			data:{id:inid,pass:inpass,datareset:inchck},
-			dataType:'json',
-			success:function(response){
-				alert('아이디 탈퇴 처리가 되었습니다.');
-				console.log(response['result']);
-				
-				window.location.href="/logoutaction";
-			},
-			error:function(){
-				alert('아이디 탈퇴에 실패했습니다.')
-			}	
-		});
-	});
-});
-</script>
 </body>
 </html>
