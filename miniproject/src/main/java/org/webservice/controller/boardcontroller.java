@@ -80,7 +80,8 @@ public class boardcontroller {
 			String userid=boardList.get(i).getWriter();	
 		}
 		boardpage page=new boardpage(search, bservice.getlisttotal(search));
-		
+		List<boardlist> brdlistobjBoardlist=bservice.select_boardlistset();
+		model.addAttribute("brdlistname", brdlistobjBoardlist);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("page", page);
 		//mservice.sendservice("dbstjrgy123@gmail.com");
