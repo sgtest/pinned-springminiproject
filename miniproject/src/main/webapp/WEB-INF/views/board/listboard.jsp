@@ -88,7 +88,9 @@
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 	<sec:authentication property="principal" var="userinfo"/>
 <div class="listboardtop">
+	<div>
 	<button class="hrefbtn" id="reloadlistboard" data-href="listboard">종합 게시판</button>
+	</div>
 <div>
 	<sec:authorize access="!isAuthenticated()">
 		<button class="hrefbtn" id="boardlogin" data-href="/loginboard">로그인</button>
@@ -175,6 +177,16 @@
     	<input type="hidden" name="amount" value='<c:out value="${page.srh.amount}"/>'>
         <button type="submit" class="boardsearch search">검색</button>
     </form>
+    
+    <div>
+	<select name="brdlisttype">
+			<option>존재하는 게시판 목록</option>
+		<c:forEach var="brdname" items="${brdlistname}">
+			<option>${brdname.boardname}</option>
+		</c:forEach>
+	</select>
+	</div>
+	
 	</div>
 		<div class="boardmake_insert">
 		<button onclick="location.href='createBoard'">게시판에 글쓰기</button>
