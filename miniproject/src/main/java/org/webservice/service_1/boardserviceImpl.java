@@ -249,6 +249,11 @@ public class boardserviceImpl implements boardservice{
 	}
 	
 	@Override
+	public void member_insert(member m) {
+		mmapper.insertmember(m);
+	}
+	
+	@Override
 	public boolean board_aouth(String boardname, String userid) {
 		String olduserid=mapper.select_boardaouth(boardname);
 		auth ath=new auth();

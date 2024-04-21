@@ -282,7 +282,7 @@ public String boardjoinaction(String id, String passwd, String username, String 
 	joinmem.setUsername(username);
 	joinmem.setPhone(phone);
 	
-	mmapper.insertmember(joinmem);
+	bservice.member_insert(joinmem);
 	mmapper.insertauth(au);
 	
 	return "redirect:/loginboard";

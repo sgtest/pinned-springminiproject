@@ -55,6 +55,7 @@ public class boardcontroller {
 	private static final String[] masteruserid= {"test123","user11","masteruser"};
 	
 	public boardservice bservice;
+	@Autowired
 	public mailservice mservice;
 	@Autowired
 	public membermapper mmapper;
@@ -84,7 +85,7 @@ public class boardcontroller {
 		model.addAttribute("brdlistname", brdlistobjBoardlist);
 		model.addAttribute("boardList", boardList);
 		model.addAttribute("page", page);
-		//mservice.sendservice("dbstjrgy123@gmail.com");
+		
 	}
 	
 	//게시물 INSERT를 한다.
