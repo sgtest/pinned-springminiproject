@@ -21,7 +21,7 @@ $(document).ready(function(){
 		else{
 			//ajax를 이용해서 아이디 중복여부 확인
 			$.ajax({
-				type:'post',
+				type:'get',
 				url:'/idcheckaction',
 				data:{ id:inputid},
 				dataType:'json',
@@ -63,7 +63,7 @@ $(document).ready(function(){
 			//console.log(inputname);
 			//console.log(inputphone);
 			$.ajax({
-				type:'post',
+				type:'get',
 				url:'/etcdatacheckaction',
 				data:{passwd:inputpw, username:inputname, phonenumber:inputphone},
 				dataType:'json',

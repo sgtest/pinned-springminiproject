@@ -33,7 +33,7 @@
 <form action="/boardjoinaction" method="post" role="form">
 	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
 <div>
-<h3>비밀번호는 숫자,영문자, 특수문자를 포함하고 8자 이상이여야 하고,<br>휴대폰 번호는 11자여야 하고, 이름은 3자 이상이어야 합니다.</h3>
+<h3>비밀번호는 숫자,영문자, 특수문자를 포함하고 8자 이상이여야 하고,<br>휴대폰 번호는 11자여야 하고, 이름은 3자 이상이어야 합니다.<br>아이디 찾기와 비밀번호 찾기가 추후 가능하도록<br> 마이페이지에 들어가서 기타정보를 등록해주세요.</h3>
 </div>
 <div class="joinset" id="joinidset">
 <h4>아이디</h4>

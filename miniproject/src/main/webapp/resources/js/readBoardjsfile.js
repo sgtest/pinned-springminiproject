@@ -139,7 +139,7 @@
         	var ruserid='${board.writer}';
         	var brdrealnameobj=$('.board_username');
     		$.ajax({
-    			type:'post',
+    			type:'get',
     			url:'/getuserinfoname',
     			data:{userid: ruserid},
     			dataType: 'json',
@@ -161,7 +161,7 @@
     	function loadcmtusername(rno,userid){
         	var csrfToken = $("#_csrf").val();
     		$.ajax({
-    			type:'post',
+    			type:'get',
     			url:'/getuserinfoname',
     			data:{userid: userid},
     			dataType: 'json',

@@ -20,7 +20,7 @@ $(document).ready(function(){
 		var inphone=$(".idphone").val();
 		console.log(inemail);
 		$.ajax({
-			type:'post',
+			type:'get',
 			url:'/searchauth',
 			data:{email: inemail,phone:inphone},
 			dataType:'json',
@@ -50,7 +50,7 @@ $(document).ready(function(){
 		var paid=$(".passid").val();
 		var paphone=$(".passphone").val();
 		$.ajax({
-			type:'post',
+			type:'get',
 			url:'/searchpass',
 			data:{userid:paid, email:paemail, phone:paphone},
 			dataType:'json',

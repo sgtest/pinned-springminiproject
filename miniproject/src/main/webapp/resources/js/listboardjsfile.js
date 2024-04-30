@@ -59,7 +59,7 @@
         		var useristr=useri.textContent;
         		console.log(useristr);
         		$.ajax({
-        			type:'post',
+        			type:'get',
         			url:'/getuserinfoname',
         			data:{userid: useristr},
         			dataType: 'json',
@@ -93,7 +93,7 @@
     	var csrfToken = $("#_csrf").val();
     	console.log(writerid);
 		$.ajax({
-			type:'post',
+			type:'get',
 			url:'/getuserinfoname',
 			data:{userid: writerid},
 			dataType: 'json',
