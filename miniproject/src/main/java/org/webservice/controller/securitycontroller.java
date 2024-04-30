@@ -81,7 +81,7 @@ public String loginaction() {
 }
 
 //유저의 정보를 가져온다
-@PostMapping("/getuserinfo")
+@GetMapping("/getuserinfo")
 @ResponseBody
 public Map<String, Object> getuserinfo(String userid){
 	//log.info(userid);
@@ -93,7 +93,7 @@ public Map<String, Object> getuserinfo(String userid){
 
 
 //유저의 아이디를 받아서 유저의 이름을 가져온다
-@PostMapping("/getuserinfoname")
+@GetMapping("/getuserinfoname")
 @ResponseBody
 public Map<String, Object> getuserinfoname(String userid){
 	//log.info(userid);
@@ -132,7 +132,7 @@ public Map<String,Object> logindeny(String userid, String userpass) {
 	return response;
 }
 
-//로그인을 수행한다.
+//로그아웃을 수행한다.
 @PostMapping("/logoutaction")
 public String logoutaction() {
 	return "redirect:/board/listboard";
@@ -289,7 +289,7 @@ public String boardjoinaction(String id, String passwd, String username, String 
 }
 
 //아이디가 존재하는지 체크한다
-@PostMapping("/idcheckaction")
+@GetMapping("/idcheckaction")
 @ResponseBody
 public Map<String, Object> idcheckaction(String id){
 	Map<String, Object> response=new HashMap<String, Object>();
@@ -303,8 +303,8 @@ public Map<String, Object> idcheckaction(String id){
 	return response;
 }
 
-//아이디가 입력 조건에 맞는지 체크한다
-@PostMapping("/etcdatacheckaction")
+//비밀번호, 닉네임, 휴대폰번호 입력값들이 입력 조건에 맞는지 체크한다
+@GetMapping("/etcdatacheckaction")
 @ResponseBody
 public Map<String, Object> etcdatacheckaction(String passwd, String username, String phonenumber)
 {
@@ -350,7 +350,7 @@ public Map<String, Object> boardoutaction(String id, String pass, boolean datare
 	return response;
 }
 
-///아이디를 찾는 화면
+///아이디, 비밀번호를 찾는 화면
 @GetMapping("/idsearch")
 public void idsearch() {
 	
@@ -448,7 +448,7 @@ public Map<String,Object> banaction(String userid, String banreason, int bantime
 
 
 //아이디를 찾는 메소드
-@PostMapping("/searchauth")
+@GetMapping("/searchauth")
 @ResponseBody
 public Map<String, Object> searchauth(String email, String phone){
 	Map<String, Object> response=new HashMap<String, Object>();
@@ -470,7 +470,7 @@ public Map<String, Object> searchauth(String email, String phone){
 	return response;
 }
 //비밀번호를 찾는 메소드
-@PostMapping("/searchpass")
+@GetMapping("/searchpass")
 @ResponseBody
 public Map<String,Object> searchpass(String userid, String email, String phone){
 	Map<String, Object> response=new HashMap<String, Object>();
