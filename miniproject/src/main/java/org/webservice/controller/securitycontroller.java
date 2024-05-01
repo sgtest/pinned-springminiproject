@@ -508,6 +508,12 @@ public Map<String,Object> resetpassword(String userid, String newpass, String re
 	return response;
 }
 
+@PreAuthorize("")
+@GetMapping("chat")
+public String chatting() {
+	return "chat";
+}
+
 //숫자 입력을 이용해서 인증을 수행한다.
 @PostMapping("/varifyauth")
 @ResponseBody
