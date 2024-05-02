@@ -121,6 +121,7 @@
 			<div class="mypagebody-btnset">
 			<button id="commoninfo-btn">기본정보 보기</button>
 			<button id="etcinfo-btn">기타정보 보기</button>
+			<button id="mypage-friendbtn">친구 목록 보기</button>
 			</div>
 			<ul class="totalmypage">
 			<li class="toppagetab show" id="mypagecommon">
@@ -301,6 +302,18 @@
 				</div>
 			</li>
 			
+			
+			<li class="toppagetab" id="mypagefriend">
+				<div>
+					<p class="friend_count">현재 친구는 0명 있습니다.</p>
+					<div>
+						<table>
+					
+						</table>
+					</div>
+				</div>
+			</li>
+			
 			</ul>
 			
 		</div>
@@ -408,6 +421,7 @@ $(document).ready(function(){
 	var toptablist=$('.toppagetab');
 	var cmtabbtn=$('#commoninfo-btn');
 	var etctabbtn=$('#etcinfo-btn');
+	var friendtabbtn=$('#mypage-friendbtn');
 	var brdrecordbtn=$('.recordbrd-deletebtn');
 	var cmtrecordbtn=$('.recordcmt-deletebtn');
 	var filerecordbtn=$('.recordfile-deletebtn');
@@ -445,6 +459,16 @@ $(document).ready(function(){
 		}
 		toptabobj.addClass('show');
 	});
+	friendtabbtn.on("click",function(e){
+		var toptabobj=$('#mypagefriend');
+		var toptablist=$('.toppagetab');
+		
+		for(var i=0;i<toptablist.length;i++){
+			$(toptablist[i]).removeClass('show');
+		}
+		toptabobj.addClass('show');
+	});
+	
 	
 	brdrecordbtn.on("click",function(e){
 		var brdobj=$(this).data("bno")

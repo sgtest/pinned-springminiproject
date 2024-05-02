@@ -38,7 +38,25 @@
 			margin-top:20px;
 			width: 800px;
 			height: 800px;
-    		border: 2px solid #000;
+    		border: 1px solid #ccc;
+   			overflow-y: auto;
+    		padding: 10px;
+    		background-color: #f9f9f9;
+		}
+		.chatdiv .message{
+    		background-color: #fff;
+    		border-radius: 5px;
+    		padding: 5px 10px;
+   			margin-bottom: 10px;
+		}
+		.chatdiv .message:last-child{
+    		margin-bottom: 0;
+    	}
+		.chatdiv .mymessage{
+			text-align: right;
+		}
+		.chatdiv .othermessae{
+			text-align: left;
 		}
 		.chatText{
 			margin-top: 20px;
@@ -51,7 +69,7 @@
 		<h3 id="chatroom_id">test title</h4>
 	</div>
 	<div class="chatdiv">
-		
+		<div></div>
 	</div>
 	<div class="chatText">
 		<textarea id="msgcontent" rows="1" cols="80"></textarea>
@@ -80,9 +98,19 @@
 	});
 	
 	$(document).on("click","#submitmsg",function(){
+		var str="";
+		var chatsender="나";
+		var chatdiv=$(".chatdiv");
 		var message=$("#msgcontent").val();
 		sendmessage(message);
 		$("#msgcontent").val("");
+		str=str+'<div class="message mymessage">';
+		str=str+'<h4>'+chatsender+'</h4>';
+		str=str+'<p>'+message+'</p>';
+		str=str+'</div>';
+		chatdiv.append(str);
+		
+		
 		function sendmessage(message){
             websocket.send(message);
 		}
