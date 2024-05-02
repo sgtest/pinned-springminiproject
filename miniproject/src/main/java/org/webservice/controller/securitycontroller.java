@@ -39,6 +39,7 @@ import org.webservice.mapper.filemapper;
 import org.webservice.mapper.membermapper;
 import org.webservice.service_1.boardservice;
 import org.webservice.service_1.commentservice;
+import org.webservice.service_1.communicationservice;
 import org.webservice.service_1.etcservice;
 
 import lombok.Setter;
@@ -62,6 +63,8 @@ public class securitycontroller {
 	private etcservice eservice;
 	@Setter(onMethod_=@Autowired)
 	private PasswordEncoder pencoder;
+	@Setter(onMethod_=@Autowired)
+	private communicationservice communicateservice;
 	
 	//비밀번호 정규식
 	private static final String pass_regex = "^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[@#$%^&+=!])(?=\\S+$).{8,}$";
@@ -508,11 +511,6 @@ public Map<String,Object> resetpassword(String userid, String newpass, String re
 	return response;
 }
 
-@PreAuthorize("")
-@GetMapping("chat")
-public String chatting() {
-	return "chat";
-}
 
 //숫자 입력을 이용해서 인증을 수행한다.
 @PostMapping("/varifyauth")
