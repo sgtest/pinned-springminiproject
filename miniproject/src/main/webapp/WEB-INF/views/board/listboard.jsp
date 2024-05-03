@@ -59,9 +59,9 @@
 		.boardmake_create,.boardmake_delete,.boardmake_list,.member_setting{
 			 float: left;
 		}
-		.boardmake_insert{
+		.right_div{
 			margin-top: 30px;
-			 float: right;
+			float: right;
 		}
         .default_board_top {
             text-align: center;
@@ -186,12 +186,20 @@
 		</c:forEach>
 	</select>
 	</div>
-	
 	</div>
-		<div class="boardmake_insert">
+	
+	<div class="right_div">
+	<div class="boardmake_insert">
 		<button onclick="location.href='createBoard'">게시판에 글쓰기</button>
 		<button class="usernamebtn">사용자 이름보기</button>
-		</div><br>
+	</div><br>
+			
+	<div class="friend_add">
+		<input id="frdtext" type="text" name="friendid" placeholder="친구 아이디 입력">
+		<button id="frdaddbtn">친구 추가하기</button>
+	</div>
+	</div>
+	
 	<sec:authorize access="isAuthenticated()">
 	<div class="boardmake_list">
     	<div class="boardmake_select"><button onclick="location.href='selectBoardlist'">게시판 리스트 살펴보기</button></div>

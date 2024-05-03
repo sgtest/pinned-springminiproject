@@ -32,6 +32,7 @@ import org.webservice.domain.boardlist;
 import org.webservice.domain.boardpage;
 import org.webservice.domain.boardsearch;
 import org.webservice.domain.comment;
+import org.webservice.domain.friend;
 import org.webservice.domain.member;
 import org.webservice.domain.member_info_etc;
 import org.webservice.domain.memberfile;
@@ -154,7 +155,8 @@ public void myPage(Model model) {
 	List<comment> mcmtlist=cmtservice.getcmtlistbyid(userid);
 	List<memberfile> mfilelistList=bservice.getMemberfilebyuserid(userid);
 	member_info_etc minfoetc=bservice.getmemberetc(userid);
-	
+	List<friend> friendlist=communicateservice.getlistfriend(userid);
+	model.addAttribute("myid", userid);
 	model.addAttribute("memberinfoetc", minfoetc);
 	model.addAttribute("memberinfo", minfo);
 	model.addAttribute("boardrecordsize", mbrdlist.size());
@@ -163,6 +165,8 @@ public void myPage(Model model) {
 	model.addAttribute("commentrecord", mcmtlist);
 	model.addAttribute("filerecordsize", mfilelistList.size());
 	model.addAttribute("filerecord", mfilelistList);
+	model.addAttribute("friendlist", friendlist);
+	model.addAttribute("friendlistsize", friendlist.size());
 }
 
 //회원의 기타정보를 가져온다.

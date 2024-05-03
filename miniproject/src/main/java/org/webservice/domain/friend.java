@@ -6,7 +6,7 @@ import lombok.Data;
 
 @Data
 public class friend {
-	String firend_code;
+	String friend_code;
 	String userid;
 	String fuserid;
 	Date regdate;

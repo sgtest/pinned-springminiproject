@@ -63,10 +63,11 @@
 			max-height:1000px;
     		overflow-y: scroll;
 		}
-		.recordtable{
+		.recordtable,.friend_div{
 			max-height:1000px;
     		overflow-y: scroll;
 		}
+		
 		#memberinfocontent{
     		text-align: center;
             width: 80%;
@@ -78,10 +79,9 @@
   				text-align: center;
             width: 100%;
 		}
-		.file-record{
+		.file-record,.friend-record{
 			table-layout:fixed;
-  			border-spacing: 20px 20px;
-  			
+  			border-spacing: 20px 20px;	
   				text-align: center;
 			width: 100%;
 		}
@@ -305,11 +305,36 @@
 			
 			<li class="toppagetab" id="mypagefriend">
 				<div>
-					<p class="friend_count">현재 친구는 0명 있습니다.</p>
-					<div>
-						<table>
-					
-						</table>
+					<p class="myfriend">${myid}</p>
+					<p class="friend_count">현재 친구는 ${friendlistsize} 명 있습니다.</p>
+					<p>상대방이 접속한 상태일때 1:1 채팅이 가능합니다.</p>
+					<div class="friend_div">
+							<table class="friend-record">
+								<thead>
+									<tr>
+										<th>친구 코드</th>
+										<th>친구의 아이디</th>
+										<th>친구 추가 날짜</th>
+										<th>친구 삭제</th>
+										<th>채팅 초대</th>
+										<th>메세지 남기기</th>
+									</tr>
+								</thead>
+								
+								<tbody>
+									<c:forEach var="friend" items="${friendlist}">
+										<tr>
+											<td>${friend.friend_code}</td>
+											<td>${friend.fuserid}</td>
+											<td>${friend.regdate}</td>
+											<td><button class="friend_deletebtn" data-frdid="${friend.fuserid}">친구 삭제하기</button></td>
+											<td><button class="chatting_btn" data-frdid="${friend.fuserid}">채팅 초대하기</button></td>
+											<td><button class="message_btn" data-frdid="${friend.fuserid}">메세지 남기기</button></td>
+										</tr>
+									</c:forEach>
+								</tbody>
+								
+							</table>
 					</div>
 				</div>
 			</li>
@@ -650,6 +675,40 @@ $(document).ready(function(){
 			}
 		});
 	});
+	
+	var chatbtn=$(".chatting_btn");
+	chatbtn.on("click",function(e){
+		var myuserid=$(".myfriend").text();
+		var frienduserid=$(this).data("frdid");
+		
+		window.location.href='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
+	});
+	
+	var frddelete=$(".friend_deletebtn");
+	frddelete.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var myuserid=$(".myfriend").text();
+		var frduserid=$(this).data("frdid");
+		
+		$.ajax({
+			type:'post',
+			url:'/deletefriend',
+			data:{userid: myuserid, fuserid: frduserid},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+        		$(this).closest('tr').remove();
+        		alert("친구 삭제 성공!!!");	
+			},
+			error: function(error){
+				console.error("친구 삭제에 실패했습니다.");
+			}
+		});
+		
+	});
+	
 	
 	
 	homebt.on("click",function(e){

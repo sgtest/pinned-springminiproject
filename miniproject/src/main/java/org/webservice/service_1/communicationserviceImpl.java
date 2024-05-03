@@ -45,7 +45,7 @@ public class communicationserviceImpl implements communicationservice{
 		else {
 			friend frd=new friend();
 			String frd_code="~Friend~"+userid+"~"+fuserid;
-			frd.setFirend_code(frd_code);
+			frd.setFriend_code(frd_code);
 			frd.setFuserid(fuserid);
 			frd.setUserid(userid);
 			frdmapper.insertfriend(frd);
@@ -64,7 +64,7 @@ public class communicationserviceImpl implements communicationservice{
 		else {
 			friend frd=new friend();
 			String frd_code="~Friend~"+userid+"~"+fuserid;
-			frd.setFirend_code(frd_code);
+			frd.setFriend_code(frd_code);
 			frd.setFuserid(fuserid);
 			frd.setUserid(userid);
 			frdmapper.deletefriend(frd);
