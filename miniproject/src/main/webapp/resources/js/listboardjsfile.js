@@ -86,6 +86,28 @@
                 loadwriternamelist(bno, writerid);
             }); 
         });
+        
+        var frdadd=$("#frdaddbtn");
+        frdadd.on("click",function(e){
+        	var fid=$("#frdtext").val();
+    		var csrfToken = $("#_csrf").val();
+    		var uid=document.querySelector('h4.userId').textContent;
+    		$.ajax({
+    			type:'post',
+        		url:'/insertfriend',
+        		data:{userid: uid, fuserid: fid},
+        		dataType: 'json',
+        	    beforeSend: function(xhr) {
+          	    xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+          	    },
+            	success:function(result){
+            		alert("친구 추가 성공!!!");	
+             	},
+             	error: function(error){
+             		console.error("친구 추가 실패"); 
+             	}
+    		});
+        });
     });
     
 
