@@ -66,6 +66,7 @@
 <body>
 	<button id="session_btn">close_btn</button>
 	<div class="chatroom_title">
+		<h3 id="chatowner">${myid}</h3>
 		<h3 id="chatroom_id">test title</h4>
 	</div>
 	<div class="chatdiv">
@@ -100,16 +101,30 @@
 	$(document).on("click","#submitmsg",function(){
 		var str="";
 		var chatsender="나";
+		var chatsenderid=$("#chatowner").text();
 		var chatdiv=$(".chatdiv");
 		var message=$("#msgcontent").val();
-		sendmessage(message);
+		
+		var currentDate = new Date();
+		var year = currentDate.getFullYear();
+		var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+		var day = ('0' + currentDate.getDate()).slice(-2);
+		var hours = ('0' + currentDate.getHours()).slice(-2);
+		var minutes = ('0' + currentDate.getMinutes()).slice(-2);
+		var seconds = ('0' + currentDate.getSeconds()).slice(-2);
+		var strday = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;
+		var strday = '   TIME: ' + strday;
+		
 		$("#msgcontent").val("");
 		str=str+'<div class="message mymessage">';
 		str=str+'<h4>'+chatsender+'</h4>';
 		str=str+'<p>'+message+'</p>';
+		str=str+'<p>'+strday+'</p>';
 		str=str+'</div>';
 		chatdiv.append(str);
-		
+
+		message=chatsenderid+'|'+message;
+		sendmessage(message);
 		
 		function sendmessage(message){
             websocket.send(message);
@@ -121,7 +136,19 @@
 	}
 	
 	function listenmessage(event){
+		var recived=event.data.split("|");
+		var sender=recived[0];
+		var message=recived[1];
+		var date=recived[2];
+		console.log(message);
 		
+		var str="";
+		str=str+'<div class="message othermessae">';
+		str=str+'<h4>'+sender+'</h4>';
+		str=str+'<p>'+message+'</p>';
+		str=str+'<p>'+date+'</p>';
+		str=str+'</div>';
+		chatdiv.append(str);
 	}
 	</script>
 </html>
