@@ -33,10 +33,10 @@
 			resize: none;
 		}
 		.totalmypage{
-			
     		text-align: center;
 		}
 		.mypagerecordtab,.totalmypage{
+			margin-top: 30px;
 			list-style-type: none;
 		}
 		.infomypage-tab{
@@ -79,7 +79,7 @@
   				text-align: center;
             width: 100%;
 		}
-		.file-record,.friend-record{
+		.file-record,.friend-record,.chat-record{
 			table-layout:fixed;
   			border-spacing: 20px 20px;	
   				text-align: center;
@@ -94,7 +94,7 @@
 			text-overflow: ellipsis;
 			white-space: nowrap;
 		}*/
-		.etcmodal_register,.etcmodal_update,.etcmodal_delete{
+		.etcmodal_register,.etcmodal_update,.etcmodal_delete,.chatmodal_create{
     		background-color: #f0f0f0;
     		padding: 10px; 
     		border: 1px solid #ccc; 
@@ -122,6 +122,7 @@
 			<button id="commoninfo-btn">기본정보 보기</button>
 			<button id="etcinfo-btn">기타정보 보기</button>
 			<button id="mypage-friendbtn">친구 목록 보기</button>
+			<button id="chatlist-btn">채팅방 목록 보기</button>
 			</div>
 			<ul class="totalmypage">
 			<li class="toppagetab show" id="mypagecommon">
@@ -339,6 +340,32 @@
 				</div>
 			</li>
 			
+			<li class="toppagetab" id="chattinglist">
+				<div>
+					<p class="mychatid">${myid}</p>
+					<p>채팅방을 보고 싶으면 채팅리스트 새로고침을 눌러주세요</p>
+					<p>한사람당 하나만 채팅방 생성이 가능하고, 채팅방에 사람이 없으면 자동으로 삭제됩니다.</p>
+					<button class="chatlistload">채팅방 목록 새로고침</button>
+					<button class="chatcreatebtn">채팅방 새로 만들기</button>
+					<div class="chat_div">
+							<table class="chat-record">
+								<thead>
+									<tr>
+										<th>채팅방 코드</th>
+										<th>채팅방 제목</th>
+										<th>채팅방 개설 아이디</th>
+										<th>채팅방 입장</th>
+									</tr>
+								</thead>
+								
+								<tbody class="chatlist_tbody">
+								
+								</tbody>
+								
+							</table>
+					</div>
+				</div>
+			</li>
 			</ul>
 			
 		</div>
@@ -430,6 +457,25 @@
 	</div>
 
 </div>
+
+
+	<div class="chatmodal_create" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+		<div class="chatmodal_create_dialog" role="document">
+			<div class="chatmodal_create_content">
+				<div class="chatmodal_create_header">
+					<button class="chatmodal_create_close">닫기</button>
+					<h4>채팅방 생성하기</h4>
+				</div>
+				<div class="chatmodal_create_body">
+					<p>채팅방 제목</p>
+					<textarea class="chatmodal_create_title" rows="1" cols="100"></textarea>
+				</div>
+				<div class="chatmodal_create_footer">
+					<button class="chatcreateactbtn">채팅방 생성</button>
+				</div>
+			</div>
+		</div>
+	</div>
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
@@ -447,10 +493,10 @@ $(document).ready(function(){
 	var cmtabbtn=$('#commoninfo-btn');
 	var etctabbtn=$('#etcinfo-btn');
 	var friendtabbtn=$('#mypage-friendbtn');
+	var chatlistbtn=$('#chatlist-btn');
 	var brdrecordbtn=$('.recordbrd-deletebtn');
 	var cmtrecordbtn=$('.recordcmt-deletebtn');
 	var filerecordbtn=$('.recordfile-deletebtn');
-	
 	
 	tablist.on("click",function(e){
 		var tabid=$(this).attr('id');
@@ -492,6 +538,90 @@ $(document).ready(function(){
 			$(toptablist[i]).removeClass('show');
 		}
 		toptabobj.addClass('show');
+	});
+	chatlistbtn.on("click",function(e){
+		var toptabobj=$('#chattinglist');
+		var toptablist=$('.toppagetab');
+		for(var i=0;i<toptablist.length;i++){
+			$(toptablist[i]).removeClass('show');
+		}
+		toptabobj.addClass('show');
+	});
+	
+	var chatloadbtn=$('.chatlistload');
+	chatloadbtn.on("click",function(e){
+		$.ajax({
+			type:'get',
+			url:'/chatlist',
+			dataType:'json',
+			success: function(response){
+				loadchatlist(response['chatlist']);
+			},
+			error: function(error){
+				console.error("채팅창 목록을 불러오는것을 실패하였습니다.")
+			}
+		});
+	});
+	
+	function loadchatlist(chatlist){
+		var str="";
+		var chattbody=$('.chatlist_tbody');
+		chattbody.empty();
+		for(var i=0;i<chatlist.length;i++){
+			var chatobj=chatlist[i];
+			str=str+'<tr>';
+			str=str+'<td>'+chatobj.chatroom_code+'</td>';
+			str=str+'<td>'+chatobj.chatroom_title+'</td>';
+			str=str+'<td>'+chatobj.regid+'</td>';
+			str=str+'<td>'+'<button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button>'+'</td>'
+			str=str+'</tr>';
+		}
+		
+		chattbody.append(str);
+	}
+	
+	var inchat=$('.chatparticate');
+	inchat.on("click",function(e){
+		var chatcode=$(this).data("code");
+		var chatuser=$(".mychatid").text();
+		var chaturi="/chat?userid="+chatuser+"&code="+chatcode;
+		window.open(chaturi,"chat","width=1000, height=1200")
+		//채팅방 접속(세션 생성)
+	});
+	
+	var chatmodal=$('.chatmodal_create');
+	var chatcre=$('.chatcreatebtn');
+	var chatmodalclose=$('.chatmodal_create_close')
+	var chatcreatecation=$('.chatcreateactbtn');
+	chatcre.on("click",function(e){
+		chatmodal.css("display","block");
+	});
+	chatmodalclose.on("click",function(e){
+		chatmodal.css("display","none");
+	});
+	chatcreatecation.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var chattitle=$(".chatmodal_create_title").val();
+		console.log(chattitle);
+		$.ajax({
+			type:'post',
+			url:'/chatcreation',
+			data:{title: chattitle},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				alert(chattitle+" 채팅방을 생성하였습니다");
+				var chatcode=response['chatcode'];
+				var chatuser=response['user'];
+				var chaturi="/chat?userid="+chatuser+'&code='+chatcode;
+				window.open(chaturi,"chat","width=1000, height=1200")
+			},
+			error: function(error){
+				console.error("채팅방 생성에 실패하였습니다.")
+			}
+		});
 	});
 	
 	
@@ -681,7 +811,9 @@ $(document).ready(function(){
 		var myuserid=$(".myfriend").text();
 		var frienduserid=$(this).data("frdid");
 		
-		window.location.href='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
+		//window.location.href='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
+		var hstr='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
+		window.open(hstr,"chat","width=1000, height=1200")
 	});
 	
 	var frddelete=$(".friend_deletebtn");

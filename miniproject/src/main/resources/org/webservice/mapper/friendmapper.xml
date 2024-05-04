@@ -15,4 +15,16 @@
 		delete from pro_friend where friend_code=#{friend_code}
 	</delete>
 	
+	<insert id="createroom">
+		insert into pro_chatroom values(#{chatroom_code},#{chatroom_title},#{regid},sysdate)
+	</insert>
+	<delete id="deleteroom">
+		delete from pro_chatroom where chatroom_code=#{chatroom_code}
+	</delete>
+	<select id="allchatroom" resultType="org.webservice.domain.chatroom">
+		select * from pro_chatroom
+	</select>
+	<select id="getchatroom" resultType="org.webservice.domain.chatroom">
+		select * from pro_chatroom where chatroom_code=#{chatroom_code}
+	</select>
 </mapper>

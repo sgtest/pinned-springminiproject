@@ -1,11 +1,15 @@
 package org.webservice.service_1;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+import org.webservice.domain.chatroom;
 import org.webservice.domain.friend;
 import org.webservice.mapper.friendmapper;
 
@@ -72,6 +76,37 @@ public class communicationserviceImpl implements communicationservice{
 		}
 	}
 
+	@Override
+	public List<chatroom> getlistchatroom(){
+		List<chatroom> chatlist=frdmapper.allchatroom();
+		return chatlist;
+	}
+	@Override
+	public chatroom selectchatroom(String code) {
+		return frdmapper.getchatroom(code);
+	}
+	@Override
+	public chatroom createchatroom(String title) {
+		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
+		String exuserid=auth.getName();
+		chatroom chtroom=new chatroom();
+		UUID uuid=UUID.randomUUID();
+		Date datevalue=new Date();
+		String createdate=new SimpleDateFormat("yyyy-MM-dd-HH-mm").format(datevalue);
+		String code=uuid+"_"+title+"_"+createdate;
+		
+		chtroom.setChatroom_code(code);
+		chtroom.setChatroom_title(title);
+		chtroom.setRegid(exuserid);
+		frdmapper.createroom(chtroom);
+		
+		return chtroom;
+	};
+	@Override
+	public void deletechatroom(String code) {
+		chatroom chtroom=frdmapper.getchatroom(code);
+		frdmapper.deleteroom(chtroom);
+	};
 	
 
 }
