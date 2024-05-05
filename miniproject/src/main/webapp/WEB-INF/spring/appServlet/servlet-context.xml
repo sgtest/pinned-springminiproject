@@ -41,11 +41,12 @@
 	<websocket:handlers>
 		<websocket:mapping handler="sockethandler" path="/requestsession"/>
 	</websocket:handlers>
+	<!--  
       <websocket:message-broker>
         <websocket:stomp-endpoint path=""> 
             <websocket:sockjs /> 
         </websocket:stomp-endpoint>
         <websocket:simple-broker prefix="" />
     </websocket:message-broker>
-    
+    -->
 </beans:beans>
