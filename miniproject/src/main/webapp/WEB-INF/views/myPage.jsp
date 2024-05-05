@@ -573,7 +573,7 @@ $(document).ready(function(){
 			str=str+'<td>'+chatobj.chatroom_code+'</td>';
 			str=str+'<td>'+chatobj.chatroom_title+'</td>';
 			str=str+'<td>'+chatobj.regid+'</td>';
-			str=str+'<td><button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button></td>'
+			str=str+'<td>'+'<button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button>'+'</td>'
 			str=str+'</tr>';
 		}
 		
@@ -584,10 +584,8 @@ $(document).ready(function(){
 	inchat.on("click",function(e){
 		var chatcode=$(this).data("code");
 		var chatuser=$(".mychatid").text();
-		var chaturi="/chat?code="+chatcode;
-		console.log(chaturi);
-		//window.open(chaturi,"chat","width=1000, height=1200");
-		window.location.href=chaturi;
+		var chaturi="/chat?userid="+chatuser+"&code="+chatcode;
+		window.open(chaturi,"chat","width=1000, height=1200")
 		//채팅방 접속(세션 생성)
 	});
 	
@@ -617,9 +615,8 @@ $(document).ready(function(){
 				alert(chattitle+" 채팅방을 생성하였습니다");
 				var chatcode=response['chatcode'];
 				var chatuser=response['user'];
-				var chaturi="/chat?code="+chatcode;
+				var chaturi="/chat?userid="+chatuser+'&code='+chatcode;
 				window.open(chaturi,"chat","width=1000, height=1200")
-				//window.location.href="/chat?userid="+chatuser+'&code='+chatcode;
 			},
 			error: function(error){
 				console.error("채팅방 생성에 실패하였습니다.")

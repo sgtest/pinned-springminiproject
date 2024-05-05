@@ -30,7 +30,7 @@ public class communicationcontroller {
 	
 	@PreAuthorize("authenticated()")
 	@GetMapping("chat")
-	public void chatting(String code, Model model) {
+	public void chatting(String userid, String code, Model model) {
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String exuserid=auth.getName();
 		model.addAttribute("myid", exuserid);
