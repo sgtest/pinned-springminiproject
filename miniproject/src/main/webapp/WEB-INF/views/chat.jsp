@@ -148,7 +148,7 @@
 		str=str+'<p>'+message+'</p>';
 		str=str+'<p>'+date+'</p>';
 		str=str+'</div>';
-		chatdiv.append(str);
+		$('.chatdiv').append(str);
 	}
 	</script>
 </html>
