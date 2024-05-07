@@ -586,8 +586,8 @@ $(document).ready(function(){
 		var chatuser=$(".mychatid").text();
 		var chaturi="/chat?code="+chatcode;
 		console.log(chaturi);
-		//window.open(chaturi,"chat","width=1000, height=1200");
-		window.location.href=chaturi;
+		window.open(chaturi,"chat","width=1000, height=1200");
+		//window.location.href=chaturi;
 		//채팅방 접속(세션 생성)
 	});
 	
@@ -619,7 +619,7 @@ $(document).ready(function(){
 				var chatuser=response['user'];
 				var chaturi="/chat?code="+chatcode;
 				window.open(chaturi,"chat","width=1000, height=1200")
-				//window.location.href="/chat?userid="+chatuser+'&code='+chatcode;
+				//window.location.href="/chat?code="+chatcode;
 			},
 			error: function(error){
 				console.error("채팅방 생성에 실패하였습니다.")

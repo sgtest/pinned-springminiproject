@@ -5,6 +5,9 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.handler.annotation.DestinationVariable;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -14,27 +17,41 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.webservice.domain.chatmessage;
 import org.webservice.domain.chatroom;
 import org.webservice.domain.friend;
 import org.webservice.service_1.communicationservice;
 
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.log4j.Log4j;
 
 @Controller
+@RequiredArgsConstructor
 @Log4j
 public class communicationcontroller {
 
 	@Setter(onMethod_=@Autowired)
 	private communicationservice communicateservice;
+
+	private final SimpMessagingTemplate simpmessageingtemplate;
 	
 	@PreAuthorize("authenticated()")
 	@GetMapping("chat")
 	public void chatting(String code, Model model) {
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String exuserid=auth.getName();
+		String title=communicateservice.selectchatroom(code).getChatroom_title();
+		model.addAttribute("chatroomtitle",title);
 		model.addAttribute("myid", exuserid);
 		model.addAttribute("chatroomcode", code);
+	}
+
+	@PreAuthorize("authenticated()")
+	@MessageMapping("/pub/chat/message")
+	public void sendchat(@DestinationVariable String code, chatmessage chat) {
+		simpmessageingtemplate.convertAndSend("/sub/chat?code="+code,chat);
+		log.info("채팅 유저: "+chat.getUserid()+", 채팅방 코드: "+chat.getRoomcode()+", 채팅 내용: "+chat.getContent()+", 채팅 유형: "+chat.getType()+", 채팅 일자: "+chat.getRegdate());
 	}
 	
 	@PreAuthorize("authenticated()")
