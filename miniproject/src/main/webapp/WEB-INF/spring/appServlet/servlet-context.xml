@@ -37,16 +37,23 @@
 
 	</beans:bean>	
 	
-	<beans:bean id="sockethandler" class="org.webservice.websocket.websockethandler"/>	
-	<websocket:handlers>
+	<beans:bean id="objectmapper" class="com.fasterxml.jackson.databind.ObjectMapper">
+	</beans:bean>
+	
+	<beans:bean id="sockethandler" class="org.webservice.websocket.websockethandler">
+    	<beans:constructor-arg ref="objectmapper" />
+	</beans:bean>	
+	
+	<websocket:handlers allowed-origins="*">
 		<websocket:mapping handler="sockethandler" path="/requestsession"/>
+        <websocket:sockjs /> 
 	</websocket:handlers>
-	<!--  
+	 
       <websocket:message-broker>
-        <websocket:stomp-endpoint path=""> 
-            <websocket:sockjs /> 
+        <websocket:stomp-endpoint path="/pub"> 
         </websocket:stomp-endpoint>
-        <websocket:simple-broker prefix="" />
+        <websocket:simple-broker prefix="/sub" />
+        
     </websocket:message-broker>
-    -->
+    
 </beans:beans>
