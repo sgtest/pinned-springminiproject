@@ -355,6 +355,7 @@
 										<th>채팅방 제목</th>
 										<th>채팅방 개설 아이디</th>
 										<th>채팅방 입장</th>
+										<th>채팅방 URL</th>
 									</tr>
 								</thead>
 								
@@ -574,22 +575,13 @@ $(document).ready(function(){
 			str=str+'<td>'+chatobj.chatroom_title+'</td>';
 			str=str+'<td>'+chatobj.regid+'</td>';
 			str=str+'<td><button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button></td>'
+			str=str+'<td><a href="chat?code='+chatobj.chatroom_code+'"/>채팅방링크</td>'
 			str=str+'</tr>';
 		}
 		
 		chattbody.append(str);
 	}
 	
-	var inchat=$('.chatparticate');
-	inchat.on("click",function(e){
-		var chatcode=$(this).data("code");
-		var chatuser=$(".mychatid").text();
-		var chaturi="/chat?code="+chatcode;
-		console.log(chaturi);
-		window.open(chaturi,"chat","width=1000, height=1200");
-		//window.location.href=chaturi;
-		//채팅방 접속(세션 생성)
-	});
 	
 	var chatmodal=$('.chatmodal_create');
 	var chatcre=$('.chatcreatebtn');
@@ -614,6 +606,7 @@ $(document).ready(function(){
 				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
 			},
 			success: function(response){
+				chatmodal.css("display","none");
 				alert(chattitle+" 채팅방을 생성하였습니다");
 				var chatcode=response['chatcode'];
 				var chatuser=response['user'];
@@ -622,6 +615,7 @@ $(document).ready(function(){
 				//window.location.href="/chat?code="+chatcode;
 			},
 			error: function(error){
+				chatmodal.css("display","none");
 				console.error("채팅방 생성에 실패하였습니다.")
 			}
 		});
@@ -814,9 +808,6 @@ $(document).ready(function(){
 		var myuserid=$(".myfriend").text();
 		var frienduserid=$(this).data("frdid");
 		
-		//window.location.href='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
-		var hstr='/chat?userid='+myuserid+'&frienduserid='+frienduserid;
-		window.open(hstr,"chat","width=1000, height=1200")
 	});
 	
 	var frddelete=$(".friend_deletebtn");
@@ -853,6 +844,19 @@ $(document).ready(function(){
 		window.location.href='/boardout';
 	});
 });
+
+$(document).on("click", ".chatparticate", function() {
+    var chatroomCode = $(this).data("code");
+    loadchatwindow(chatroomCode);
+});
+
+function loadchatwindow(code){
+	var chatcode=code;
+	var chatuser=$(".mychatid").text();
+	var chaturi="/chat?code="+chatcode;
+	console.log(chaturi);
+	window.open(chaturi,"chat","width=1000, height=1200");
+}
 </script>
 </body>
 </html>

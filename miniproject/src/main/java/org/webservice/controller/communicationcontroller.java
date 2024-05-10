@@ -48,9 +48,9 @@ public class communicationcontroller {
 	}
 
 	@PreAuthorize("authenticated()")
-	@MessageMapping("/pub/chat/message")
+	@MessageMapping("/chat/message/{code}")
 	public void sendchat(@DestinationVariable String code, chatmessage chat) {
-		simpmessageingtemplate.convertAndSend("/sub/chat?code="+code,chat);
+		simpmessageingtemplate.convertAndSend("/sub/chat/"+code,chat);
 		log.info("채팅 유저: "+chat.getUserid()+", 채팅방 코드: "+chat.getRoomcode()+", 채팅 내용: "+chat.getContent()+", 채팅 유형: "+chat.getType()+", 채팅 일자: "+chat.getRegdate());
 	}
 	

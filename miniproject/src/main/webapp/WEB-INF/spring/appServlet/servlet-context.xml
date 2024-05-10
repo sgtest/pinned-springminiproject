@@ -49,8 +49,9 @@
         <websocket:sockjs /> 
 	</websocket:handlers>
 	 
-      <websocket:message-broker>
-        <websocket:stomp-endpoint path="/pub"> 
+      <websocket:message-broker application-destination-prefix="/pub">
+        <websocket:stomp-endpoint path="/stomp/chat" allowed-origins="*"> 
+        	<websocket:sockjs/>
         </websocket:stomp-endpoint>
         <websocket:simple-broker prefix="/sub" />
         

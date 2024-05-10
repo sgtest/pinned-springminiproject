@@ -93,20 +93,24 @@ User
 	$(document).ready(function(){
 		var sessionclosebtn=$("#session_btn");
 		var chtrmcode="${chatroomcode}";
-		
-			jssocket=new SockJS("http://localhost:8080/requestsession");
+		var myid=$("#chatowner").text();
+			jssocket=new SockJS("http://localhost:8080/stomp/chat");
 			jsstomp=Stomp.over(jssocket);
 			jsstomp.connect({}, function(frame) {
 				console.log('Connected: ' + frame);
 				
-				jsstomp.subscribe("/sub/pub/"+chtrmcode,function(chat){
+				jsstomp.subscribe("/sub/chat/"+chtrmcode,function(chat){
 			        var msg=JSON.parse(chat.body);
 			        var msgtype=msg.type;
 			        var msgcontent=msg.content;
 			        var msgwritter=msg.userid;
 			        var msgdate=msg.regdate;
+			        var msgdate="TIME: "+getlistenTime(msgdate);
 
 			        var str="";
+			        if(msgwritter===myid){
+			        	
+			        }else{
 			        if(msgtype === "nomal"){
 			            str=str+'<div class="message othermessae">';
 			            str=str+'<h4>'+msgwritter+'</h4>';
@@ -127,6 +131,7 @@ User
 			            str=str+'<p>'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
+			        }
 			        }
 			        $('.chatdiv').append(str);
 			        scrollToBottom();
@@ -155,22 +160,13 @@ User
 	    				"type": "particate",
 	    				"regdate": date
 	    		}
-	    		jsstomp.send("/pub/chat/message?code="+chtrmcode,{},JSON.stringify(particatemsg));
+	    		jsstomp.send("/pub/chat/message/"+chtrmcode,{},JSON.stringify(particatemsg));
 				scrollToBottom();
 				
 			});	
-    		
-			
-		
-		
-	});
-	
-	$(document).on("click","#session_btn",function(){
-		sessionclose();
-		function sessionclose(){
-			
-			console.log("연결 세션 종료");
-		}
+			jsstomp.disconnect(function(){
+				sessionclose();
+			});	
 	});
 	
 	$(document).on("click","#submitmsg",function(){
@@ -196,19 +192,58 @@ User
 		//json 형태로 전송?
 		var particatemsg={
     			"roomcode": chtrmcode,
-    			"userid": chatsender,
+    			"userid": chatsenderid,
     			"content": message,
     			"type": "nomal",
     			"regdate": current
     	}
-    	jsstomp.send("/pub/chat/message?code="+chtrmcode,{},JSON.stringify(particatemsg));				
+    	jsstomp.send("/pub/chat/message/"+chtrmcode,{},JSON.stringify(particatemsg));				
 		
 		scrollToBottom();
 		
 	});
-	
+	$(document).on("click","#session_btn",function(){
+		sessionclose();
+		
+	});
+	window.addEventListener('beforeunload', function(event) {
+	    sessionclose();
+	});
+
+	function sessionclose(){
+		//창을 닫고 메세지 전송
+		var chtrmcode="${chatroomcode}";
+		console.log("연결 세션 종료");
+		var exiter=$("#chatowner").text();
+        var date=new Date();
+    	var strday = getTime();
+		var strday = '   TIME: ' + strday;
+		var exit="채팅에서 나갔습니다.";
+		var exitmsg={
+				"roomcode": chtrmcode,
+				"userid": exiter,
+				"content": exiter+" 님이 "+exit,
+				"type": "exit",
+				"regdate": date
+		}
+		jsstomp.send("/pub/chat/message/"+chtrmcode,{},JSON.stringify(exitmsg));
+		
+		window.close();
+	}
 	function getTime(){
 		var currentDate = new Date();
+		console.log(currentDate);
+		var year = currentDate.getFullYear();
+		var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
+		var day = ('0' + currentDate.getDate()).slice(-2);
+		var hours = ('0' + currentDate.getHours()).slice(-2);
+		var minutes = ('0' + currentDate.getMinutes()).slice(-2);
+		var seconds = ('0' + currentDate.getSeconds()).slice(-2);
+		var strday = year + '-' + month + '-' + day + ' ' + hours + ':' + minutes + ':' + seconds;	
+		return strday;
+	}
+	function getlistenTime(curtime){
+		var currentDate = new Date(curtime);
 		var year = currentDate.getFullYear();
 		var month = ('0' + (currentDate.getMonth() + 1)).slice(-2);
 		var day = ('0' + currentDate.getDate()).slice(-2);
