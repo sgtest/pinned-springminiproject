@@ -1,6 +1,9 @@
 User
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/core" prefix="c"%>
+<%@ taglib uri="http://java.sun.com/jsp/jstl/fmt" prefix="fmt"%>
+<%@ taglib prefix="sec" uri="http://www.springframework.org/security/tags" %>
 <!DOCTYPE html>
 <html>
 <head>
@@ -47,33 +50,48 @@ User
     		background-color: #f9f9f9;
 		}
 		.chatdiv .message{
+			max-width: 100%;
     		background-color: #fff;
     		border-radius: 5px;
+    		border: 1px solid #ccc;
     		padding: 5px 10px;
+    		background-color: #f9f9f9;
    			margin-bottom: 10px;
 		}
 		.chatdiv .message:last-child{
     		margin-bottom: 0;
     	}
 		.chatdiv .mymessage{
+		 	background-color: #FFFFE0;
 			text-align: right;
 		}
 		.chatdiv .othermessae{
+			background-color: #CCCCCC;
 			text-align: left;
 		}
 		.chatdiv .particate{
+			background-color: #ADD8E6;
 			text-align: center;
 		}
 		.chatdiv .exit{
+			background-color: #FFC0CB;
 			text-align: center;
 		}
 		.chatText{
 			margin-top: 20px;
 		}
+	    .chatdiv .pmsg{
+			word-wrap: break-word;
+		}
     </style> 
 </head>
 <body>
+	<input id="_csrf" type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}">
+	<sec:authentication property="principal" var="userinfo"/>
 	<button id="session_btn">close_btn</button>
+	
+	<button>채팅방 폭파</button>
+	
 	<div class="chatroom_title">
 		<h3 id="chatroomcode">${chatroomcode}</h3>
 		<h3 id="chatowner">${myid}</h3>
@@ -114,21 +132,21 @@ User
 			        if(msgtype === "nomal"){
 			            str=str+'<div class="message othermessae">';
 			            str=str+'<h4>'+msgwritter+'</h4>';
-			            str=str+'<p>'+msgcontent+'</p>';
+			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
 			        }
 			        else if(msgtype === "particate"){
 			            str=str+'<div class="message particate">';
 			            str=str+'<h4>'+msgwritter+'</h4>';
-			            str=str+'<p>'+msgcontent+'</p>';
+			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
 			        }
 			        else{
 			            str=str+'<div class="message exit">';
 			            str=str+'<h4>'+msgwritter+'</h4>';
-			            str=str+'<p>'+msgcontent+'</p>';
+			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
 			        }
@@ -147,7 +165,7 @@ User
 	            var str="";
 	    		str=str+'<div class="message particate">';
 	    		str=str+'<h4>'+particater+'</h4>';
-	    		str=str+'<p>'+partication+'</p>';
+	    		str=str+'<p class="pmsg">'+partication+'</p>';
 	    		str=str+'<p>'+strday+'</p>';
 	    		str=str+'</div>';
 	    		chatdiv.append(str);
@@ -170,6 +188,15 @@ User
 	});
 	
 	$(document).on("click","#submitmsg",function(){
+		 sendmessage();
+	});
+	$(document).on("keydown","#msgcontent",function(event){
+		if (event.ctrlKey && event.keyCode === 13) {
+			sendmessage();
+	        event.preventDefault();
+	    }
+	});
+	function sendmessage(){
 		var str="";
 		var chatsender="나";
 		var chatsenderid=$("#chatowner").text();
@@ -184,7 +211,7 @@ User
 		$("#msgcontent").val("");
 		str=str+'<div class="message mymessage">';
 		str=str+'<h4>'+chatsender+'</h4>';
-		str=str+'<p>'+message+'</p>';
+		str=str+'<p class="pmsg">'+message+'</p>';
 		str=str+'<p>'+strday+'</p>';
 		str=str+'</div>';
 		chatdiv.append(str);
@@ -200,8 +227,7 @@ User
     	jsstomp.send("/pub/chat/message/"+chtrmcode,{},JSON.stringify(particatemsg));				
 		
 		scrollToBottom();
-		
-	});
+	}
 	$(document).on("click","#session_btn",function(){
 		sessionclose();
 		
