@@ -41,7 +41,11 @@ public class communicationcontroller {
 	public void chatting(String code, Model model) {
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String exuserid=auth.getName();
-		String title=communicateservice.selectchatroom(code).getChatroom_title();
+		chatroom chtroom=communicateservice.selectchatroom(code);
+		String title=chtroom.getChatroom_title();
+		String reguserid=chtroom.getRegid();
+		
+		model.addAttribute("reguser", reguserid);
 		model.addAttribute("chatroomtitle",title);
 		model.addAttribute("myid", exuserid);
 		model.addAttribute("chatroomcode", code);
@@ -125,9 +129,19 @@ public class communicationcontroller {
 		String exuserid=auth.getName();
 		chatroom chat=communicateservice.selectchatroom(code);
 		if(chat.getRegid().compareTo(exuserid)!=0) {
-			
+			response.put("result","failure");
+		}else if(chat.getRegid().compareTo(exuserid)==0){
+			chatmessage chtexit=new chatmessage();
+			chtexit.setRoomcode(code);
+			chtexit.setContent("chatroom_remove");
+			chtexit.setType("removechatroom");
+			chtexit.setUserid(chat.getRegid());
+			simpmessageingtemplate.convertAndSend("/sub/chat/"+code,chtexit);
+			//이 방법 말고도 벡엔드 단에서 채팅방이 사라질시 자동으로 세션이 끊기고 창이 닫히게 하는 방법을 찾아보자
+			communicateservice.deletechatroom(code);
+			response.put("result","success");
 		}else {
-			
+			response.put("result","failure");
 		}
 		return response;
 	}

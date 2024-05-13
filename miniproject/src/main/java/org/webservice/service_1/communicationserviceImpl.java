@@ -89,6 +89,8 @@ public class communicationserviceImpl implements communicationservice{
 	public chatroom createchatroom(String title) {
 		Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 		String exuserid=auth.getName();
+		
+		//만약 해당 유저 이름으로 만든 채팅방이 5개 존재하면 채팅방을 만들지 않고 null을 반환
 		chatroom chtroom=new chatroom();
 		UUID uuid=UUID.randomUUID();
 		Date datevalue=new Date();
