@@ -83,6 +83,13 @@ User
 	    .chatdiv .pmsg{
 			word-wrap: break-word;
 		}
+		.chatremovemodal{
+			background-color: #f0f0f0;
+    		padding: 10px; 
+    		border: 1px solid #ccc; 
+   			margin-bottom: 10px; 
+   			margin-left:5px;
+		}
     </style> 
 </head>
 <body>
@@ -90,7 +97,33 @@ User
 	<sec:authentication property="principal" var="userinfo"/>
 	<button id="session_btn">close_btn</button>
 	
-	<button>채팅방 폭파</button>
+	<sec:authorize access="${reguser eq userinfo.username}">
+		<button id="chatremove">채팅방 폭파</button>
+	</sec:authorize>
+	
+	<div class="chatremovemodal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+		<div class="chatremovemodal_dialog" role="document">
+			<div class="chatremovemodal_content">
+				<div class="chatremovemodal_header">
+					<button id="chatremoveclose">닫기</button>
+					<sec:authorize access="${reguser eq userinfo.username}">
+					<p>채팅방을 폭파하시겠습니까?</p>
+					</sec:authorize>
+					<sec:authorize access="${reguser ne userinfo.username}">
+					<p>권한이 없습니다.</p>
+					</sec:authorize>
+				</div>
+				<div class="chatremovemodal_body">
+					<sec:authorize access="${reguser eq userinfo.username}">
+						<button id="chatremoveaction">채팅방 삭제</button>
+					</sec:authorize>
+					<sec:authorize access="${reguser ne userinfo.username}">
+					
+					</sec:authorize>
+				</div>
+			</div>
+		</div>
+	</div>
 	
 	<div class="chatroom_title">
 		<h3 id="chatroomcode">${chatroomcode}</h3>
@@ -104,6 +137,10 @@ User
 		<textarea id="msgcontent" rows="1" cols="80"></textarea>
 		<button id="submitmsg">submit</button>
 	</div>
+	<div class="chathelperdiv">
+		<h4>crtl key, enter key를 동시에 누를시 채팅이 전송됩니다.</h4>
+	</div>
+	
 </body>
 	<script>  
 	let jssocket;
@@ -186,6 +223,22 @@ User
 				sessionclose();
 			});	
 	});
+	
+	$(document).on("click","#chatremove",function(){
+		var chatrmmodal=$(".chatremovemodal");
+		chatrmmodal.css("display","block");
+		
+	});
+	$(document).on("click","#chatremoveclose",function(){
+		var chatrmmodal=$(".chatremovemodal");
+		chatrmmodal.css("display","none");
+		
+	});
+	$(document).on("click","#chatremoveaction",function(){
+		//채팅방 폭파 메세지를 전부에게 전송하고 강제로 해당 방과 관련된 세션을 끊어야한다
+		
+	});
+	
 	
 	$(document).on("click","#submitmsg",function(){
 		 sendmessage();
