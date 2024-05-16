@@ -9,6 +9,6 @@ public class chatmessage {
 	String roomcode;
 	String userid;
 	String content;
-	String type; //"particate","exit","nomal"
+	String type; //"particate","exit","nomal","removechatroom"
 	Date regdate;
 }

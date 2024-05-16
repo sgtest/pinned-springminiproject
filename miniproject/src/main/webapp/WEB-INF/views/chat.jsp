@@ -180,6 +180,10 @@ User
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
 			        }
+			        else if(msgtype === "removechatroom"){
+			    		alert("채팅방이 삭제되었습니다");
+			        	chatromeextinction();
+			        }
 			        else{
 			            str=str+'<div class="message exit">';
 			            str=str+'<h4>'+msgwritter+'</h4>';
@@ -236,7 +240,29 @@ User
 	});
 	$(document).on("click","#chatremoveaction",function(){
 		//채팅방 폭파 메세지를 전부에게 전송하고 강제로 해당 방과 관련된 세션을 끊어야한다
-		
+		var chtrmcode="${chatroomcode}";
+		var csrfToken = $("#_csrf").val();
+		$.ajax({
+			type:'post',
+			url:'/chatdelete',
+			data:{code:chtrmcode},
+			dataType:'json',
+			beforeSend: function(xhr) {
+				xhr.setRequestHeader('X-CSRF-TOKEN', csrfToken);
+			},
+			success: function(response){
+				if(response['result']==='success'){
+					alert(chtrmcode+" 채팅방 삭제");
+					chatromeextinction();
+				}
+				else{
+					alert("채팅방 삭제 권한이 없습니다.");
+				}
+			},
+			error: function(error){
+				console.error("채팅방 삭제 실패");
+			}
+		});
 	});
 	
 	
@@ -306,7 +332,11 @@ User
 				"regdate": date
 		}
 		jsstomp.send("/pub/chat/message/"+chtrmcode,{},JSON.stringify(exitmsg));
-		
+		jsstomp.unsubscribe();
+		window.close();
+	}
+	function chatromeextinction(){
+		jsstomp.unsubscribe();
 		window.close();
 	}
 	function getTime(){
