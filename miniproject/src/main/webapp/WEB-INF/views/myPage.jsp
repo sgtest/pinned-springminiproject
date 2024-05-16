@@ -355,7 +355,6 @@
 										<th>채팅방 제목</th>
 										<th>채팅방 개설 아이디</th>
 										<th>채팅방 입장</th>
-										<th>채팅방 URL</th>
 									</tr>
 								</thead>
 								
@@ -574,8 +573,7 @@ $(document).ready(function(){
 			str=str+'<td>'+chatobj.chatroom_code+'</td>';
 			str=str+'<td>'+chatobj.chatroom_title+'</td>';
 			str=str+'<td>'+chatobj.regid+'</td>';
-			str=str+'<td><button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button></td>'
-			str=str+'<td><a href="chat?code='+chatobj.chatroom_code+'"/>채팅방링크</td>'
+			str=str+'<td><button class="chatparticate" data-code="'+chatobj.chatroom_code+'">채팅 참여하기</button></td>';
 			str=str+'</tr>';
 		}
 		
@@ -853,9 +851,25 @@ $(document).on("click", ".chatparticate", function() {
 function loadchatwindow(code){
 	var chatcode=code;
 	var chatuser=$(".mychatid").text();
-	var chaturi="/chat?code="+chatcode;
-	console.log(chaturi);
-	window.open(chaturi,"chat","width=1000, height=1200");
+	//해당 채팅의 존재여부 확인
+	$.ajax({
+		type:'get',
+		url:'/chatverification',
+		data:{code: chatcode},
+		dataType:'json',
+		success: function(response){
+			if(response['result']==='success'){
+				var chaturi="/chat?code="+chatcode;
+				console.log(chaturi);
+				window.open(chaturi,"chat","width=1000, height=1200");
+			}else{
+				alert("해당 채팅방이 존재하지 않습니다.");
+			}
+		},
+		error: function(error){
+			console.error("");
+		}
+	});
 }
 </script>
 </body>
