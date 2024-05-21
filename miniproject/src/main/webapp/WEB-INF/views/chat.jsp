@@ -21,6 +21,7 @@ User
 	<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
         integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8sh+WyldQxFbSTFpCR78dt4vgLSF6g6yo"
         crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.min.js"></script>
     <style>
     	button, input[type="button"]{
   			background-color: #000;
@@ -172,6 +173,7 @@ User
 			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
+				        chatsound();
 			        }
 			        else if(msgtype === "particate"){
 			            str=str+'<div class="message particate">';
@@ -179,10 +181,12 @@ User
 			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
+				        chatinsound();
 			        }
 			        else if(msgtype === "removechatroom"){
 			    		alert("채팅방이 삭제되었습니다");
 			        	chatromeextinction();
+				        chatoutsound();
 			        }
 			        else{
 			            str=str+'<div class="message exit">';
@@ -190,6 +194,7 @@ User
 			            str=str+'<p class="pmsg">'+msgcontent+'</p>';
 			            str=str+'<p>'+msgdate+'</p>';
 			            str=str+'</div>';
+				        chatoutsound();
 			        }
 			        }
 			        $('.chatdiv').append(str);
@@ -338,6 +343,28 @@ User
 	function chatromeextinction(){
 		jsstomp.unsubscribe();
 		window.close();
+	}
+	document.addEventListener('DOMContentLoaded', function() {
+         Tone.start();
+         console.log('Audio is ready');
+     });
+	function chatinsound(){
+		const sound=new Tone.Synth().toDestination();
+		const now = Tone.now();
+		sound.triggerAttackRelease('C5', '8n', now);
+		sound.triggerAttackRelease('D5', '8n', now + 0.2);
+	}
+	function chatsound(){
+		const sound=new Tone.Synth().toDestination();
+		sound.triggerAttackRelease('C4', '8n');
+		
+	}
+	function chatoutsound(){
+		const sound=new Tone.Synth().toDestination();
+		const now = Tone.now();
+		sound.triggerAttackRelease('C3', '8n', now);
+		sound.triggerAttackRelease('B2', '8n', now + 0.2);
+		
 	}
 	function getTime(){
 		var currentDate = new Date();

@@ -111,16 +111,6 @@ public class boardcontroller {
 		model.addAttribute("searchcondition", "type: "+search.getType()+", keyword: "+search.getKeyword());
 	}
 	
-	//업로드 확인용
-	@PostMapping("/uploadTest")
-	public void uploadTest(MultipartFile[] uploadFile, Model model) {
-		for(MultipartFile multipartFile:uploadFile) {
-			log.info(multipartFile.getOriginalFilename());
-			log.info(multipartFile.getSize());
-			log.info(multipartFile.getName());
-		}
-	}
-	
 	//게시판 제거 화면
 	@PreAuthorize("hasAuthority('master')")
 	@GetMapping("removeBoardlist")	
@@ -128,14 +118,6 @@ public class boardcontroller {
 		List<boardlist> brdlist=bservice.select_boardlistset();
 		model.addAttribute("boardlistset", brdlist);
 	}
-	
-	/*@PreAuthorize("hasAuthority('admin')")
-	@PostMapping("updateBoardlistaction")
-	public Map<String,Object> updateBoardlistaction(Long brdnum){
-		Map<String, Object> response=new HashMap<String, Object>();
-		
-		return response;
-	}*/
 	
 	//게시판 관리자 리스트를 가져온다.
 	@PreAuthorize("hasAuthority('master')||hasAuthority(#boardname)")

@@ -53,7 +53,11 @@
     			success: function(response){
     				if(response['result']==='success'){
     					var ban=response['bancontent'];
-    					alert("차단 아이디: "+ban.userid+" 차단 시작일: "+displaytime(ban.startdate)+" 차단 종료일: "+displaytime(ban.enddate)+" 차단 사유: "+ban.banreason);
+    					if(ban === null){
+    						alert("차단 목록에 존재하지 않습니다.");
+    					}else{
+    						alert("차단 아이디: "+ban.userid+" 차단 시작일: "+displaytime(ban.startdate)+" 차단 종료일: "+displaytime(ban.enddate)+" 차단 사유: "+ban.banreason);
+    					}
     				}else{
     					alert("아이디가 존재하지 않습니다.");
     				}

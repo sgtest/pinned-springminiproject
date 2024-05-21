@@ -11,13 +11,13 @@ import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 
 @Configuration
-//@PropertySource("classpath:application.properties")
+@PropertySource("classpath:application.properties")
 public class mailconfig {
 	/*
     @Value("${spring.mail.host}")
     private String host;
     @Value("${spring.mail.port}")
-    private int port;
+    private String port;
     @Value("${spring.mail.username}")
     private String username;
     @Value("${spring.mail.password}")
@@ -26,6 +26,8 @@ public class mailconfig {
     private boolean auth;
     @Value("${spring.mail.properties.mail.smtp.starttls.enable}")
     private boolean enable;    
+    */
+    /*
     @Value("${spring.mail.properties.mail.smtp.starttls.required}")
     private boolean required;
     @Value("${spring.mail.properties.mail.smtp.connectiontimeout}")
@@ -39,7 +41,7 @@ public class mailconfig {
     */
 	
     @Bean
-    public JavaMailSender javaMailSender() {
+    public JavaMailSender getjavaMailSender() {
         JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
         Properties properties=new Properties();
         /*
@@ -58,6 +60,7 @@ public class mailconfig {
         mailSender.setDefaultEncoding("UTF-8");
         mailSender.setJavaMailProperties(properties);
         */
+        /*
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
         mailSender.setUsername("naverid");
@@ -69,8 +72,19 @@ public class mailconfig {
         properties.put("mail.debug", "true");
         properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
         properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
-
+		*/
+        /*
+        mailSender.setHost(host);
+        mailSender.setProtocol("smtp");
+        mailSender.setPort(Integer.parseInt(port));
+        mailSender.setUsername(username);
+        mailSender.setPassword(password);
+        //properties.put("mail.smtp.auth", "true");
+        properties.put("mail.smtp.starttls.enable", "true");
         mailSender.setJavaMailProperties(properties);
+        
+        mailSender.setJavaMailProperties(properties);
+        */
         return mailSender;
         
     }
