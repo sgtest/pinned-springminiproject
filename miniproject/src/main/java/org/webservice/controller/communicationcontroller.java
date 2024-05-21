@@ -37,6 +37,7 @@ public class communicationcontroller {
 
 	private final SimpMessagingTemplate simpmessageingtemplate;
 	
+	//채팅방에 들어간다.
 	@PreAuthorize("authenticated()")
 	@GetMapping("chat")
 	public void chatting(String code, Model model) {
@@ -61,6 +62,7 @@ public class communicationcontroller {
 		log.info("채팅 유저: "+chat.getUserid()+", 채팅방 코드: "+chat.getRoomcode()+", 채팅 내용: "+chat.getContent()+", 채팅 유형: "+chat.getType()+", 채팅 일자: "+chat.getRegdate());
 	}
 	
+	//친구를 삭제한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping("/deletefriend")
 	@ResponseBody
@@ -78,6 +80,7 @@ public class communicationcontroller {
 		return response;
 	}
 	
+	//친구를 추가한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping("/insertfriend")
 	@ResponseBody
@@ -94,7 +97,8 @@ public class communicationcontroller {
 		}	
 		return response;
 	}
-	
+
+	//채팅방 리스트를 가져온다
 	@PreAuthorize("authenticated()")
 	@GetMapping("/chatlist")
 	@ResponseBody
@@ -106,7 +110,7 @@ public class communicationcontroller {
 		return response;
 	}
 
-	//방의 존재여부를 검증한다
+	//채팅방의 존재여부를 검증한다.
 	@PreAuthorize("authenticated()")
 	@GetMapping("/chatverification")
 	@ResponseBody
@@ -120,6 +124,7 @@ public class communicationcontroller {
 		return response;
 	}
 	
+	//채팅방을 생성한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping("/chatcreation")
 	@ResponseBody
@@ -136,7 +141,7 @@ public class communicationcontroller {
 		return response;
 	}
 	
-
+	//채팅방을 삭제한다.
 	@PreAuthorize("authenticated()")
 	@PostMapping("/chatdelete")
 	@ResponseBody

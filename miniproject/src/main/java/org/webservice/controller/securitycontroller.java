@@ -146,8 +146,7 @@ public String logoutaction() {
 @PreAuthorize("authenticated()")
 @GetMapping("/myPage")
 public void myPage(Model model) {
-	//마이페이지,작성 글과 댓글 기록, 업로드 파일 기록, 회원정보
-	//메일 과 1:1 채팅기능(추후 구현 가능성)
+	//마이페이지,작성 글과 댓글 기록, 업로드 파일 기록, 회원정보, 친구 목록을 가져온다.
 	Authentication auth=SecurityContextHolder.getContext().getAuthentication();
 	String userid=auth.getName();
 	member minfo=mmapper.readmember(userid);
@@ -464,6 +463,8 @@ public Map<String, Object> searchauth(String email, String phone){
 		eservice.createjms(email, validnum);
 		response.put("result", "success");
 	}catch (Exception e) {
+		
+		//현재 위의 기능이 제대로 동작을 안하는 상태이다(2024/5/21)
 		//만약 메일 인증이 제대로 동작을 안하면 db내 저장된 정보를 이용해서 아이디 확인
 		String subid=bservice.getuserid(email, phone);
 		if(subid!=null) {
@@ -515,7 +516,7 @@ public Map<String,Object> resetpassword(String userid, String newpass, String re
 	return response;
 }
 
-
+//사용안하는 api
 //숫자 입력을 이용해서 인증을 수행한다.
 @PostMapping("/varifyauth")
 @ResponseBody

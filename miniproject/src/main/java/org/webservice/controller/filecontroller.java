@@ -158,6 +158,8 @@ public class filecontroller {
 		int lastposition = filefullname.lastIndexOf(".");
 		String fileextend = filefullname.substring(lastposition + 1);
 		String[] dangerextend= {"exe","js","zip","sh","alz","Ink"};
+		//파일을 좀더 자세히 검사하는 코드를 추가하면 좋다.
+		
 		
 		for(String extend:dangerextend) {
 			if(fileextend.contains(extend)) {

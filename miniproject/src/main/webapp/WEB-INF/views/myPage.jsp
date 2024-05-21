@@ -317,8 +317,7 @@
 										<th>친구의 아이디</th>
 										<th>친구 추가 날짜</th>
 										<th>친구 삭제</th>
-										<th>채팅 초대</th>
-										<th>메세지 남기기</th>
+										<!--<th>메세지 남기기</th> -->
 									</tr>
 								</thead>
 								
@@ -329,8 +328,7 @@
 											<td>${friend.fuserid}</td>
 											<td>${friend.regdate}</td>
 											<td><button class="friend_deletebtn" data-frdid="${friend.fuserid}">친구 삭제하기</button></td>
-											<td><button class="chatting_btn" data-frdid="${friend.fuserid}">채팅 초대하기</button></td>
-											<td><button class="message_btn" data-frdid="${friend.fuserid}">메세지 남기기</button></td>
+											<!--<td><button class="message_btn" data-frdid="${friend.fuserid}">메세지 남기기</button></td> -->
 										</tr>
 									</c:forEach>
 								</tbody>
@@ -458,7 +456,7 @@
 
 </div>
 
-
+<!--채팅방 생성 모달창 -->
 	<div class="chatmodal_create" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
 		<div class="chatmodal_create_dialog" role="document">
 			<div class="chatmodal_create_content">
@@ -476,6 +474,27 @@
 			</div>
 		</div>
 	</div>
+	
+<!--하루에 3번으로 횟수에 제한을 두고 db에 저장해서 나중에 보여주는 형식으로 구현-->
+<!--나중에 추후 구현 -->
+<!--메세지 남기는 모달창 -->
+<!-- 
+	<div class="">
+		<div>
+			<div>
+				<div>
+				
+				</div>
+				<div>
+				
+				</div>
+				<div>
+				
+				</div>
+			</div>
+		</div>
+	</div>
+-->
 <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.2/dist/umd/popper.min.js"
         integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5PtkFExj5u9bOyDDn5a+3pu8L+I2LZ"
@@ -832,9 +851,17 @@ $(document).ready(function(){
 		});
 		
 	});
-	
-	
-	
+	//추후 구현
+	/*
+	var frdmsgbtn=$(".message_btn");
+	frdmsgbtn.on("click",function(e){
+		var csrfToken = $("#_csrf").val();
+		var myuserid=$(".myfriend").text();
+		var frduserid=$(this).data("frdid");
+		
+		//메세지 전송을 위한 모달창을 연다
+	});
+	*/	
 	homebt.on("click",function(e){
 		window.location.href=homebt.data("href")	
 	});
@@ -867,7 +894,7 @@ function loadchatwindow(code){
 			}
 		},
 		error: function(error){
-			console.error("");
+			console.error("채팅방 접속에 실패했습니다.");
 		}
 	});
 }

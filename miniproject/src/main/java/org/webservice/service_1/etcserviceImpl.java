@@ -27,7 +27,9 @@ import org.springframework.web.servlet.view.document.AbstractXlsView;
 import jakarta.mail.internet.MimeUtility;
 import lombok.RequiredArgsConstructor;
 
-
+//이미 탈퇴된 아이디
+//이메일 서버오류로 구현 실패
+//나중에 추후 구현
 @Service
 @RequiredArgsConstructor
 public class etcserviceImpl implements etcservice{
@@ -44,6 +46,7 @@ public class etcserviceImpl implements etcservice{
 
 	@Override
 	public void createmessage(String email, String title, String text) {
+		/*
 		mailSender=javasnd();
 		//ApplicationContext context=new ClassPathXmlApplicationContext("classpath:servlet-context.xml");
 		//mailSender=(JavaMailSenderImpl)context.getBean("mailSender");
@@ -59,6 +62,7 @@ public class etcserviceImpl implements etcservice{
 		} catch (MessagingException e) {
 			e.printStackTrace();
 		}
+		*/
 	}
 	
 	public JavaMailSender javasnd() {
@@ -78,7 +82,7 @@ public class etcserviceImpl implements etcservice{
         props.setProperty("mail.smtp.ssl.trust", "*");
         props.setProperty("mail.smtp.ssl.enable", "false");
         return mailSender;
-        */
+       
         mailSender.setHost("smtp.naver.com");
         mailSender.setPort(465);
         mailSender.setUsername("springservice1111@naver.com");
@@ -91,6 +95,7 @@ public class etcserviceImpl implements etcservice{
         properties.put("mail.smtp.ssl.trust", "smtp.naver.com");
         //properties.put("mail.smtp.ssl.protocols", "TLSv1.2");
         mailSender.setJavaMailProperties(properties);
+         */
         return mailSender;
         
 	}
@@ -98,6 +103,7 @@ public class etcserviceImpl implements etcservice{
 	
 	@Override
 	public void createjms(String email, int number) {
+		/*
         //JavaMailSender sendertest = javasnd();
 		this.varifynum=number;
 		String title="웹서비스 인증 메일입니다.";
@@ -109,6 +115,7 @@ public class etcserviceImpl implements etcservice{
 		
 		//text="test입니다";
 		createmessage(email,title,text);
+		*/
 	}
 	
 	@Override
