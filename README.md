@@ -1,4 +1,5 @@
-![IMG_2712](https://github.com/somecreater/springminiproject/assets/127456520/ebd9f5d1-6bce-4289-853d-1581a35d8e79)# springminiproject
+
+
 java기반 spring 프레임워크를 적용해서 작은 서비스를 만듭니다. 이것을 이용해서 여러 웹 서비스를 제공할 수 있습니다.
 
 ## 📜 목차
