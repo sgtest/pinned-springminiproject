@@ -18,8 +18,10 @@ java기반 spring 프레임워크를 적용해서 작은 서비스를 만듭니�
 (유지보수 기간은 미포함)
 
 ## ⚙️ 개발 환경
- - 'JAVA 11'
- - 'JDK'
+ - **programming language** : 'Java 11', 'JavaScript '
+ - 'JDK 11.0.18'
+ - **DataBase** : *Oracle DB 18*
+ - **IDE** : 'STS 3.9.18.RELEASE', 'SQL Developer 22.2.1.234.1810'
 ## 🔧 주요 기능
 
 
