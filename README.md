@@ -34,6 +34,8 @@ java기반 spring 프레임워크를 적용해서 작은 서비스를 만듭니�
 - 회원 차단, 차단 해제, 권한 부여, 권한 회수
 
 ### 권한 리스트 
+![auth_list](https://github.com/somecreater/springminiproject/assets/127456520/0e1f83e0-1506-48d5-982b-3cddeef69f0b)
+
 
 - 친구 추가, 삭제
 - 채팅방 생성, 입장, 나가기, 폭파, 채팅방 리스트 읽기, 채팅 메시지 전송
