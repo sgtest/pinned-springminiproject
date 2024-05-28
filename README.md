@@ -44,6 +44,8 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 
 
 ## 💿 관계 DB 테이블 구조 및 관계도
+![Entity Relationship Diagram](https://github.com/somecreater/springminiproject/assets/127456520/5b3ab9b1-8e2f-4507-badb-c8e4786dc563)
+
 
 
 ## 📋 api 정리
