@@ -71,6 +71,12 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Boardlist Delete-1  | /removeBoardlist         | GET    | Model: model                                                    | -                                                                                                                                 | -                                               | -                                               | View, 게시판 제거하기 페이지     |
 
 
+| API NAME           | URL                    | Method | URL Params                        | Data Params | Success Response                                     | Error Response                                          | etc(부가 설명)               |
+|--------------------|------------------------|--------|-----------------------------------|-------------|------------------------------------------------------|---------------------------------------------------------|--------------------------|
+| Boardlist Delete-2 | /removeBoardlistaction | POST   | String: brdname                   | -           | Map<String,Object> response (result: “success”)      | Map<String,Object> response (result: “failure”)         | 게시판 제거하기 실행              |
+| Boardlist Update   | /updatebrdlistsubac    | POST   | String: brdname, String: brdsub   | -           | Map<String,Object> response(result: “success”)       | Map<String,Object> response result: “failure”)          | 게시판 설명 수정하기 실행           |
+| Manager List       | /getauthlist           | GET    | boardsearch: search, Model: model | -           | Map<String,Object> response (authlist: List<String>) | Map<String,Object> response (authlist: “해당 게시판 관리자 아님”) | 특정 게시판 관리자 리스트 가져오기 실행   |
+
 ![board api-1](https://github.com/somecreater/springminiproject/assets/127456520/61bffd38-9a44-42bc-b191-a26dd5bee61e)
 ![board api-2](https://github.com/somecreater/springminiproject/assets/127456520/8ead39c1-c15c-4cb9-b46f-4d34929b6499)
 ![board api-3](https://github.com/somecreater/springminiproject/assets/127456520/8ca93889-bd5d-45c2-bd3d-8572809059fe)
