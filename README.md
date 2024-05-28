@@ -49,6 +49,23 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 
 
 ## 📋 api 정리
+![board api-1](https://github.com/somecreater/springminiproject/assets/127456520/61bffd38-9a44-42bc-b191-a26dd5bee61e)
+![board api-2](https://github.com/somecreater/springminiproject/assets/127456520/8ead39c1-c15c-4cb9-b46f-4d34929b6499)
+![board api-3](https://github.com/somecreater/springminiproject/assets/127456520/8ca93889-bd5d-45c2-bd3d-8572809059fe)
+
+![comment api](https://github.com/somecreater/springminiproject/assets/127456520/4f4aac69-be5b-4ba7-bf3b-5470ffb97245)
+
+![file api](https://github.com/somecreater/springminiproject/assets/127456520/07adfd15-f31e-4f10-a122-84bfbb20ea55)
+
+![security api-1](https://github.com/somecreater/springminiproject/assets/127456520/e1880bc0-a11e-4673-ac51-da9f26326cbc)
+![security api-2](https://github.com/somecreater/springminiproject/assets/127456520/3af789db-bd54-4fdb-8cc5-8f98741523e9)
+![security api-3](https://github.com/somecreater/springminiproject/assets/127456520/0b0b747a-0ea0-4b5a-b9ea-5de9a5a317e4)
+![security api-4](https://github.com/somecreater/springminiproject/assets/127456520/742420d1-f7e6-4950-a080-203924b26561)
+![security api-5](https://github.com/somecreater/springminiproject/assets/127456520/f3611ad1-a371-43c0-b2ba-4ca002f3e5b9)
+
+![chat api-1](https://github.com/somecreater/springminiproject/assets/127456520/676d28f9-9894-433d-adcb-35d1ec3caf64)
+![chat api-2](https://github.com/somecreater/springminiproject/assets/127456520/890418f1-1c6c-4e79-b7f1-013b58df52d6)
+
 
 
 ## 🖥️ 예시 화면
