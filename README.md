@@ -50,6 +50,7 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 
 ## 📋 api 정리
 
+**board api**
 
 | API NAME       | URL                    | Method | URL Params                                                | Data Params                                                                                                                                                      | Success Response      | Error Response | etc(부가 설명)                                       |
 |:----------------:|:------------------------:|:--------:|:-----------------------------------------------------------:|:------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------:|:----------------:|:--------------------------------------------------:|
@@ -78,6 +79,10 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Manager List       | /getauthlist           | GET    | boardsearch: search, Model: model | -           | Map<String,Object> response (authlist: List<String>) | Map<String,Object> response (authlist: “해당 게시판 관리자 아님”) | 특정 게시판 관리자 리스트 가져오기 실행   |
 
 
+---
+
+**comment api**
+
 | API NAME       | URL                      | Method | URL Params                             | Data Params                                                                       | Success Response      | Error Response | etc(부가 설명)      | 
 |:----------------:|:--------------------------:|:--------:|:----------------------------------------:|:-----------------------------------------------------------------------------------:|:-----------------------:|:----------------:|:-----------------:|
 | Comment List   | /comment/readcommentlist | GET    | Long: bno, int: pagenum                | -                                                                                 | -                     | -              | 댓글 리스트 가져오기 실행  |
@@ -86,6 +91,9 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Comment Update | /comment/updatecomment   | POST   | comment: cmt, RedirectAttributes: rttr | comment: { Long: rno, Long: bno, String: comments, String: writer, Date: regdate} | String(redirect: URL) | -              | 댓글 수정하기 실행      |
 | Comment Delete | /comment/deletecomment   | POST   | Long: rno, String: userid              | -                                                                                 | -                     | -              | 댓글 삭제하기 실행      |
 
+---
+
+**file api**
 
 | API NAME      | URL         | Method | URL Params                         | Data Params                                                                                                                                                 | Success Response                                                                                                | Error Response | etc           |
 |:---------------:|:-------------:|:--------:|:------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------:|:----------------:|:---------------:|
@@ -94,6 +102,9 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | File Donwload | /download   | GET    | String: fileuri                    | -                                                                                                                                                           | ResponseEntity<Resource>                                                                                        | -              | 파일 다운로드 실행    | 
 | File Delete   | /deletefile | POST   | String: fileuri, boolean: filetype | -                                                                                                                                                           | Map<String,Object> response (result: “success”)                                                                 | -              | 파일 삭제하기 실행    | 
 
+---
+
+**security api**
 
 | API NAME      | URL              | Method | URL Params                                                 | Data Params                                                                                                                                                                         | Success Response      | Error Response | etc               |
 |:---------------:|:------------------:|:--------:|:------------------------------------------------------------:|:-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------:|:----------------:|:-------------------:|
@@ -140,6 +151,9 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | User Service out-1 | /boardout       | GET    | -                                               | -                                                                                                      | -                                               | -                                               | View, 회원 탈퇴 페이지  | 
 | User Service out-2 | /boardoutaction | GET    | String: id, String: pass, Boolean: datareset    | -                                                                                                      | Map<String,Object> response (result: “success”) | Map<String,Object> response (result: “failure”) | 회원 탈퇴 실행         |
 
+---
+
+**chat api**
 
 | API NAME               | URL                  | Method             | URL Params                      | Data Params                                                                            | Success Response                                                 | Error Response                                  | etc          | 
 |:------------------------:|:----------------------:|:--------------------:|:---------------------------------:|:----------------------------------------------------------------------------------------:|:------------------------------------------------------------------:|:-------------------------------------------------:|:--------------:|
