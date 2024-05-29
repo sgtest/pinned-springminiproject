@@ -43,7 +43,12 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 - 채팅방 생성, 입장, 나가기, 폭파, 채팅방 리스트 읽기, 채팅 메시지 전송
 
 ### 채팅 기능
-![스크린샷 2024-05-29 105620](https://github.com/somecreater/springminiproject/assets/127456520/97480037-6288-4e04-bfed-bc30fa92efa4) ![스크린샷 2024-05-29 105632](https://github.com/somecreater/springminiproject/assets/127456520/2c7c1120-4aec-48cd-9c1e-95753716e54c)
+![스크린샷 2024-05-29 105620](https://github.com/somecreater/springminiproject/assets/127456520/97480037-6288-4e04-bfed-bc30fa92efa4) 
+
+
+
+
+![스크린샷 2024-05-29 105632](https://github.com/somecreater/springminiproject/assets/127456520/2c7c1120-4aec-48cd-9c1e-95753716e54c)
 
 
 
