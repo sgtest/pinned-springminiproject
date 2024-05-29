@@ -18,6 +18,11 @@ $(document).ready(function(){
 	var imgfileresult=$('#fileresult_thumb');
 	
 	var submitform=$("form[role='form']");
+	var backlist=$('#backlistboard');
+	
+	backlist.on("click",function(e){
+		window.location.href="/board/listboard";
+	});
 	
 	//게시물 작성완료 버튼 누를시 파일 요소 추가해서 저장
 	$("button[type='submit']").on("click", function(e){
@@ -174,23 +179,6 @@ $(document).ready(function(){
 		filemodal.modal('show');
 	});
 	
-	//새로고침과 뒤로가기 버튼을 누르거나 링크 이동시에만 파일 삭제해야 게시물 등록때는 작동을 안해야한다
-	/*window.addEventListener('beforeunload', function(e) {
-		
-	//var target = event.target || event.srcElement;
-	//(event.returnValue && event.returnValue.includes(' 새로고침'))
-	    e.preventDefault(); 
-		if (e.target?.classList?.contains('btn_boardinsert')) {
-	        return;
-	    }
-	    else{
-			console.log('동작중입니다');
-	      // 임시 파일 삭제
-	      fileclear();
-	      return;
-	    }
-	    
-	  });*/
 
 	function fileclear(){
 		//모달창이 열린상태이면

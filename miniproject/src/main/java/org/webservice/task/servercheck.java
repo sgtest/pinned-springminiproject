@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 import org.webservice.domain.banuser;
 import org.webservice.mapper.boardmapper;
 import org.webservice.service_1.boardservice;
+import org.webservice.service_1.communicationservice;
 
 import lombok.extern.log4j.Log4j;
 
@@ -20,6 +21,8 @@ import lombok.extern.log4j.Log4j;
 public class servercheck {
 	@Autowired
 	boardmapper bmapper;
+	@Autowired
+	communicationservice comunicatesesrvice;
 	@Autowired
 	boardservice bservice;
 	//매일 확인 
@@ -48,7 +51,16 @@ public class servercheck {
 	}
 	
 	//하루 지날때 마다 채팅방 리스트 자동 초기화
+	@Scheduled(fixedRate = 24 * 60 * 60 * 1000)
 	public void checkchatroom() {
+		try {
+			comunicatesesrvice.deleteallchatroom();
+			System.out.println("채팅방 리스트가 초기화 되었습니다.");
+		} catch (Exception e) {
+			System.out.println("채팅방 리스트 초기화 도중 오류가 발생했습니다.");
+		}
 		
 	}
+	
+	
 }

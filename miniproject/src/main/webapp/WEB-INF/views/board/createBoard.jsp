@@ -136,7 +136,7 @@
 	<sec:authentication property="principal" var="userinfo"/>
 	
 <div class="insert_top">
-	<h1><a href="listboard">메인 홈페이지로</a></h1>
+	<button id="backlistboard">메인 홈페이지로</button>
 	<h2>게시물 작성</h2>
 	
 	<form role="form" action="/board/saveBoard" method="post">

@@ -21,6 +21,9 @@
 	<delete id="deleteroom">
 		delete from pro_chatroom where chatroom_code=#{chatroom_code}
 	</delete>
+	<delete id="deleteallroom">
+		delete from pro_chatroom
+	</delete>
 	<select id="allchatroom" resultType="org.webservice.domain.chatroom">
 		select * from pro_chatroom
 	</select>

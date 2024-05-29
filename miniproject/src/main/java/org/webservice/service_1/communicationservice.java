@@ -15,4 +15,6 @@ public interface communicationservice {
 	public chatroom selectchatroom(String code);
 	public chatroom createchatroom(String title);
 	public void deletechatroom(String code);
+	public void deleteallchatroom();
+	
 }

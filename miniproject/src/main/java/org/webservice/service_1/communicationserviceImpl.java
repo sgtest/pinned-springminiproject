@@ -110,5 +110,8 @@ public class communicationserviceImpl implements communicationservice{
 		frdmapper.deleteroom(chtroom);
 	};
 	
-
+	@Override
+	public void deleteallchatroom() {
+		frdmapper.deleteallroom();
+	}
 }

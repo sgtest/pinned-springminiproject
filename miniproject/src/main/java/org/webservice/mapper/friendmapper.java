@@ -12,6 +12,7 @@ public interface friendmapper {
 	
 	public void createroom(chatroom room);
 	public void deleteroom(chatroom room);
+	public void deleteallroom();
 	public List<chatroom> allchatroom();
 	public chatroom getchatroom(String chatroom_code);
 }
