@@ -173,5 +173,3 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 ## 🖥️ 예시 화면
 
 
-## 현재까지 구현상황(2024/5/21):
-
