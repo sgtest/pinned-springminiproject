@@ -23,6 +23,7 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
  - 'JDK 11.0.18', 'JSP 2.3'
  - **DataBase** : *Oracle DB 18*
  - **IDE** : 'STS 3.9.18.RELEASE(Eclipse 2021-09 (4.21.0))', 'SQL Developer 22.2.1.234.1810'
+ - **Web Application Server** : 'Apache Tomcat 9.0'
 
 ## 🔧 주요 기능
 - 게시물 업로드, 삭제, 수정, 읽기, 게시물 리스트 읽기
@@ -40,6 +41,9 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 
 - 친구 추가, 삭제
 - 채팅방 생성, 입장, 나가기, 폭파, 채팅방 리스트 읽기, 채팅 메시지 전송
+
+### 채팅 기능
+![스크린샷 2024-05-29 105620](https://github.com/somecreater/springminiproject/assets/127456520/541b7941-fb53-42c9-840f-9352e39d5c26) ![스크린샷 2024-05-29 105632](https://github.com/somecreater/springminiproject/assets/127456520/7a25512b-ab3e-4e93-a2a7-ac7f20bb681e)
 
 
 
