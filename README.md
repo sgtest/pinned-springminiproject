@@ -174,10 +174,11 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Chatroom list   | /chatlist   | GET    | -          | -           | Map<String,Object> response (chatlist: “List<chatroom>”) |                                                 | 채팅방 목록 불러오기  | 
 | Chatroom delete | /chatdelete | POST   | -          | -           | Map<String,Object> response (result: “success”)          | Map<String,Object> response (result: “failure”) | 채팅방 삭제       |
 
+
+
 ---
 ---
----
-🖥️🖥️🖥️
+🖥️🖥️🖥️🖥️🖥️🖥️🖥️🖥️
 
 ## 예시 화면
 
