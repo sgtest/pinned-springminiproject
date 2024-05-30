@@ -8,7 +8,7 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
  - [주요 기능](#-주요-기능)
  - [관계 데이터베이스 테이블 구조 및 관계도](#-관계-DB-테이블-구조-및-관계도)
  - [api 정리](#-api-정리)
- - [예시 화면](#예시-화면-🖥)
+ - [예시 화면](#예시-화면)
 
 ## 💡 개발 주제
 자발적으로 관리하고 서로 실시간으로 소통하는 게시판 사이트
@@ -174,7 +174,11 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Chatroom list   | /chatlist   | GET    | -          | -           | Map<String,Object> response (chatlist: “List<chatroom>”) |                                                 | 채팅방 목록 불러오기  | 
 | Chatroom delete | /chatdelete | POST   | -          | -           | Map<String,Object> response (result: “success”)          | Map<String,Object> response (result: “failure”) | 채팅방 삭제       |
 
+---
+---
+---
+🖥️🖥️🖥️
 
-## 예시 화면 🖥️
+## 예시 화면
 
 https://whimsical.com/web-project-flowchart-KzhnuRNZndTGoWYduFpk2u
