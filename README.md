@@ -175,6 +175,6 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 | Chatroom delete | /chatdelete | POST   | -          | -           | Map<String,Object> response (result: “success”)          | Map<String,Object> response (result: “failure”) | 채팅방 삭제       |
 
 
-## 🖥️ 예시 화면
+## 예시 화면
 
 https://whimsical.com/web-project-flowchart-KzhnuRNZndTGoWYduFpk2u
