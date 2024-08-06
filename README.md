@@ -72,7 +72,7 @@
 ![Entity Relationship Diagram](https://github.com/somecreater/springminiproject/assets/127456520/0e23b804-074b-4078-9fc8-534a28863a6e)
 
 
-## 기능 구현 방식(Back-End)
+## 기능 구현 방식(Back End)
 
 - 데이터 저장 방식
     
