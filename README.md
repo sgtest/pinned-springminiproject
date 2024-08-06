@@ -1,7 +1,10 @@
 # 프로젝트
-Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
+
+제목: 너와 나의 연결 공간
+
 
 ## 📜 목차
+
  - [개발 주제](#-개발-주제)
  - [개발 기간](#-개발기간)
  - [개발 환경](#-개발-환경)
@@ -9,30 +12,47 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
  - [관계 데이터베이스 테이블 구조 및 관계도](#-관계-DB-테이블-구조-및-관계도)
  - [api 정리](#-api-정리)
  - [예시 화면](#-예시-화면)
+ - [성취 요소](#-성취-요소)
+ - [기능 구현 방식(Back-End)](#기능-구현-방식(Back-End))
 
 ## 💡 개발 주제
+
 자발적으로 관리하고 서로 실시간으로 소통하는 게시판 사이트
 
 
 ## 🕔 개발기간
+
 2023년 11월 15일 ~ 2024년 5월 21일
 (유지보수 기간은 미포함)
 
 ## ⚙️ 개발 환경
+
  - **programming language** : 'Java 11', 'JavaScript ES12'
  - 'JDK 11.0.18', 'JSP 2.3'
  - **DataBase** : *Oracle DB 18*
  - **IDE** : 'STS 3.9.18.RELEASE(Eclipse 2021-09 (4.21.0))', 'SQL Developer 22.2.1.234.1810'
  - **Web Application Server** : 'Apache Tomcat 9.0'
+ - **Cooperation Tools**: 'GitHub', 'Whimsical'
+ - **Etc**: 'MyBatis', 'HikariCP', 'Ajax', 'JQuery'
 
 ## 🔧 주요 기능
+
 - 게시물 업로드, 삭제, 수정, 읽기, 게시물 리스트 읽기
+  
 - 게시판 개설, 삭제, 게시판 목록 읽기, 게시판 설명 수정
+  
 - 댓글 작성, 수정, 삭제, 읽기
+  
 - 게시물 내 파일 업로드, 다운로드, 삭제, 이미지 파일 보기, 파일 리스트 읽기
+  
 - 로그인, 로그아웃, 회원 가입, 회원 탈퇴, 아이디 찾기, 비밀번호 재설정
+  
 - 마이 페이지, 기타정보 등록, 삭제, 수정, 읽기
+  
 - 마이 페이지를 통한 게시물, 댓글, 파일 읽기, 삭제
+
+- 친구 추가 및 삭제 
+  
 - 회원 차단, 차단 해제, 권한 부여, 권한 회수
 
 ### 권한 리스트 
@@ -52,7 +72,39 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 ![Entity Relationship Diagram](https://github.com/somecreater/springminiproject/assets/127456520/0e23b804-074b-4078-9fc8-534a28863a6e)
 
 
+## 기능 구현 방식(Back-End)
 
+- 데이터 저장 방식
+    
+    게시판 데이터, 댓글 데이터, 채팅방 데이터, 회원 데이터, 회원 권한 데이터, 회원 차단 데이터 등등 서비스에서 다루는 모든 데이터들을 Oracle Database에 저장하고, 서버와 DB 사이의 원활한 통신을 위해서, ORM 프레임워크 Mybatis와 Connection pool을 관리해주는 HikariCP를 이용한다.
+    즉 데이터베이스에 접근하기 위한 요소는 mybatis, hikaricp xml 설정 파일, mapper 인터페이스, mapper xml 파일, dao 클래스(DB 상에 데이터 조회, 삽입,삭제,수정을 위한 클래스), dto 클래스(코드 내에서 데이터 교환을 위한 클래스)로 구성되어 있다.
+
+
+- 회원 가입 처리 방식
+   
+   1. 사용자가 회원 가입 화면에서 아이디를 입력한다
+   2. 아이디 길이 만족 여부는 js 코드로 간단히 확인하고 사용자 아이디의 중복 여부는 Ajax를 통해서 Rest API로 db 조회로 직접 중복 여부를 확인한다
+   3. 위의 조건을 만족하면 사용자는 비밀번호, 사용자 이름, 휴대폰 번호를 입력하고, 입력값이 길이, 특정 조건을 만족하는 것 여부는 ajax로 Rest api를 통해 자바 정규식으로 확인한다.
+   4. 위의 조건들이 만족하면, 입력 폼을 서버로 제출하고, 회원 가입이 완료 된다.
+   5. 초기 회원 가입 시 회원의 권한은 일반 권한인 ‘common’이다.
+
+
+- 로그인 처리 방식
+
+  Spring Security의 '사용자 인증' 기능을 사용하였다.
+  UserDetailsService를 직접 구현하였다.
+  
+   1. 사용자가 로그인 화면에서 데이터를 입력한다.
+   2. 로그인을 할 때 DB 조회로 차단 여부를 확인하고, 해당 유저의 권한들을 DB 조회로 가져와서 해당 권한들을 부여하고 로그인을 완료 시킨다.
+
+
+- 채팅 기능 구현 방식
+   
+  WebSocket을 이용하였고
+  채팅방 데이터는 DB에 저장하고 메세지는 Front-End에서만 처리하게 했다.
+  
+   
+   
 ## 📋 api 정리
 
 ### **board api**
@@ -183,3 +235,12 @@ Spring Framework, JAVA, Java Script, JSP를 활용한 웹 서비스
 ## 예시 화면 및 주요 화면 흐름도
 
 https://whimsical.com/web-project-flowchart-KzhnuRNZndTGoWYduFpk2u
+
+
+## 성취 요소
+   
+   1. SpringFramework의 기본 이론과 활용 방법을 알게 되었다.
+   2. JavaScript의 문법 및 응용 방법을 알게 되었다.
+   3. JSP의 문법과 응용 방법을 알게 되었다.
+   4. Mybatis와 Oracle SQL의 응용 방법을 알게 되었다.
+5. WebSocket의 기본 원리와 활용 방법을 알게 되었다.
