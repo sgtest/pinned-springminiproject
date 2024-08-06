@@ -10,10 +10,10 @@
  - [개발 환경](#-개발-환경)
  - [주요 기능](#-주요-기능)
  - [관계 데이터베이스 테이블 구조 및 관계도](#-관계-DB-테이블-구조-및-관계도)
+ - [기능 구현 방식(Back End)](#기능-구현-방식(Back-End))
  - [api 정리](#-api-정리)
  - [예시 화면](#-예시-화면)
  - [성취 요소](#-성취-요소)
- - [기능 구현 방식(Back-End)](#기능-구현-방식(Back-End))
 
 ## 💡 개발 주제
 
@@ -243,4 +243,4 @@ https://whimsical.com/web-project-flowchart-KzhnuRNZndTGoWYduFpk2u
    2. JavaScript의 문법 및 응용 방법을 알게 되었다.
    3. JSP의 문법과 응용 방법을 알게 되었다.
    4. Mybatis와 Oracle SQL의 응용 방법을 알게 되었다.
-5. WebSocket의 기본 원리와 활용 방법을 알게 되었다.
+   5. WebSocket의 기본 원리와 활용 방법을 알게 되었다.
