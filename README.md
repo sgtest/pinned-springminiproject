@@ -74,11 +74,13 @@
 
 ## 기능 구현 방식(Back End)
 
-- 데이터 저장 방식
+- 데이터 저장 및 처리 방식
     
     게시판 데이터, 댓글 데이터, 채팅방 데이터, 회원 데이터, 회원 권한 데이터, 회원 차단 데이터 등등 서비스에서 다루는 모든 데이터들을 Oracle Database에 저장하고, 서버와 DB 사이의 원활한 통신을 위해서, ORM 프레임워크 Mybatis와 Connection pool을 관리해주는 HikariCP를 이용한다.
   
     즉 데이터베이스에 접근하기 위한 요소는 mybatis, hikaricp xml 설정 파일, mapper 인터페이스, mapper xml 파일, dao 클래스(DB 상에 데이터 조회, 삽입,삭제,수정을 위한 클래스), dto 클래스(코드 내에서 데이터 교환을 위한 클래스)로 구성되어 있다.
+
+    db 상의 데이터는 클라이언트에서 Ajax를 이용해서 api를 호출하고, api에서 mapper를 이용해서 sql문을 실행하는 식으로 Read, Insert, Delete, Update를 한다
 
 
 - 회원 가입 처리 방식
@@ -126,9 +128,7 @@
   게시글 입력 창에서 파일을 업로드만 하고, 게시글 등록을 안하면 게시글 번호 없이 PRO_MEMBER_FILE 테이블에 데이터가 저장되고, 게시글 업로드가 된다면 PRO_MEMBER_FILE, PRO_FILE 테이블에 완전한 데이터를 저장한다
 
 
-- 사용자 관리 방식
-
-
+  
 
 ## 📋 api 정리
 
