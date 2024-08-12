@@ -13,7 +13,6 @@
  - [기능 구현 방식(Back End)](#기능-구현-방식Back-End)
  - [api 정리](#-api-정리)
  - [예시 화면](#-예시-화면)
- - [성취 요소](#성취-요소)
 
 ## 💡 개발 주제
 
@@ -262,11 +261,3 @@
 
 https://whimsical.com/web-project-flowchart-KzhnuRNZndTGoWYduFpk2u
 
-
-## 성취 요소
-   
-   1. SpringFramework의 기본 이론과 활용 방법을 알게 되었다.
-   2. JavaScript의 문법 및 응용 방법을 알게 되었다.
-   3. JSP의 문법과 응용 방법을 알게 되었다.
-   4. Mybatis와 Oracle SQL의 응용 방법을 알게 되었다.
-   5. WebSocket의 기본 원리와 활용 방법을 알게 되었다.
