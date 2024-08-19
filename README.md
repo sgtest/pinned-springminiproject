@@ -73,7 +73,8 @@ https://whimsical.com/project-architecture-GFHYdk3n9kjUqHmXaip3H2
 
 
 ## 💿 관계 DB 테이블 구조 및 관계도
-![Entity Relationship Diagram](https://github.com/somecreater/springminiproject/assets/127456520/0e23b804-074b-4078-9fc8-534a28863a6e)
+
+![DB Diagram](https://github.com/user-attachments/assets/eff45bf2-fc35-40a9-a271-ee8b595ec18a)
 
 
 ## 기능 구현 방식(Back End)
