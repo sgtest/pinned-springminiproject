@@ -26,14 +26,15 @@
 (유지보수 기간은 미포함)
 
 ## ⚙️ 개발 환경
-
+ - **OS**: *Windows 11*
  - **programming language** : 'Java 11', 'JavaScript ES12'
  - 'JDK 11.0.18', 'JSP 2.3'
  - **DataBase** : *Oracle DB 18*
+ - **Framework** : *Spring Framework 5.0.7.RELEASE*, *HikariCP*, *MyBatis*
  - **IDE** : 'STS 3.9.18.RELEASE(Eclipse 2021-09 (4.21.0))', 'SQL Developer 22.2.1.234.1810'
  - **Web Application Server** : 'Apache Tomcat 9.0'
  - **Cooperation Tools**: 'GitHub', 'Whimsical'
- - **Etc**: 'MyBatis', 'HikariCP', 'Ajax', 'JQuery'
+ - **Etc**: 'Ajax', 'JQuery'
 
 ## 🔧 주요 기능
 
